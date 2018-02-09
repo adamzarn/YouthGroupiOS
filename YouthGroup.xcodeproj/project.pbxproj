@@ -22,6 +22,18 @@
 		DB37B7D1202BF1C3000DABE2 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB37B7CE202BF1C3000DABE2 /* Bolts.framework */; };
 		DB37B7D2202BF1C3000DABE2 /* FBSDKCoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB37B7CF202BF1C3000DABE2 /* FBSDKCoreKit.framework */; };
 		DB37B7D3202BF1C3000DABE2 /* FBSDKLoginKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DB37B7D0202BF1C3000DABE2 /* FBSDKLoginKit.framework */; };
+		DB37B7D5202C8CE0000DABE2 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7D4202C8CE0000DABE2 /* MainTabBarController.swift */; };
+		DB37B7D7202C8F07000DABE2 /* LessonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7D6202C8F07000DABE2 /* LessonsViewController.swift */; };
+		DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */; };
+		DB37B7DB202C8F3B000DABE2 /* PrayerRequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */; };
+		DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */; };
+		DB9C750E202C9C6300BA4B7D /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */; };
+		DBD03FD4202CA01200030C43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DBD03FD3202CA01200030C43 /* Localizable.strings */; };
+		DBD03FD6202CA1BC00030C43 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FD5202CA1BC00030C43 /* Alert.swift */; };
+		DBD03FD8202CACB600030C43 /* Aiv.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FD7202CACB600030C43 /* Aiv.swift */; };
+		DBD03FDC202CC82300030C43 /* FacebookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDB202CC82300030C43 /* FacebookClient.swift */; };
+		DBD03FDE202CE34A00030C43 /* KeyboardNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */; };
+		DBD03FE0202D40A000030C43 /* Linking.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDF202D40A000030C43 /* Linking.swift */; };
 		F667CD0A9836E71BEB2890F8 /* Pods_YouthGroupUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B80922DC63D05DC9F95B81E3 /* Pods_YouthGroupUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +83,18 @@
 		DB37B7CE202BF1C3000DABE2 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Bolts.framework; sourceTree = "<group>"; };
 		DB37B7CF202BF1C3000DABE2 /* FBSDKCoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKCoreKit.framework; sourceTree = "<group>"; };
 		DB37B7D0202BF1C3000DABE2 /* FBSDKLoginKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = FBSDKLoginKit.framework; sourceTree = "<group>"; };
+		DB37B7D4202C8CE0000DABE2 /* MainTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
+		DB37B7D6202C8F07000DABE2 /* LessonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonsViewController.swift; sourceTree = "<group>"; };
+		DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
+		DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestsViewController.swift; sourceTree = "<group>"; };
+		DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
+		DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
+		DBD03FD3202CA01200030C43 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
+		DBD03FD5202CA1BC00030C43 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
+		DBD03FD7202CACB600030C43 /* Aiv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aiv.swift; sourceTree = "<group>"; };
+		DBD03FDB202CC82300030C43 /* FacebookClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookClient.swift; sourceTree = "<group>"; };
+		DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotifications.swift; sourceTree = "<group>"; };
+		DBD03FDF202D40A000030C43 /* Linking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Linking.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -156,7 +180,7 @@
 			isa = PBXGroup;
 			children = (
 				DB37B799202BE855000DABE2 /* AppDelegate.swift */,
-				DB37B79B202BE855000DABE2 /* LoginViewController.swift */,
+				DB37B7DE202C8F67000DABE2 /* Controllers */,
 				DB37B79D202BE855000DABE2 /* Main.storyboard */,
 				DB37B7A3202BE855000DABE2 /* Assets.xcassets */,
 				DB37B7A5202BE855000DABE2 /* LaunchScreen.storyboard */,
@@ -164,6 +188,11 @@
 				DB37B7A8202BE855000DABE2 /* Info.plist */,
 				DB37B7A0202BE855000DABE2 /* YouthGroup.xcdatamodeld */,
 				DB37B7CC202BED2E000DABE2 /* FirebaseClient.swift */,
+				DBD03FDB202CC82300030C43 /* FacebookClient.swift */,
+				DBD03FD3202CA01200030C43 /* Localizable.strings */,
+				DBD03FD5202CA1BC00030C43 /* Alert.swift */,
+				DBD03FD7202CACB600030C43 /* Aiv.swift */,
+				DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */,
 			);
 			path = YouthGroup;
 			sourceTree = "<group>";
@@ -184,6 +213,21 @@
 				DB37B7BE202BE855000DABE2 /* Info.plist */,
 			);
 			path = YouthGroupUITests;
+			sourceTree = "<group>";
+		};
+		DB37B7DE202C8F67000DABE2 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				DB37B79B202BE855000DABE2 /* LoginViewController.swift */,
+				DB37B7D4202C8CE0000DABE2 /* MainTabBarController.swift */,
+				DB37B7D6202C8F07000DABE2 /* LessonsViewController.swift */,
+				DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */,
+				DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */,
+				DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */,
+				DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */,
+				DBD03FDF202D40A000030C43 /* Linking.swift */,
+			);
+			path = Controllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -305,6 +349,7 @@
 				DB37B7A7202BE855000DABE2 /* LaunchScreen.storyboard in Resources */,
 				DB37B7CB202BE88B000DABE2 /* GoogleService-Info.plist in Resources */,
 				DB37B7A4202BE855000DABE2 /* Assets.xcassets in Resources */,
+				DBD03FD4202CA01200030C43 /* Localizable.strings in Resources */,
 				DB37B79F202BE855000DABE2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -468,10 +513,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB9C750E202C9C6300BA4B7D /* CreateAccountViewController.swift in Sources */,
+				DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */,
+				DB37B7D7202C8F07000DABE2 /* LessonsViewController.swift in Sources */,
 				DB37B7A2202BE855000DABE2 /* YouthGroup.xcdatamodeld in Sources */,
+				DBD03FDC202CC82300030C43 /* FacebookClient.swift in Sources */,
+				DBD03FDE202CE34A00030C43 /* KeyboardNotifications.swift in Sources */,
+				DBD03FD8202CACB600030C43 /* Aiv.swift in Sources */,
+				DBD03FE0202D40A000030C43 /* Linking.swift in Sources */,
 				DB37B79C202BE855000DABE2 /* LoginViewController.swift in Sources */,
+				DB37B7D5202C8CE0000DABE2 /* MainTabBarController.swift in Sources */,
+				DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */,
 				DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */,
+				DBD03FD6202CA1BC00030C43 /* Alert.swift in Sources */,
 				DB37B7CD202BED2E000DABE2 /* FirebaseClient.swift in Sources */,
+				DB37B7DB202C8F3B000DABE2 /* PrayerRequestsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

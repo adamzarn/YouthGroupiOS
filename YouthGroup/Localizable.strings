@@ -1,0 +1,26 @@
+/* 
+  Localizable.strings
+  YouthGroup
+
+  Created by Adam Zarn on 2/8/18.
+  Copyright © 2018 Adam Zarn. All rights reserved.
+*/
+
+"mfn" = "Missing First Name";
+"mfn_m" = "You must provide a first name";
+"mln" = "Missing Last Name";
+"mln_m" = "You must provide a last name";
+"me" = "Missing Email";
+"me_m" = "You must provide an email";
+"mp" = "Missing Password";
+"mp_m" = "You must provide a password";
+"pm" = "Password Mismatch";
+"pm_m" = "Your passwords don't match";
+"ue_m" = "An unknown error occurred";
+
+"error" = "Error";
+"success" = "Success";
+
+"asc" = "Your account was successfully created";
+
+"newFacebookUserMessage" = "Your Facebook email and name have been stored in our database. If you ever create a YouthGroup account in the future, make sure to use your Facebook email so that your account info will be merged.";
