@@ -11,6 +11,10 @@ import FirebaseAuth
 import FBSDKCoreKit
 import FBSDKLoginKit
 
+protocol LoginViewControllerDelegate: class {
+    func refreshAccountDetail(reloadGroupsOnly: Bool)
+}
+
 class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAccountViewControllerDelegate {
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -19,12 +23,10 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
     var waitingForFacebook = false
     var fbCredentialForLinking: AuthCredential?
     
-    enum LoginError: Error {
-        case missingEmail
-        case missingPassword
-    }
+    weak var delegate: LoginViewControllerDelegate?
 
     //MARK: IBOutlets
+    @IBOutlet weak var titleView: BouncingView!
     @IBOutlet weak var email: UITextField!
     @IBOutlet weak var password: UITextField!
     @IBOutlet weak var aiv: UIActivityIndicatorView!
@@ -34,14 +36,18 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
     override func viewDidLoad() {
         super.viewDidLoad()
         fbLoginButton.readPermissions = ["public_profile", "email"]
+        titleView.animating = true
+        titleView.isHidden = false
+        titleView.animateTitle()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
         KeyboardNotifications.subscribe(vc: self, showSelector: #selector(LoginViewController.keyboardWillShow), hideSelector: #selector(LoginViewController.keyboardWillHide))
         Aiv.hide(aiv: aiv)
         if Auth.auth().currentUser != nil && !linkingInProgress && !waitingForFacebook {
-            dismiss()
+            self.navigationController?.dismiss(animated: true, completion: nil)
         } else {
             email.text = defaults.value(forKey: "lastUsedEmail") as? String
             password.text = defaults.value(forKey: "lastUsedPassword") as? String
@@ -52,49 +58,55 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(true)
+        super.viewWillDisappear(animated)
         KeyboardNotifications.unsubscribe(vc: self)
     }
     
     func loginButton(_ loginButton: FBSDKLoginButton!, didCompleteWith result: FBSDKLoginManagerLoginResult!, error: Error!) {
         if FBSDKAccessToken.current() != nil {
-            self.waitingForFacebook = true
-            let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
-            FirebaseClient.shared.signInWith(credential: credential, completion: { (user, error) in
-                self.waitingForFacebook = false
-                if let errorString = error {
-                    FacebookClient.shared.getFBUserEmail(completion: { (email) in
-                        if let email = email {
-                            self.getProviders(email: email, completion: { (providers) in
-                                if let providers = providers {
-                                    if providers.contains("password") {
-                                        self.fbCredentialForLinking = credential
-                                        self.startLinkingFacebookWithEmailPasswordAccount(email: email)
-                                    } else {
-                                        Alert.showBasic(title: "Error", message: errorString, vc: self)
-                                        Aiv.hide(aiv: self.aiv)
-                                    }
-                                } else {
-                                    Alert.showBasic(title: "Error", message: errorString, vc: self)
-                                    Aiv.hide(aiv: self.aiv)
-                                }
-                            })
-                        } else {
-                            Alert.showBasic(title: "Error", message: "Could not retrieve Facebook Email", vc: self)
-                            Aiv.hide(aiv: self.aiv)
-                        }
-                    })
+            waitingForFacebook = true
+            fbCredentialForLinking = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+            signInWithFacebook(credential: fbCredentialForLinking!)
+        }
+    }
+    
+    func signInWithFacebook(credential: AuthCredential) {
+        FirebaseClient.shared.signInWith(credential: credential, completion: { (user, error) in
+            self.waitingForFacebook = false
+            if let errorString = error {
+                self.checkIfLinkIsNecessary(error: errorString)
+            } else {
+                if self.linkingInProgress {
+                    self.linkEmailPasswordWithFacebookAccount(user: user!)
                 } else {
-                    if self.linkingInProgress {
-                        self.linkEmailPasswordWithFacebookAccount(user: user!)
+                    FirebaseClient.shared.setUserData(user: user!)
+                    if self.defaults.bool(forKey: "loggedInWithFacebookBefore") {
+                        self.delegate?.refreshAccountDetail(reloadGroupsOnly: false)
+                        self.navigationController?.dismiss(animated: true, completion: nil)
                     } else {
-                        self.linkingInProgress = false
-                        FirebaseClient.shared.setUserData(user: user!)
-                        self.dismiss()
+                        self.addNewUser(user: user!)
                     }
                 }
-            })
-        }
+            }
+        })
+    }
+    
+    func checkIfLinkIsNecessary(error: String) {
+        FacebookClient.shared.getFBUserEmail(completion: { (email) in
+            if let email = email {
+                self.getProviders(email: email, completion: { (providers) in
+                    if let providers = providers, providers.contains("password") {
+                        self.startLinkingFacebookWithEmailPasswordAccount(email: email)
+                    } else {
+                        Alert.showBasic(title: "Error", message: error, vc: self)
+                        Aiv.hide(aiv: self.aiv)
+                    }
+                })
+            } else {
+                Alert.showBasic(title: "Error", message: "Could not retrieve Facebook Email", vc: self)
+                Aiv.hide(aiv: self.aiv)
+            }
+        })
     }
     
     func loginButtonWillLogin(_ loginButton: FBSDKLoginButton!) -> Bool {
@@ -107,9 +119,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
             FirebaseClient.shared.addNewUser(email: email, displayName: displayName, completion: { (error) in
                 Aiv.hide(aiv: self.aiv)
                 if let error = error {
-                    Alert.showBasicThenDismiss(title: self.getString(key: "error"), message: error, vc: self)
+                    Alert.showBasic(title: self.getString(key: "error"), message: error, vc: self)
                 } else {
-                    Alert.showBasicThenDismiss(title: self.getString(key: "success"), message: self.getString(key: "asc"), vc: self)
+                    self.defaults.set(true, forKey: "loggedInWithFacebookBefore")
+                    let addPhotoVC = self.storyboard?.instantiateViewController(withIdentifier: "AddPhotoViewController") as! AddPhotoViewController
+                    self.navigationController?.pushViewController(addPhotoVC, animated: true)
                 }
             })
         }
@@ -149,10 +163,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
                 if self.linkingInProgress {
                     self.linkFacebookWithEmailPasswordAccount(user: user)
                 } else {
-                    self.defaults.setValue(self.email.text!, forKey: "lastUsedEmail")
+                    self.defaults.setValue(self.email.text!.lowercased(), forKey: "lastUsedEmail")
                     self.defaults.setValue(self.password.text!, forKey: "lastUsedPassword")
                     FirebaseClient.shared.setUserData(user: user)
-                    self.dismiss()
+                    self.delegate?.refreshAccountDetail(reloadGroupsOnly: false)
+                    self.navigationController?.dismiss(animated: true, completion: nil)
                 }
             }
         })
@@ -176,14 +191,9 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
     }
     
     @IBAction func createAccountButtonPressed(_ sender: Any) {
-        let createAccountNC = storyboard?.instantiateViewController(withIdentifier: "CreateAccountNavigationController") as! UINavigationController
-        let createAccountVC = createAccountNC.viewControllers[0] as! CreateAccountViewController
+        let createAccountVC = storyboard?.instantiateViewController(withIdentifier: "CreateAccountViewController") as! CreateAccountViewController
         createAccountVC.delegate = self
-        present(createAccountNC, animated: true, completion: nil)
-    }
-    
-    func dismiss() {
-        self.dismiss(animated: true, completion: nil)
+        self.navigationController?.pushViewController(createAccountVC, animated: true)
     }
     
     func getString(key: String) -> String {

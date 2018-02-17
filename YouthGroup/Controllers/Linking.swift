@@ -14,7 +14,7 @@ extension LoginViewController {
     
     func startLinkingFacebookWithEmailPasswordAccount(email: String) {
         linkingInProgress = true
-        let alert = UIAlertController(title: "Email in Use", message: "A YouthGroup account with the email \"\(email.lowercased())\" has already been used to log in. Enter your password below, select \"Link\", and then we'll link it with your facebook account", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Email in Use", message: "A YouthGroup account with the email \"\(email.lowercased())\" has already been used to log in. Enter your password below, select \"Link\", and then we'll link it with your facebook account.", preferredStyle: .alert)
         alert.addTextField { (textField) in
             textField.placeholder = "Password"
             textField.isSecureTextEntry = true
@@ -42,8 +42,7 @@ extension LoginViewController {
                     Aiv.hide(aiv: self.aiv)
                 } else {
                     FirebaseClient.shared.setUserData(user: user!)
-                    Alert.showBasicThenDismiss(title: "Success", message: "Your new facebook account has been linked to your existing YouthGroup account", vc: self)
-                    Aiv.hide(aiv: self.aiv)
+                    self.checkForPhoto(user: user!)
                 }
             }
         }
@@ -56,7 +55,7 @@ extension LoginViewController {
     
     func startLinkingEmailPasswordWithFacebookAccount(email: String) {
         linkingInProgress = true
-        let alert = UIAlertController(title: "Email in Use", message: "A facebook account with the email \"\(email.lowercased())\" has already been used to log in. Select \"Link\" to login with facebook and then we'll link it to the email/password credentials you just provided", preferredStyle: .alert)
+        let alert = UIAlertController(title: "Email in Use", message: "A facebook account with the email \"\(email.lowercased())\" has already been used to log in. Select \"Link\" to login with facebook and then we'll link it to the email/password credentials you just provided.", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Link", style: .default) { (_) in
             self.defaults.setValue(self.email.text!, forKey: "lastUsedEmail")
             self.defaults.setValue(self.password.text!, forKey: "lastUsedPassword")
@@ -78,11 +77,11 @@ extension LoginViewController {
                 Aiv.hide(aiv: self.aiv)
             } else {
                 FirebaseClient.shared.setUserData(user: user!)
-                Alert.showBasicThenDismiss(title: "Success", message: "Your new YouthGroup account has been linked to your existing facebook account", vc: self)
-                Aiv.hide(aiv: self.aiv)
+                self.checkForPhoto(user: user!)
             }
         }
     }
+    
 }
 
 extension LoginViewController {
@@ -91,4 +90,20 @@ extension LoginViewController {
             completion(providers)
         })
     }
+    
+    func checkForPhoto(user: User) {
+        FirebaseClient.shared.hasProfilePhoto(email: user.email!, completion: { (hasPhoto) in
+            Aiv.hide(aiv: self.aiv)
+            if hasPhoto {
+                Alert.showBasicWithCompletion(title: "Success", message: "Your accounts have been linked.", vc: self, completion: {_ in self.navigationController?.dismiss(animated: true, completion: nil)
+                })
+            } else {
+                Alert.showBasicWithCompletion(title: "Success", message: "Your accounts have been linked.", vc: self, completion: {_ in
+                    let addPhotoVC = self.storyboard?.instantiateViewController(withIdentifier: "AddPhotoViewController") as! AddPhotoViewController
+                    self.navigationController?.pushViewController(addPhotoVC, animated: true)
+                })
+            }
+        })
+    }
+    
 }

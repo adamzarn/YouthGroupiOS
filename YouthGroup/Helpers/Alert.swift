@@ -17,12 +17,12 @@ class Alert {
         vc.present(alert, animated: true, completion: nil)
     }
     
-    class func showBasicThenDismiss(title: String, message: String, vc: UIViewController) {
+    class func showBasicWithCompletion(title: String, message: String, vc: UIViewController, completion: @escaping (UIAlertAction) -> Void) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {(alert: UIAlertAction!) in
-            vc.dismiss(animated: true, completion: nil)
-        }))
-        vc.present(alert, animated: true)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: completion))
+        vc.present(alert, animated: true, completion: nil)
     }
+    
+    
     
 }

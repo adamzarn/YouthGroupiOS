@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		3852E45B676F83AF682A3EE7 /* Pods_YouthGroupTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E7A6EDB3AAC24A44F7F75FD /* Pods_YouthGroupTests.framework */; };
 		75B7407D4D9D66B06821DA54 /* Pods_YouthGroup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D011E8F1EB0A17F0A1854F /* Pods_YouthGroup.framework */; };
+		DB13136E2036271300051ED7 /* ButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB13136D2036271300051ED7 /* ButtonCell.swift */; };
+		DB13137020362B1D00051ED7 /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */; };
+		DB1313722036348000051ED7 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1313712036348000051ED7 /* Errors.swift */; };
+		DB1313742036561000051ED7 /* JoinGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1313732036561000051ED7 /* JoinGroupViewController.swift */; };
 		DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B799202BE855000DABE2 /* AppDelegate.swift */; };
 		DB37B79C202BE855000DABE2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B79B202BE855000DABE2 /* LoginViewController.swift */; };
 		DB37B79F202BE855000DABE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB37B79D202BE855000DABE2 /* Main.storyboard */; };
@@ -27,13 +31,28 @@
 		DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */; };
 		DB37B7DB202C8F3B000DABE2 /* PrayerRequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */; };
 		DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */; };
+		DB6AF455203390B200738FF0 /* BouncingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF454203390B200738FF0 /* BouncingView.swift */; };
+		DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */; };
+		DB6AF45A2033ADEC00738FF0 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF4592033ADEC00738FF0 /* Buttons.swift */; };
+		DB6AF45C2033AF5B00738FF0 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF45B2033AF5B00738FF0 /* Colors.swift */; };
+		DB6AF45E2033F89B00738FF0 /* ProfileCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF45D2033F89B00738FF0 /* ProfileCell.swift */; };
 		DB9C750E202C9C6300BA4B7D /* CreateAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */; };
+		DBCCEC7C203772FE0050AC46 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC7B203772FE0050AC46 /* Constants.swift */; };
+		DBCCEC7E203788FD0050AC46 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC7D203788FD0050AC46 /* Helper.swift */; };
+		DBCCEC8020378DF80050AC46 /* EditMemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC7F20378DF80050AC46 /* EditMemberCell.swift */; };
+		DBCCEC842037A0EE0050AC46 /* JoinGroupCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC832037A0EE0050AC46 /* JoinGroupCell.swift */; };
+		DBCCEC862037A9670050AC46 /* PrayerRequestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC852037A9670050AC46 /* PrayerRequestCell.swift */; };
+		DBCCEC882037A9880050AC46 /* PrayerRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC872037A9880050AC46 /* PrayerRequest.swift */; };
+		DBCCEC8A2037CE4F0050AC46 /* MembersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC892037CE4F0050AC46 /* MembersViewController.swift */; };
+		DBCCEC8C2037D0FD0050AC46 /* MemberCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC8B2037D0FD0050AC46 /* MemberCell.swift */; };
+		DBCCEC8E2037DA0C0050AC46 /* AddPrayerRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBCCEC8D2037DA0C0050AC46 /* AddPrayerRequestViewController.swift */; };
 		DBD03FD4202CA01200030C43 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DBD03FD3202CA01200030C43 /* Localizable.strings */; };
 		DBD03FD6202CA1BC00030C43 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FD5202CA1BC00030C43 /* Alert.swift */; };
 		DBD03FD8202CACB600030C43 /* Aiv.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FD7202CACB600030C43 /* Aiv.swift */; };
 		DBD03FDC202CC82300030C43 /* FacebookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDB202CC82300030C43 /* FacebookClient.swift */; };
 		DBD03FDE202CE34A00030C43 /* KeyboardNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */; };
 		DBD03FE0202D40A000030C43 /* Linking.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDF202D40A000030C43 /* Linking.swift */; };
+		DBF417B62036065100F2A4F8 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF417B52036065100F2A4F8 /* Group.swift */; };
 		F667CD0A9836E71BEB2890F8 /* Pods_YouthGroupUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B80922DC63D05DC9F95B81E3 /* Pods_YouthGroupUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +83,10 @@
 		83D011E8F1EB0A17F0A1854F /* Pods_YouthGroup.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouthGroup.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E7A6EDB3AAC24A44F7F75FD /* Pods_YouthGroupTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouthGroupTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B80922DC63D05DC9F95B81E3 /* Pods_YouthGroupUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouthGroupUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB13136D2036271300051ED7 /* ButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCell.swift; sourceTree = "<group>"; };
+		DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
+		DB1313712036348000051ED7 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
+		DB1313732036561000051ED7 /* JoinGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinGroupViewController.swift; sourceTree = "<group>"; };
 		DB37B796202BE855000DABE2 /* YouthGroup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouthGroup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB37B799202BE855000DABE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DB37B79B202BE855000DABE2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -88,13 +111,28 @@
 		DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestsViewController.swift; sourceTree = "<group>"; };
 		DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
+		DB6AF454203390B200738FF0 /* BouncingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncingView.swift; sourceTree = "<group>"; };
+		DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoViewController.swift; sourceTree = "<group>"; };
+		DB6AF4592033ADEC00738FF0 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
+		DB6AF45B2033AF5B00738FF0 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
+		DB6AF45D2033F89B00738FF0 /* ProfileCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCell.swift; sourceTree = "<group>"; };
 		DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateAccountViewController.swift; sourceTree = "<group>"; };
+		DBCCEC7B203772FE0050AC46 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		DBCCEC7D203788FD0050AC46 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		DBCCEC7F20378DF80050AC46 /* EditMemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditMemberCell.swift; sourceTree = "<group>"; };
+		DBCCEC832037A0EE0050AC46 /* JoinGroupCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinGroupCell.swift; sourceTree = "<group>"; };
+		DBCCEC852037A9670050AC46 /* PrayerRequestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestCell.swift; sourceTree = "<group>"; };
+		DBCCEC872037A9880050AC46 /* PrayerRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequest.swift; sourceTree = "<group>"; };
+		DBCCEC892037CE4F0050AC46 /* MembersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MembersViewController.swift; sourceTree = "<group>"; };
+		DBCCEC8B2037D0FD0050AC46 /* MemberCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberCell.swift; sourceTree = "<group>"; };
+		DBCCEC8D2037DA0C0050AC46 /* AddPrayerRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPrayerRequestViewController.swift; sourceTree = "<group>"; };
 		DBD03FD3202CA01200030C43 /* Localizable.strings */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; path = Localizable.strings; sourceTree = "<group>"; };
 		DBD03FD5202CA1BC00030C43 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		DBD03FD7202CACB600030C43 /* Aiv.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Aiv.swift; sourceTree = "<group>"; };
 		DBD03FDB202CC82300030C43 /* FacebookClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookClient.swift; sourceTree = "<group>"; };
 		DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotifications.swift; sourceTree = "<group>"; };
 		DBD03FDF202D40A000030C43 /* Linking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Linking.swift; sourceTree = "<group>"; };
+		DBF417B52036065100F2A4F8 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -180,6 +218,12 @@
 			isa = PBXGroup;
 			children = (
 				DB37B799202BE855000DABE2 /* AppDelegate.swift */,
+				DBF417B42036062700F2A4F8 /* Helpers */,
+				DBF417B32036060000F2A4F8 /* Managers */,
+				DBF417B2203605D400F2A4F8 /* Cells */,
+				DB6AF45B2033AF5B00738FF0 /* Colors.swift */,
+				DBF417B72036066700F2A4F8 /* Model */,
+				DB6AF456203390B900738FF0 /* View */,
 				DB37B7DE202C8F67000DABE2 /* Controllers */,
 				DB37B79D202BE855000DABE2 /* Main.storyboard */,
 				DB37B7A3202BE855000DABE2 /* Assets.xcassets */,
@@ -187,12 +231,7 @@
 				DB37B7CA202BE88B000DABE2 /* GoogleService-Info.plist */,
 				DB37B7A8202BE855000DABE2 /* Info.plist */,
 				DB37B7A0202BE855000DABE2 /* YouthGroup.xcdatamodeld */,
-				DB37B7CC202BED2E000DABE2 /* FirebaseClient.swift */,
-				DBD03FDB202CC82300030C43 /* FacebookClient.swift */,
 				DBD03FD3202CA01200030C43 /* Localizable.strings */,
-				DBD03FD5202CA1BC00030C43 /* Alert.swift */,
-				DBD03FD7202CACB600030C43 /* Aiv.swift */,
-				DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */,
 			);
 			path = YouthGroup;
 			sourceTree = "<group>";
@@ -218,16 +257,74 @@
 		DB37B7DE202C8F67000DABE2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				DB37B79B202BE855000DABE2 /* LoginViewController.swift */,
 				DB37B7D4202C8CE0000DABE2 /* MainTabBarController.swift */,
+				DB37B79B202BE855000DABE2 /* LoginViewController.swift */,
 				DB37B7D6202C8F07000DABE2 /* LessonsViewController.swift */,
 				DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */,
 				DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */,
 				DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */,
 				DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */,
+				DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */,
 				DBD03FDF202D40A000030C43 /* Linking.swift */,
+				DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */,
+				DB1313732036561000051ED7 /* JoinGroupViewController.swift */,
+				DBCCEC892037CE4F0050AC46 /* MembersViewController.swift */,
+				DBCCEC8D2037DA0C0050AC46 /* AddPrayerRequestViewController.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		DB6AF456203390B900738FF0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				DB6AF4592033ADEC00738FF0 /* Buttons.swift */,
+				DB6AF454203390B200738FF0 /* BouncingView.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		DBF417B2203605D400F2A4F8 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				DB6AF45D2033F89B00738FF0 /* ProfileCell.swift */,
+				DB13136D2036271300051ED7 /* ButtonCell.swift */,
+				DBCCEC7F20378DF80050AC46 /* EditMemberCell.swift */,
+				DBCCEC832037A0EE0050AC46 /* JoinGroupCell.swift */,
+				DBCCEC852037A9670050AC46 /* PrayerRequestCell.swift */,
+				DBCCEC8B2037D0FD0050AC46 /* MemberCell.swift */,
+			);
+			path = Cells;
+			sourceTree = "<group>";
+		};
+		DBF417B32036060000F2A4F8 /* Managers */ = {
+			isa = PBXGroup;
+			children = (
+				DB37B7CC202BED2E000DABE2 /* FirebaseClient.swift */,
+				DBD03FDB202CC82300030C43 /* FacebookClient.swift */,
+			);
+			path = Managers;
+			sourceTree = "<group>";
+		};
+		DBF417B42036062700F2A4F8 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				DBD03FD5202CA1BC00030C43 /* Alert.swift */,
+				DBD03FD7202CACB600030C43 /* Aiv.swift */,
+				DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */,
+				DB1313712036348000051ED7 /* Errors.swift */,
+				DBCCEC7B203772FE0050AC46 /* Constants.swift */,
+				DBCCEC7D203788FD0050AC46 /* Helper.swift */,
+			);
+			path = Helpers;
+			sourceTree = "<group>";
+		};
+		DBF417B72036066700F2A4F8 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				DBF417B52036065100F2A4F8 /* Group.swift */,
+				DBCCEC872037A9880050AC46 /* PrayerRequest.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -513,21 +610,40 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DBCCEC8A2037CE4F0050AC46 /* MembersViewController.swift in Sources */,
+				DBF417B62036065100F2A4F8 /* Group.swift in Sources */,
+				DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */,
 				DB9C750E202C9C6300BA4B7D /* CreateAccountViewController.swift in Sources */,
 				DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */,
+				DB1313722036348000051ED7 /* Errors.swift in Sources */,
+				DBCCEC7E203788FD0050AC46 /* Helper.swift in Sources */,
+				DBCCEC842037A0EE0050AC46 /* JoinGroupCell.swift in Sources */,
+				DBCCEC882037A9880050AC46 /* PrayerRequest.swift in Sources */,
 				DB37B7D7202C8F07000DABE2 /* LessonsViewController.swift in Sources */,
 				DB37B7A2202BE855000DABE2 /* YouthGroup.xcdatamodeld in Sources */,
 				DBD03FDC202CC82300030C43 /* FacebookClient.swift in Sources */,
 				DBD03FDE202CE34A00030C43 /* KeyboardNotifications.swift in Sources */,
 				DBD03FD8202CACB600030C43 /* Aiv.swift in Sources */,
+				DBCCEC8020378DF80050AC46 /* EditMemberCell.swift in Sources */,
 				DBD03FE0202D40A000030C43 /* Linking.swift in Sources */,
+				DB6AF45E2033F89B00738FF0 /* ProfileCell.swift in Sources */,
 				DB37B79C202BE855000DABE2 /* LoginViewController.swift in Sources */,
+				DB1313742036561000051ED7 /* JoinGroupViewController.swift in Sources */,
 				DB37B7D5202C8CE0000DABE2 /* MainTabBarController.swift in Sources */,
+				DB6AF45A2033ADEC00738FF0 /* Buttons.swift in Sources */,
+				DB6AF45C2033AF5B00738FF0 /* Colors.swift in Sources */,
+				DBCCEC8C2037D0FD0050AC46 /* MemberCell.swift in Sources */,
 				DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */,
+				DBCCEC7C203772FE0050AC46 /* Constants.swift in Sources */,
 				DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */,
 				DBD03FD6202CA1BC00030C43 /* Alert.swift in Sources */,
+				DBCCEC8E2037DA0C0050AC46 /* AddPrayerRequestViewController.swift in Sources */,
+				DB6AF455203390B200738FF0 /* BouncingView.swift in Sources */,
+				DB13136E2036271300051ED7 /* ButtonCell.swift in Sources */,
 				DB37B7CD202BED2E000DABE2 /* FirebaseClient.swift in Sources */,
 				DB37B7DB202C8F3B000DABE2 /* PrayerRequestsViewController.swift in Sources */,
+				DBCCEC862037A9670050AC46 /* PrayerRequestCell.swift in Sources */,
+				DB13137020362B1D00051ED7 /* CreateGroupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

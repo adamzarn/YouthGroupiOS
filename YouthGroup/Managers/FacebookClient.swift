@@ -24,6 +24,18 @@ class FacebookClient: NSObject {
         })
     }
     
+    func getFBUserProfilePhoto(tokenString: String, completion: @escaping (_ data: Data?) -> ()) {
+        if let url = URL(string: "https://graph.facebook.com/me/picture?type=large&return_ssl_resources=1&access_token="+tokenString) {
+            URLSession.shared.dataTask(with: url) { (data, response, error) in
+                if let data = data {
+                    completion(data)
+                } else {
+                    completion(nil)
+                }
+            }.resume()
+        }
+    }
+    
     static let shared = FacebookClient()
     private override init() {
         super.init()

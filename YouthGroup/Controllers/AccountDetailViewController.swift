@@ -12,12 +12,117 @@ import FirebaseAuth
 import FBSDKCoreKit
 import FBSDKLoginKit
 
-class AccountDetailViewController: UITableViewController {
+class AccountDetailViewController: UIViewController {
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    let defaults = UserDefaults.standard
+    var chosenImage: UIImage?
+    var groupUIDs: [String]?
+    var currentGroup: Group?
+    var otherGroups: [Group] = []
+    var reloadGroupsOnly = false
+    var refreshControl: UIRefreshControl!
+    
+    @IBOutlet weak var aiv: UIActivityIndicatorView!
+    @IBOutlet weak var tableView: UITableView!
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.tableView.tableFooterView = UIView(frame: CGRect.zero)
+        
+        refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(AccountDetailViewController.refreshAccountDetail), for: .valueChanged)
+        tableView.refreshControl = refreshControl
+        
+        Aiv.show(aiv: aiv)
+        self.tableView.isHidden = true
+        if Auth.auth().currentUser == nil {
+            if FBSDKAccessToken.current() != nil {
+                let credential = FacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
+                FirebaseClient.shared.signInWith(credential: credential, completion: { (user, error) in
+                    if let user = user {
+                        FirebaseClient.shared.setUserData(user: user)
+                        self.reloadTableView()
+                    }
+                })
+            }
+        }
+        
+        refreshAccountDetail(reloadGroupsOnly: false)
+
+    }
+    
+    func reloadTableView() {
+        
+        if reloadGroupsOnly {
+            let sections = IndexSet(integersIn: 1...2)
+            tableView.reloadSections(sections, with: .automatic)
+        } else {
+            refreshControl.endRefreshing()
+            tableView.reloadData()
+            tableView.isHidden = false
+            Aiv.hide(aiv: aiv)
+        }
+        
+    }
+    
+    func getGroupUIDs(email: String) {
+        FirebaseClient.shared.getGroupUIDs(email: email, completion: { (groupUIDs) in
+            if let groupUIDs = groupUIDs {
+                self.groupUIDs = groupUIDs
+                self.getGroups(groupUIDs: groupUIDs)
+            } else {
+                self.reloadTableView()
+            }
+        })
+    }
+    
+    func getGroups(groupUIDs: [String]) {
+        let totalGroups = groupUIDs.count
+        var fetchedGroups = 0
+        for groupUID in groupUIDs {
+            let currentGroupUID = UserDefaults.standard.string(forKey: "currentGroup")
+            FirebaseClient.shared.getGroup(groupUID: groupUID, completion: { (group) in
+                fetchedGroups += 1
+                if let group = group, let uid = group.uid {
+                    if currentGroupUID == uid {
+                        self.currentGroup = group
+                    } else {
+                        self.otherGroups.append(group)
+                    }
+                }
+                if fetchedGroups == totalGroups {
+                    if self.otherGroups.count > 0 && self.currentGroup == nil {
+                        self.currentGroup = self.otherGroups.removeFirst()
+                        UserDefaults.standard.setValue(self.currentGroup?.uid!, forKey: "currentGroup")
+                    }
+                    self.reloadTableView()
+                }
+            })
+        }
+    }
     
     override func viewWillAppear(_ animated: Bool) {
-        tableView.reloadData()
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.tabBarController?.tabBar.isHidden = false
+        if let email = Auth.auth().currentUser?.email {
+            if email != UserDefaults.standard.string(forKey: "lastEmail") {
+                refreshAccountDetail(reloadGroupsOnly: false)
+            }
+            UserDefaults.standard.set(email, forKey: "lastEmail")
+        }
+        
+        let name = Notification.Name(rawValue: NotificationKeys.reloadAccount)
+        let selector = #selector(AccountDetailViewController.refresh)
+        NotificationCenter.default.addObserver(self, selector:selector, name: name, object: nil)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
@@ -37,24 +142,299 @@ class AccountDetailViewController: UITableViewController {
     }
     
     func presentLoginView() {
-        let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-        self.present(loginVC, animated: false, completion: nil)
+        let loginNC = storyboard?.instantiateViewController(withIdentifier: "LoginNavigationController") as! UINavigationController
+        let loginVC = loginNC.viewControllers[0] as! LoginViewController
+        loginVC.delegate = self
+        self.present(loginNC, animated: false, completion: nil)
+    }
+    
+    func getString(key: String) -> String {
+        return NSLocalizedString(key, comment: "")
     }
     
 }
 
 //UITableViewDelegate and DataSource
-extension AccountDetailViewController {
+extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return appDelegate.userData?.count ?? 0
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 1 || indexPath.section == 2 {
+            return true
+        }
+        return false
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "accountDetailCell")! as UITableViewCell
-        cell.textLabel?.text = appDelegate.userData?[indexPath.row].0
-        cell.detailTextLabel?.text = appDelegate.userData?[indexPath.row].1
-        return cell
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let group = (indexPath.section == 1) ? currentGroup! : otherGroups[indexPath.row]
+            let isCurrentGroup = (indexPath.section == 1)
+            if isOnlyLeader(group: group) {
+                Alert.showBasic(title: "Cannot Delete", message: "You cannot delete this group because you are its only leader.", vc: self)
+            } else {
+                removeGroup(group: group, isCurrentGroup: isCurrentGroup)
+            }
+        }
     }
     
+    func removeGroup(group: Group, isCurrentGroup: Bool) {
+        
+        if isCurrentGroup {
+            if otherGroups.count > 0 {
+                UserDefaults.standard.set(otherGroups[0].uid, forKey: "currentGroup")
+            } else {
+                UserDefaults.standard.set(nil, forKey: "currentGroup")
+            }
+        }
+
+        if let email = Auth.auth().currentUser?.email, let groupUIDs = groupUIDs {
+            let newGroupUIDs = groupUIDs.filter { $0 != group.uid }
+            FirebaseClient.shared.updateUserGroups(email: email, groupUIDs: newGroupUIDs, completion: { (success, error) in
+                if let error = error {
+                    Alert.showBasic(title: "Cannot Delete", message: error, vc: self)
+                } else {
+                    self.updateGroupMembers(group: group, email: email)
+                }
+            })
+        }
+    }
+    
+    func updateGroupMembers(group: Group, email: String) {
+        let memberType = isLeader(group: group) ? "leaders" : "students"
+        let currentMembers = (memberType == "leaders") ? group.leaders! : group.students!
+        let updatedMembers = currentMembers.filter { $0.email != email }
+        FirebaseClient.shared.updateGroupMembers(uid: group.uid!, updatedMembers: updatedMembers, type: memberType, completion: { (success, error) in
+            if let error = error {
+                Alert.showBasic(title: "Cannot Delete", message: error, vc: self)
+            } else {
+                self.refreshAccountDetail(reloadGroupsOnly: true)
+            }
+        })
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        switch section {
+        case 0:
+            return appDelegate.userData?.count ?? 0
+        case 1:
+            if self.currentGroup != nil { return 1 }
+            return 0
+        case 2:
+            return otherGroups.count + 2
+        default:
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell") as! ProfileCell
+                cell.delegate = self
+                cell.setUp(image: self.chosenImage, user: Auth.auth().currentUser)
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "accountDetailCell")! as UITableViewCell
+                cell.textLabel?.text = appDelegate.userData?[indexPath.row].0
+                cell.detailTextLabel?.text = appDelegate.userData?[indexPath.row].1
+                return cell
+            }
+        } else if indexPath.section == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell")! as UITableViewCell
+            if isLeader(group: self.currentGroup!) {
+                cell.accessoryType = .detailDisclosureButton
+            } else {
+                cell.accessoryType = .none
+            }
+            cell.selectionStyle = .none
+            cell.textLabel?.text = currentGroup!.church
+            cell.detailTextLabel?.text = currentGroup!.nickname
+            return cell
+        } else {
+            if indexPath.row < otherGroups.count {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell")! as UITableViewCell
+                let currentGroup = otherGroups[indexPath.row]
+                if isLeader(group: currentGroup) {
+                    cell.accessoryType = .detailDisclosureButton
+                } else {
+                    cell.accessoryType = .none
+                }
+                cell.textLabel?.text = currentGroup.church
+                cell.detailTextLabel?.text = currentGroup.nickname
+                return cell
+            } else {
+                let cell = tableView.dequeueReusableCell(withIdentifier: "buttonCell") as! ButtonCell
+                cell.delegate = self
+                if indexPath.row == otherGroups.count {
+                    cell.setUp(title: getString(key: "joinGroup"), buttonType: ButtonType.join)
+                } else {
+                    cell.setUp(title: getString(key: "createGroup"), buttonType: ButtonType.create)
+                }
+                return cell
+            }
+        }
+    }
+    
+    func isLeader(group: Group) -> Bool {
+        if let leaders = group.leaders {
+            let leaderEmails = leaders.map { $0.email }
+            if let email = Auth.auth().currentUser?.email {
+                return leaderEmails.contains(where: { $0 == email })
+            }
+        }
+        return false
+    }
+    
+    func isOnlyLeader(group: Group) -> Bool {
+        if let leaders = group.leaders {
+            if isLeader(group: group) && leaders.count == 1 {
+                return true
+            }
+        }
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 0:
+            return nil
+        case 1:
+            return "Current Group"
+        case 2:
+            if otherGroups.count > 0 { return "Other Groups" }
+            return nil
+        default:
+            return nil
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.section == 0 && indexPath.row == 0 {
+            return 120.0
+        } else if indexPath.section == 0 {
+            return 44.0
+        }
+        return 60.0
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        if indexPath.section == 2 && indexPath.row < otherGroups.count {
+            let alert = UIAlertController(title: "Set Current Group", message: "Would you like to make \(otherGroups[indexPath.row].church!) your current group?", preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) -> Void in
+                self.otherGroups.append(self.currentGroup!)
+                self.currentGroup = self.otherGroups[indexPath.row]
+                self.otherGroups.remove(at: indexPath.row)
+                UserDefaults.standard.setValue(self.currentGroup?.uid!, forKey: "currentGroup")
+                let sections = IndexSet(integersIn: 1...2)
+                self.tableView.reloadSections(sections, with: .automatic)
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            self.present(alert, animated: true, completion: nil)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        var groupToEdit: Group
+        if indexPath.section == 1 {
+            groupToEdit = currentGroup!
+        } else {
+            groupToEdit = otherGroups[indexPath.row]
+        }
+        let createGroupNC = self.storyboard?.instantiateViewController(withIdentifier: "CreateGroupNavigationController") as! UINavigationController
+        let createGroupVC = createGroupNC.viewControllers[0] as! CreateGroupViewController
+        createGroupVC.delegate = self
+        createGroupVC.groupToEdit = groupToEdit
+        present(createGroupNC, animated: true, completion: nil)
+    }
+    
+}
+
+extension AccountDetailViewController: ProfileCellDelegate {
+    
+    @objc func didTapProfileImageView(imageData: Data?) {
+        let addPhotoNC = self.storyboard?.instantiateViewController(withIdentifier: "AddPhotoNavigationController") as! UINavigationController
+        let addPhotoVC = addPhotoNC.viewControllers[0] as! AddPhotoViewController
+        addPhotoVC.delegate = self
+        addPhotoVC.imageData = imageData
+        addPhotoVC.chosenImage = chosenImage
+        addPhotoVC.cancelButton.tintColor = nil
+        addPhotoVC.cancelButton.isEnabled = true
+        addPhotoVC.skipAddPhotoButton.tintColor = .clear
+        addPhotoVC.skipAddPhotoButton.isEnabled = false
+        present(addPhotoNC, animated: true, completion: nil)
+    }
+    
+    @objc func didSetProfilePhoto(image: UIImage?) {
+        self.chosenImage = image
+    }
+
+}
+
+extension AccountDetailViewController: AddPhotoViewControllerDelegate {
+    
+    func setChosenProfilePhoto(chosenImage: UIImage?) {
+        self.chosenImage = chosenImage
+        let firstRow = IndexPath(row: 0, section: 0)
+        tableView.reloadRows(at: [firstRow], with: .none)
+    }
+    
+}
+
+extension AccountDetailViewController: ButtonCellDelegate {
+    func didSelectButton(buttonType: ButtonType) {
+        if buttonType == .join {
+            let joinGroupNC = self.storyboard?.instantiateViewController(withIdentifier: "JoinGroupNavigationController") as! UINavigationController
+            let joinGroupVC = joinGroupNC.viewControllers[0] as! JoinGroupViewController
+            joinGroupVC.delegate = self
+            joinGroupVC.groupUIDs = groupUIDs
+            joinGroupVC.skipJoinGroupButton.tintColor = .clear
+            joinGroupVC.skipJoinGroupButton.isEnabled = false
+            joinGroupVC.cancelButton.tintColor = nil
+            joinGroupVC.cancelButton.isEnabled = true
+            present(joinGroupNC, animated: true)
+        } else if buttonType == .create {
+            let createGroupNC = self.storyboard?.instantiateViewController(withIdentifier: "CreateGroupNavigationController") as! UINavigationController
+            let createGroupVC = createGroupNC.viewControllers[0] as! CreateGroupViewController
+            createGroupVC.delegate = self
+            createGroupVC.groupUIDs = groupUIDs
+            createGroupVC.groupToEdit = nil
+            present(createGroupNC, animated: true, completion: nil)
+        }
+    }
+}
+
+extension AccountDetailViewController: CreateGroupViewControllerDelegate, JoinGroupViewControllerDelegate, LoginViewControllerDelegate {
+    
+    @objc func refresh() {
+        refreshAccountDetail(reloadGroupsOnly: false)
+    }
+    
+    @objc func refreshAccountDetail(reloadGroupsOnly: Bool) {
+        
+        self.navigationController?.navigationBar.isTranslucent = false
+        self.navigationController?.isNavigationBarHidden = false
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+        self.tabBarController?.tabBar.isHidden = false
+        
+        self.reloadGroupsOnly = reloadGroupsOnly
+        
+        if !reloadGroupsOnly {
+            Aiv.show(aiv: aiv)
+            tableView.isHidden = true
+            tableView.setContentOffset(CGPoint.zero, animated: false)
+        }
+
+        UserDefaults.standard.setValue(Tabs.account.rawValue, forKey: "tabToDisplay")
+        chosenImage = nil
+        if let email = Auth.auth().currentUser?.email {
+            groupUIDs = []
+            currentGroup = nil
+            otherGroups = []
+            getGroupUIDs(email: email)
+        }
+    }
 }

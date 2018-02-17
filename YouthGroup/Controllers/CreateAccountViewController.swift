@@ -10,22 +10,16 @@ import Foundation
 import UIKit
 import FirebaseAuth
 
-protocol CreateAccountViewControllerDelegate {
+protocol CreateAccountViewControllerDelegate: class {
     func startLinkingEmailPasswordWithFacebookAccount(email: String)
 }
 
 class CreateAccountViewController: UIViewController {
     
     let defaults = UserDefaults.standard
-    var delegate: CreateAccountViewControllerDelegate?
-    
-    enum CreateAccountError: Error {
-        case missingFirstName
-        case missingLastName
-        case missingEmail
-        case missingPassword
-        case passwordMismatch
-    }
+    weak var delegate: CreateAccountViewControllerDelegate?
+    var yOrigin: CGFloat!
+    var yKeyboard: CGFloat!
     var keyboardHeight: CGFloat?
     
     //MARK: IBOutlets
@@ -37,6 +31,14 @@ class CreateAccountViewController: UIViewController {
     @IBOutlet weak var aiv: UIActivityIndicatorView!
     
     //MARK: Lifecycle
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.navigationController?.navigationBar.isTranslucent = false
+        yOrigin = (self.navigationController?.navigationBar.frame.size.height)! + UIApplication.shared.statusBarFrame.size.height
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
         KeyboardNotifications.subscribe(vc: self, showSelector: #selector(CreateAccountViewController.keyboardWillShow), hideSelector: #selector(CreateAccountViewController.keyboardWillHide))
@@ -50,6 +52,7 @@ class CreateAccountViewController: UIViewController {
     
     //MARK: IBActions
     @IBAction func submitButtonPressed(_ sender: Any) {
+
         Aiv.show(aiv: aiv)
         do {
             try createUser()
@@ -72,10 +75,6 @@ class CreateAccountViewController: UIViewController {
             Aiv.hide(aiv: aiv)
             Alert.showBasic(title: getString(key: "error"), message: getString(key: "ue_m"), vc: self)
         }
-    }
-    
-    @IBAction func cancelButtonPressed(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
     }
     
     func createUser() throws {
@@ -133,9 +132,17 @@ class CreateAccountViewController: UIViewController {
                 Aiv.hide(aiv: self.aiv)
                 FirebaseClient.shared.setUserData(user: user)
                 if let error = error {
-                    Alert.showBasicThenDismiss(title: self.getString(key: "error"), message: error, vc: self)
+                    Alert.showBasic(title: self.getString(key: "error"), message: error, vc: self)
                 } else {
-                    Alert.showBasicThenDismiss(title: self.getString(key: "success"), message: self.getString(key: "asc"), vc: self)
+                    let completion: (UIAlertAction) -> Void = {_ in
+                        let addPhotoVC = self.storyboard?.instantiateViewController(withIdentifier: "AddPhotoViewController") as! AddPhotoViewController
+                        addPhotoVC.cancelButton.tintColor = .clear
+                        addPhotoVC.cancelButton.isEnabled = false
+                        addPhotoVC.skipAddPhotoButton.tintColor = nil
+                        addPhotoVC.skipAddPhotoButton.isEnabled = true
+                        self.navigationController?.pushViewController(addPhotoVC, animated: true)
+                    }
+                    Alert.showBasicWithCompletion(title: self.getString(key: "success"), message: self.getString(key: "asc"), vc: self, completion: completion)
                 }
             })
         }
@@ -147,14 +154,15 @@ class CreateAccountViewController: UIViewController {
     
     @objc func keyboardWillShow(notification: Notification) {
         let keyboardHeight = KeyboardNotifications.getKeyboardHeight(notification: notification)
-        if password.isFirstResponder || passwordVerification.isFirstResponder {
-            view.frame.origin.y = (-1*keyboardHeight)/2
-        }
         self.keyboardHeight = keyboardHeight
+        yKeyboard = (yOrigin - keyboardHeight)/8
+        if password.isFirstResponder || passwordVerification.isFirstResponder {
+            view.frame.origin.y = yKeyboard
+        }
     }
-    
+
     @objc func keyboardWillHide(notification: Notification) {
-        view.frame.origin.y = 0
+        view.frame.origin.y = yOrigin
     }
 
 }
@@ -164,19 +172,21 @@ extension CreateAccountViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        if let keyboardHeight = keyboardHeight {
+        if let yKeyboard = self.yKeyboard {
             if password.isFirstResponder || passwordVerification.isFirstResponder {
                 UIView.animate(withDuration: 0.3, delay: 0.0, options: [], animations: {
-                    self.view.frame.origin.y = (-1*keyboardHeight)/2
+                    self.view.frame.origin.y = yKeyboard
                 }, completion: nil)
             } else {
                 UIView.animate(withDuration: 0.3, delay: 0.0, options: [], animations: {
-                    self.view.frame.origin.y = 0
+                    self.view.frame.origin.y = self.yOrigin
                 }, completion: nil)
             }
         }
     }
+    
 }
 
 extension CreateAccountViewController {

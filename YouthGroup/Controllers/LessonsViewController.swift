@@ -13,7 +13,6 @@ class LessonsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
     }
     
 }

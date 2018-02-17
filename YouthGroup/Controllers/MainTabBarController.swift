@@ -17,16 +17,24 @@ class MainTabBarController: UITabBarController {
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     
     override func viewWillAppear(_ animated: Bool) {
-        self.selectedIndex = 0
+        self.selectedIndex = UserDefaults.standard.integer(forKey: "tabToDisplay")
     }
 
     override func viewDidAppear(_ animated: Bool) {
         if Auth.auth().currentUser == nil && FBSDKAccessToken.current() == nil {
-            let loginVC = storyboard?.instantiateViewController(withIdentifier: "LoginViewController") as! LoginViewController
-            self.present(loginVC, animated: false, completion: nil)
+            let loginNC = storyboard?.instantiateViewController(withIdentifier: "LoginNavigationController") as! UINavigationController
+            self.present(loginNC, animated: false, completion: nil)
         } else if let user = Auth.auth().currentUser {
             FirebaseClient.shared.setUserData(user: user)
         }
     }
     
+}
+
+enum Tabs: Int {
+    case lessons = 0
+    case members = 1
+    case events = 2
+    case prayerRequests = 3
+    case account = 4
 }

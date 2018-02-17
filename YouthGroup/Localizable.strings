@@ -7,20 +7,56 @@
 */
 
 "mfn" = "Missing First Name";
-"mfn_m" = "You must provide a first name";
+"mfn_m" = "You must provide a first name.";
 "mln" = "Missing Last Name";
-"mln_m" = "You must provide a last name";
+"mln_m" = "You must provide a last name.";
 "me" = "Missing Email";
-"me_m" = "You must provide an email";
+"me_m" = "You must provide an email.";
 "mp" = "Missing Password";
-"mp_m" = "You must provide a password";
+"mp_m" = "You must provide a password.";
 "pm" = "Password Mismatch";
-"pm_m" = "Your passwords don't match";
-"ue_m" = "An unknown error occurred";
+"pm_m" = "Your passwords don't match.";
+
+"ue_m" = "An unknown error occurred.";
 
 "error" = "Error";
 "success" = "Success";
 
-"asc" = "Your account was successfully created";
+"asc" = "Your account was successfully created.";
 
 "newFacebookUserMessage" = "Your Facebook email and name have been stored in our database. If you ever create a YouthGroup account in the future, make sure to use your Facebook email so that your account info will be merged.";
+
+"nps" = "No Photo Selected";
+"nps_m" = "You didn't select a profile photo.";
+
+"fle" = "You must be logged in via Facebook to use your Facebook profile photo.";
+
+"choosePhoto" = "CHOOSE PHOTO";
+"chooseDifferentPhoto" = "CHOOSE A DIFFERENT PHOTO";
+
+"submitPhotoInstructions" = "Note: Your photo won't be saved until you hit submit.";
+
+"joinGroup" = "JOIN GROUP";
+"createGroup" = "CREATE GROUP";
+
+"missingChurch" = "Missing Church";
+"missingChurchMessage" = "You must provide a Church.";
+
+"missingNickname" = "Missing Nickname";
+"missingNicknameMessage" = "You must provide a Nickname.";
+
+"missingPassword" = "Missing Password";
+"missingPasswordMessage" = "You must provide a password.";
+
+"createdAndJoinedGroupMessage" = "You successfully created and joined this group. We'll take you back to your account page now.";
+"joinedGroupMessage" = "You successfully joined this group. We'll take you to your account page now.";
+"editedGroupMessage" = "This group was successfully edited. We'll take you to your account page now.";
+
+"anonymous" = "Anonymous";
+
+"missingTitle" = "Missing Title";
+"missingTitleMessage" = "Prayer requests must have a title.";
+
+"missingRequest" = "Missing Request";
+"missingRequestMessage" = "Prayer requests must have a request.";
+
