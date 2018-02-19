@@ -47,8 +47,6 @@ class AccountDetailViewController: UIViewController {
                 })
             }
         }
-        
-        refreshAccountDetail(reloadGroupsOnly: false)
 
     }
     
@@ -67,12 +65,16 @@ class AccountDetailViewController: UIViewController {
     }
     
     func getGroupUIDs(email: String) {
-        FirebaseClient.shared.getGroupUIDs(email: email, completion: { (groupUIDs) in
-            if let groupUIDs = groupUIDs {
-                self.groupUIDs = groupUIDs
-                self.getGroups(groupUIDs: groupUIDs)
+        FirebaseClient.shared.getGroupUIDs(email: email, completion: { (groupUIDs, error) in
+            if let error = error {
+                Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
             } else {
-                self.reloadTableView()
+                if let groupUIDs = groupUIDs {
+                    self.groupUIDs = groupUIDs
+                    self.getGroups(groupUIDs: groupUIDs)
+                } else {
+                    self.reloadTableView()
+                }
             }
         })
     }
@@ -82,21 +84,25 @@ class AccountDetailViewController: UIViewController {
         var fetchedGroups = 0
         for groupUID in groupUIDs {
             let currentGroupUID = UserDefaults.standard.string(forKey: "currentGroup")
-            FirebaseClient.shared.getGroup(groupUID: groupUID, completion: { (group) in
-                fetchedGroups += 1
-                if let group = group, let uid = group.uid {
-                    if currentGroupUID == uid {
-                        self.currentGroup = group
-                    } else {
-                        self.otherGroups.append(group)
+            FirebaseClient.shared.getGroup(groupUID: groupUID, completion: { (group, error) in
+                if let error = error {
+                    Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+                } else {
+                    fetchedGroups += 1
+                    if let group = group, let uid = group.uid {
+                        if currentGroupUID == uid {
+                            self.currentGroup = group
+                        } else {
+                            self.otherGroups.append(group)
+                        }
                     }
-                }
-                if fetchedGroups == totalGroups {
-                    if self.otherGroups.count > 0 && self.currentGroup == nil {
-                        self.currentGroup = self.otherGroups.removeFirst()
-                        UserDefaults.standard.setValue(self.currentGroup?.uid!, forKey: "currentGroup")
+                    if fetchedGroups == totalGroups {
+                        if self.otherGroups.count > 0 && self.currentGroup == nil {
+                            self.currentGroup = self.otherGroups.removeFirst()
+                            UserDefaults.standard.setValue(self.currentGroup?.uid!, forKey: "currentGroup")
+                        }
+                        self.reloadTableView()
                     }
-                    self.reloadTableView()
                 }
             })
         }
@@ -108,17 +114,10 @@ class AccountDetailViewController: UIViewController {
         self.navigationController?.isNavigationBarHidden = false
         self.navigationController?.navigationBar.prefersLargeTitles = true
         self.tabBarController?.tabBar.isHidden = false
-        if let email = Auth.auth().currentUser?.email {
-            if email != UserDefaults.standard.string(forKey: "lastEmail") {
-                refreshAccountDetail(reloadGroupsOnly: false)
-            }
-            UserDefaults.standard.set(email, forKey: "lastEmail")
-        }
-        
         let name = Notification.Name(rawValue: NotificationKeys.reloadAccount)
         let selector = #selector(AccountDetailViewController.refresh)
         NotificationCenter.default.addObserver(self, selector:selector, name: name, object: nil)
-        
+        refreshAccountDetail(reloadGroupsOnly: false)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -127,10 +126,14 @@ class AccountDetailViewController: UIViewController {
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
         if Auth.auth().currentUser != nil {
-            FirebaseClient.shared.signOut(completion: { success in
-                if success {
-                    self.appDelegate.userData = nil
-                    self.presentLoginView()
+            FirebaseClient.shared.signOut(completion: { (success, error) in
+                if let error = error {
+                    Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+                } else {
+                    if success {
+                        self.appDelegate.userData = nil
+                        self.presentLoginView()
+                    }
                 }
             })
         }

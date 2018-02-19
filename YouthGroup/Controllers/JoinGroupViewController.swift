@@ -23,6 +23,7 @@ class JoinGroupViewController: UIViewController {
     @IBOutlet weak var cancelButton: UIBarButtonItem!
     
     let searchController = UISearchController(searchResultsController: nil)
+    let reloadAccountName = Notification.Name(NotificationKeys.reloadAccount)
     
     var groupUIDs: [String]?
     var groups: [Group] = []
@@ -115,8 +116,7 @@ class JoinGroupViewController: UIViewController {
     @IBAction func skipJoinGroupButtonPressed(_ sender: Any) {
         UserDefaults.standard.set(Tabs.account.rawValue, forKey: "tabToDisplay")
         self.navigationController?.dismiss(animated: true, completion: nil)
-        let name = Notification.Name(NotificationKeys.reloadAccount)
-        NotificationCenter.default.post(name: name, object: nil)
+        NotificationCenter.default.post(name: reloadAccountName, object: nil)
     }
     
 }
@@ -226,7 +226,7 @@ extension JoinGroupViewController: UITableViewDataSource, UITableViewDelegate {
                     Alert.showBasic(title: "Error", message: error, vc: self)
                 } else {
                     let completion: (UIAlertAction) -> Void = {_ in
-                        self.delegate?.refreshAccountDetail(reloadGroupsOnly: true)
+                        NotificationCenter.default.post(name: self.reloadAccountName, object: nil)
                         self.navigationController?.dismiss(animated: true, completion: nil)
                     }
                     UserDefaults.standard.setValue(group.uid!, forKey: "currentGroup")

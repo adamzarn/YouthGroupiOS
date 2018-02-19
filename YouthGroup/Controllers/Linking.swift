@@ -92,16 +92,20 @@ extension LoginViewController {
     }
     
     func checkForPhoto(user: User) {
-        FirebaseClient.shared.hasProfilePhoto(email: user.email!, completion: { (hasPhoto) in
+        FirebaseClient.shared.hasProfilePhoto(email: user.email!, completion: { (hasPhoto, error) in
             Aiv.hide(aiv: self.aiv)
-            if hasPhoto {
-                Alert.showBasicWithCompletion(title: "Success", message: "Your accounts have been linked.", vc: self, completion: {_ in self.navigationController?.dismiss(animated: true, completion: nil)
-                })
+            if let error = error {
+                Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
             } else {
-                Alert.showBasicWithCompletion(title: "Success", message: "Your accounts have been linked.", vc: self, completion: {_ in
-                    let addPhotoVC = self.storyboard?.instantiateViewController(withIdentifier: "AddPhotoViewController") as! AddPhotoViewController
-                    self.navigationController?.pushViewController(addPhotoVC, animated: true)
-                })
+                if hasPhoto {
+                    Alert.showBasicWithCompletion(title: "Success", message: "Your accounts have been linked.", vc: self, completion: {_ in self.navigationController?.dismiss(animated: true, completion: nil)
+                    })
+                } else {
+                    Alert.showBasicWithCompletion(title: "Success", message: "Your accounts have been linked.", vc: self, completion: {_ in
+                        let addPhotoVC = self.storyboard?.instantiateViewController(withIdentifier: "AddPhotoViewController") as! AddPhotoViewController
+                        self.navigationController?.pushViewController(addPhotoVC, animated: true)
+                    })
+                }
             }
         })
     }

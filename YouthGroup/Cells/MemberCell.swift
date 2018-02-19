@@ -14,13 +14,8 @@ class MemberCell: UITableViewCell {
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     var savedEmail: String!
     
-    @IBOutlet weak var memberImageView: UIImageView!
+    @IBOutlet weak var memberImageView: CircleImageView!
     @IBOutlet weak var nameLabel: UILabel!
-    
-    override func awakeFromNib() {
-        memberImageView.layer.borderColor = UIColor.black.cgColor
-        memberImageView.layer.borderWidth = 0.5
-    }
     
     func setUp(member: Member) {
         nameLabel.text = member.name

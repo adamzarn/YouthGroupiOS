@@ -17,6 +17,7 @@ class YouthGroupButton: UIButton {
         super.init(coder: aDecoder)
         
         backgroundColor = color
+        tintColor = UIColor.white
         titleLabel?.textColor = UIColor.white
         titleLabel?.adjustsFontSizeToFitWidth = true
         titleLabel?.minimumScaleFactor = 0.5

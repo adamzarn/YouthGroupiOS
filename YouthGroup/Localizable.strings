@@ -60,3 +60,5 @@
 "missingRequest" = "Missing Request";
 "missingRequestMessage" = "Prayer requests must have a request.";
 
+"noInternet" = "You are not connected to the internet. Please establish an internet connection and try again.";
+

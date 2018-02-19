@@ -84,7 +84,18 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
                         self.delegate?.refreshAccountDetail(reloadGroupsOnly: false)
                         self.navigationController?.dismiss(animated: true, completion: nil)
                     } else {
-                        self.addNewUser(user: user!)
+                        FirebaseClient.shared.doesUserExist(email: user!.email!, completion: { (exists, error) in
+                            if let error = error {
+                                Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+                            } else {
+                                if exists {
+                                    self.delegate?.refreshAccountDetail(reloadGroupsOnly: false)
+                                    self.navigationController?.dismiss(animated: true, completion: nil)
+                                } else {
+                                    self.addNewUser(user: user!)
+                                }
+                            }
+                        })
                     }
                 }
             }

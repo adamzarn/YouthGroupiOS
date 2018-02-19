@@ -7,8 +7,49 @@
 //
 
 import Foundation
+import FirebaseAuth
 
 class Helper {
+    
+    static func hasConnectivity() -> Bool {
+        do {
+            let reachability = Reachability()
+            let networkStatus: Int = reachability!.currentReachabilityStatus.hashValue
+            return (networkStatus != 0)
+        }
+    }
+    
+    static func createMemberFromUser() -> Member? {
+        if let user = Auth.auth().currentUser, let email = user.email, let name = user.displayName {
+            return Member(email: email, name: name, leader: false)
+        }
+        return nil
+    }
+    
+    static func convertAnyObjectToMembers(dict: [String: String], leader: Bool) -> [Member] {
+        var members: [Member] = []
+        for (key,value) in dict {
+            if let email = key.decodeURIComponent() {
+                let newMember = Member(email: email, name: value, leader: leader)
+                members.append(newMember)
+            }
+        }
+        return members
+    }
+    
+    static func convertMembersToAnyObject(members: [Member]?) -> [String : String]? {
+        if let members = members {
+            var membersObject = [:] as [String:String]
+            for member in members {
+                if let email = member.email.encodeURIComponent(), let name = member.name {
+                    membersObject[email] = name
+                }
+            }
+            return membersObject
+        }
+        return nil
+    }
+    
     static func combineLeadersAndStudents(group: Group) -> [Member] {
         var members: [Member] = []
         if let leaders = group.leaders {

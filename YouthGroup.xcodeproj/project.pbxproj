@@ -31,6 +31,12 @@
 		DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */; };
 		DB37B7DB202C8F3B000DABE2 /* PrayerRequestsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */; };
 		DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */; };
+		DB4816A92038CD4400C7FF38 /* PrayerRequestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816A82038CD4400C7FF38 /* PrayerRequestViewController.swift */; };
+		DB4816AB2038D44100C7FF38 /* CircleImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816AA2038D44100C7FF38 /* CircleImageView.swift */; };
+		DB4816AD2038D66F00C7FF38 /* BorderedTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816AC2038D66F00C7FF38 /* BorderedTextView.swift */; };
+		DB4816AF2039CA2400C7FF38 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816AE2039CA2400C7FF38 /* NetworkClient.swift */; };
+		DB4816B12039CC5600C7FF38 /* BiblePassage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B02039CC5600C7FF38 /* BiblePassage.swift */; };
+		DB4816B3203A3C5200C7FF38 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B2203A3C5200C7FF38 /* Reachability.swift */; };
 		DB6AF455203390B200738FF0 /* BouncingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF454203390B200738FF0 /* BouncingView.swift */; };
 		DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */; };
 		DB6AF45A2033ADEC00738FF0 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF4592033ADEC00738FF0 /* Buttons.swift */; };
@@ -111,6 +117,12 @@
 		DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestsViewController.swift; sourceTree = "<group>"; };
 		DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailViewController.swift; sourceTree = "<group>"; };
+		DB4816A82038CD4400C7FF38 /* PrayerRequestViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrayerRequestViewController.swift; sourceTree = "<group>"; };
+		DB4816AA2038D44100C7FF38 /* CircleImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircleImageView.swift; sourceTree = "<group>"; };
+		DB4816AC2038D66F00C7FF38 /* BorderedTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderedTextView.swift; sourceTree = "<group>"; };
+		DB4816AE2039CA2400C7FF38 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
+		DB4816B02039CC5600C7FF38 /* BiblePassage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePassage.swift; sourceTree = "<group>"; };
+		DB4816B2203A3C5200C7FF38 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		DB6AF454203390B200738FF0 /* BouncingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncingView.swift; sourceTree = "<group>"; };
 		DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoViewController.swift; sourceTree = "<group>"; };
 		DB6AF4592033ADEC00738FF0 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -218,8 +230,9 @@
 			isa = PBXGroup;
 			children = (
 				DB37B799202BE855000DABE2 /* AppDelegate.swift */,
+				DB4816B2203A3C5200C7FF38 /* Reachability.swift */,
 				DBF417B42036062700F2A4F8 /* Helpers */,
-				DBF417B32036060000F2A4F8 /* Managers */,
+				DBF417B32036060000F2A4F8 /* Clients */,
 				DBF417B2203605D400F2A4F8 /* Cells */,
 				DB6AF45B2033AF5B00738FF0 /* Colors.swift */,
 				DBF417B72036066700F2A4F8 /* Model */,
@@ -262,6 +275,8 @@
 				DB37B7D6202C8F07000DABE2 /* LessonsViewController.swift */,
 				DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */,
 				DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */,
+				DBCCEC8D2037DA0C0050AC46 /* AddPrayerRequestViewController.swift */,
+				DB4816A82038CD4400C7FF38 /* PrayerRequestViewController.swift */,
 				DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */,
 				DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */,
 				DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */,
@@ -269,7 +284,6 @@
 				DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */,
 				DB1313732036561000051ED7 /* JoinGroupViewController.swift */,
 				DBCCEC892037CE4F0050AC46 /* MembersViewController.swift */,
-				DBCCEC8D2037DA0C0050AC46 /* AddPrayerRequestViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -277,8 +291,10 @@
 		DB6AF456203390B900738FF0 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				DB4816AA2038D44100C7FF38 /* CircleImageView.swift */,
 				DB6AF4592033ADEC00738FF0 /* Buttons.swift */,
 				DB6AF454203390B200738FF0 /* BouncingView.swift */,
+				DB4816AC2038D66F00C7FF38 /* BorderedTextView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -296,13 +312,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
-		DBF417B32036060000F2A4F8 /* Managers */ = {
+		DBF417B32036060000F2A4F8 /* Clients */ = {
 			isa = PBXGroup;
 			children = (
 				DB37B7CC202BED2E000DABE2 /* FirebaseClient.swift */,
 				DBD03FDB202CC82300030C43 /* FacebookClient.swift */,
+				DB4816AE2039CA2400C7FF38 /* NetworkClient.swift */,
 			);
-			path = Managers;
+			path = Clients;
 			sourceTree = "<group>";
 		};
 		DBF417B42036062700F2A4F8 /* Helpers */ = {
@@ -323,6 +340,7 @@
 			children = (
 				DBF417B52036065100F2A4F8 /* Group.swift */,
 				DBCCEC872037A9880050AC46 /* PrayerRequest.swift */,
+				DB4816B02039CC5600C7FF38 /* BiblePassage.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -615,6 +633,8 @@
 				DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */,
 				DB9C750E202C9C6300BA4B7D /* CreateAccountViewController.swift in Sources */,
 				DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */,
+				DB4816A92038CD4400C7FF38 /* PrayerRequestViewController.swift in Sources */,
+				DB4816AD2038D66F00C7FF38 /* BorderedTextView.swift in Sources */,
 				DB1313722036348000051ED7 /* Errors.swift in Sources */,
 				DBCCEC7E203788FD0050AC46 /* Helper.swift in Sources */,
 				DBCCEC842037A0EE0050AC46 /* JoinGroupCell.swift in Sources */,
@@ -627,6 +647,7 @@
 				DBCCEC8020378DF80050AC46 /* EditMemberCell.swift in Sources */,
 				DBD03FE0202D40A000030C43 /* Linking.swift in Sources */,
 				DB6AF45E2033F89B00738FF0 /* ProfileCell.swift in Sources */,
+				DB4816AF2039CA2400C7FF38 /* NetworkClient.swift in Sources */,
 				DB37B79C202BE855000DABE2 /* LoginViewController.swift in Sources */,
 				DB1313742036561000051ED7 /* JoinGroupViewController.swift in Sources */,
 				DB37B7D5202C8CE0000DABE2 /* MainTabBarController.swift in Sources */,
@@ -636,13 +657,16 @@
 				DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */,
 				DBCCEC7C203772FE0050AC46 /* Constants.swift in Sources */,
 				DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */,
+				DB4816B12039CC5600C7FF38 /* BiblePassage.swift in Sources */,
 				DBD03FD6202CA1BC00030C43 /* Alert.swift in Sources */,
+				DB4816AB2038D44100C7FF38 /* CircleImageView.swift in Sources */,
 				DBCCEC8E2037DA0C0050AC46 /* AddPrayerRequestViewController.swift in Sources */,
 				DB6AF455203390B200738FF0 /* BouncingView.swift in Sources */,
 				DB13136E2036271300051ED7 /* ButtonCell.swift in Sources */,
 				DB37B7CD202BED2E000DABE2 /* FirebaseClient.swift in Sources */,
 				DB37B7DB202C8F3B000DABE2 /* PrayerRequestsViewController.swift in Sources */,
 				DBCCEC862037A9670050AC46 /* PrayerRequestCell.swift in Sources */,
+				DB4816B3203A3C5200C7FF38 /* Reachability.swift in Sources */,
 				DB13137020362B1D00051ED7 /* CreateGroupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

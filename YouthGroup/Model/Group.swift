@@ -50,22 +50,11 @@ struct Group {
             self.description = description as? String
         }
         if let leaders = info["leaders"] {
-            self.leaders = convertToMembers(dict: leaders as! [String : String], leader: true)
+            self.leaders = Helper.convertAnyObjectToMembers(dict: leaders as! [String : String], leader: true)
         }
         if let students = info["students"] {
-            self.students = convertToMembers(dict: students as! [String : String], leader: false)
+            self.students = Helper.convertAnyObjectToMembers(dict: students as! [String : String], leader: false)
         }
-    }
-    
-    func convertToMembers(dict: [String: String], leader: Bool) -> [Member] {
-        var members: [Member] = []
-        for (key,value) in dict {
-            if let email = key.decodeURIComponent() {
-                let newMember = Member(email: email, name: value, leader: leader)
-                members.append(newMember)
-            }
-        }
-        return members
     }
     
     func toAnyObject() -> [String: Any] {
@@ -77,21 +66,8 @@ struct Group {
                 "lowercasedCreatedBy": self.lowercasedCreatedBy,
                 "createdByEmail": self.createdByEmail,
                 "description": self.description,
-                "leaders": membersToAnyObject(members: self.leaders),
-                "students": membersToAnyObject(members: self.students)]
-    }
-    
-    func membersToAnyObject(members: [Member]?) -> [String : String]? {
-        if let members = members {
-            var membersObject = [:] as [String:String]
-            for member in members {
-                if let email = member.email.encodeURIComponent(), let name = member.name {
-                    membersObject[email] = name
-                }
-            }
-            return membersObject
-        }
-        return nil
+                "leaders": Helper.convertMembersToAnyObject(members: self.leaders),
+                "students": Helper.convertMembersToAnyObject(members: self.students)]
     }
     
 }

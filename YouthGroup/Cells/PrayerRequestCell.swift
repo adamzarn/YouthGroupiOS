@@ -13,21 +13,18 @@ var imageCache = [String: UIImage]()
 
 class PrayerRequestCell: UITableViewCell {
     
-    @IBOutlet weak var prayerRequestImageView: UIImageView!
+    @IBOutlet weak var prayerRequestImageView: CircleImageView!
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var nameLabel: UILabel!
     @IBOutlet weak var timestampLabel: UILabel!
+    @IBOutlet weak var answeredButton: CheckboxButton!
     
     var savedEmail: String!
-    
-    override func awakeFromNib() {
-        prayerRequestImageView.layer.borderColor = UIColor.black.cgColor
-        prayerRequestImageView.layer.borderWidth = 0.5
-    }
     
     func setUp(request: PrayerRequest) {
         
         savedEmail = request.submittedByEmail
+        setCheckmark(answered: request.answered)
         
         self.prayerRequestImageView.image = UIImage(named: "Boy")
         
@@ -57,6 +54,12 @@ class PrayerRequestCell: UITableViewCell {
         
     }
     
-    
+    func setCheckmark(answered: Bool) {
+        if answered {
+            answeredButton.setImage(#imageLiteral(resourceName: "checkmark"), for: .normal)
+        } else {
+            answeredButton.setImage(nil, for: .normal)
+        }
+    }
     
 }

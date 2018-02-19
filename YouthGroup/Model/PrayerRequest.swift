@@ -18,6 +18,7 @@ struct PrayerRequest {
     var request: String
     var answered: Bool
     var anonymous: Bool
+    var prayingMembers: [Member]?
     
     init(uid: String, info: NSDictionary) {
         self.uid = uid
@@ -28,9 +29,12 @@ struct PrayerRequest {
         self.request = info["request"] as! String
         self.answered = info["answered"] as! Bool
         self.anonymous = info["anonymous"] as! Bool
+        if let prayingMembers = info["prayingMembers"] {
+            self.prayingMembers = Helper.convertAnyObjectToMembers(dict: prayingMembers as! [String : String], leader: false)
+        }
     }
     
-    init(uid: String?, submittedBy: String, submittedByEmail: String, timestamp: String, title: String, request: String, answered: Bool, anonymous: Bool) {
+    init(uid: String?, submittedBy: String, submittedByEmail: String, timestamp: String, title: String, request: String, answered: Bool, anonymous: Bool, prayingMembers: [Member]?) {
         self.uid = uid
         self.submittedBy = submittedBy
         self.submittedByEmail = submittedByEmail
@@ -39,6 +43,7 @@ struct PrayerRequest {
         self.request = request
         self.answered = answered
         self.anonymous = anonymous
+        self.prayingMembers = prayingMembers
     }
     
     func toAnyObject() -> [String: Any] {
@@ -48,7 +53,8 @@ struct PrayerRequest {
                 "title": title,
                 "request": request,
                 "answered": answered,
-                "anonymous": anonymous]
+                "anonymous": anonymous,
+                "prayingMembers": Helper.convertMembersToAnyObject(members: prayingMembers)]
     }
 
 }

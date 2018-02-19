@@ -36,26 +36,34 @@ class MembersViewController: UIViewController {
     
     func checkIfUserBelongsToGroup(groupUID: String) {
         if let email = Auth.auth().currentUser?.email {
-            FirebaseClient.shared.getGroupUIDs(email: email, completion: { groupUIDs in
-                if let groupUIDs = groupUIDs, groupUIDs.contains(groupUID) {
-                    self.getMembers(groupUID: groupUID)
+            FirebaseClient.shared.getGroupUIDs(email: email, completion: { (groupUIDs, error) in
+                if let error = error {
+                    Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                 } else {
-                    UserDefaults.standard.set(nil, forKey: "currentGroup")
-                    self.reloadTableView(members: [])
+                    if let groupUIDs = groupUIDs, groupUIDs.contains(groupUID) {
+                        self.getMembers(groupUID: groupUID)
+                    } else {
+                        UserDefaults.standard.set(nil, forKey: "currentGroup")
+                        self.reloadTableView(members: [])
+                    }
                 }
             })
         }
     }
     
     @objc func getMembers(groupUID: String) {
-        FirebaseClient.shared.getGroup(groupUID: groupUID, completion: { (group) in
-            if let group = group {
-                if let leaders = group.leaders, let students = group.students {
-                    let sortedLeaders = leaders.sorted(by: { $0.name < $1.name })
-                    let sortedStudents = students.sorted(by: { $0.name < $1.name })
-                    self.reloadTableView(members: [sortedLeaders, sortedStudents])
-                } else {
-                    self.reloadTableView(members: [])
+        FirebaseClient.shared.getGroup(groupUID: groupUID, completion: { (group, error) in
+            if let error = error {
+                Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+            } else {
+                if let group = group {
+                    if let leaders = group.leaders, let students = group.students {
+                        let sortedLeaders = leaders.sorted(by: { $0.name < $1.name })
+                        let sortedStudents = students.sorted(by: { $0.name < $1.name })
+                        self.reloadTableView(members: [sortedLeaders, sortedStudents])
+                    } else {
+                        self.reloadTableView(members: [])
+                    }
                 }
             }
         })

@@ -17,20 +17,17 @@ protocol ProfileCellDelegate: class {
 
 class ProfileCell: UITableViewCell {
     
-    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var profileImageView: CircleImageView!
     @IBOutlet weak var nameLabel: UILabel!
     weak var delegate: ProfileCellDelegate?
     var imageData: Data?
+    var cachedImage: UIImage?
     
     override func awakeFromNib() {
         super.awakeFromNib()
         profileImageView.isUserInteractionEnabled = false
         let recognizer = UITapGestureRecognizer(target: self, action: #selector(ProfileCell.profileImageViewTapped(_:)))
         profileImageView.addGestureRecognizer(recognizer)
-        
-        profileImageView.layer.borderWidth = 1.0
-        profileImageView.layer.borderColor = UIColor.black.cgColor
-        
     }
     
     @objc func profileImageViewTapped(_ sender: UITapGestureRecognizer) {
@@ -40,8 +37,12 @@ class ProfileCell: UITableViewCell {
     func setUp(image: UIImage?, user: User?) {
         if let user = user {
             nameLabel.text = user.displayName
+            cachedImage = imageCache[user.email!]
         }
-        if let image = image {
+        if let cachedImage = self.cachedImage {
+            profileImageView.isUserInteractionEnabled = true
+            profileImageView.image = cachedImage
+        } else if let image = image {
             profileImageView.isUserInteractionEnabled = true
             profileImageView.image = image
         } else {
@@ -56,6 +57,7 @@ class ProfileCell: UITableViewCell {
                             DispatchQueue.main.async {
                                 self.profileImageView.isUserInteractionEnabled = true
                                 self.profileImageView.image = image
+                                imageCache[email] = image
                             }
                         }
                     } else {

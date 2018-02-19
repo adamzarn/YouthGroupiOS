@@ -19,7 +19,7 @@ class CreateGroupViewController: UIViewController {
     @IBOutlet weak var churchTextField: UITextField!
     @IBOutlet weak var nicknameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var descriptionTextView: UITextView!
+    @IBOutlet weak var descriptionTextView: BorderedTextView!
     @IBOutlet weak var aiv: UIActivityIndicatorView!
     
     var yOrigin: CGFloat!
@@ -34,9 +34,6 @@ class CreateGroupViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        descriptionTextView.layer.borderColor = UIColor.lightGray.cgColor
-        descriptionTextView.layer.borderWidth = 0.5
-        descriptionTextView.layer.cornerRadius = 4.0
         
         yOrigin = (self.navigationController?.navigationBar.frame.size.height)! + UIApplication.shared.statusBarFrame.size.height
         
