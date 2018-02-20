@@ -17,11 +17,11 @@ class LessonsViewController: UIViewController {
         if let parameters = verse.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) {
             NetworkClient.shared.getBibleVerses(parameters: parameters, completion: { (reference, text, verses) in
                 if let reference = reference, let text = text, let verses = verses {
-                    print(reference)
-                    print(text)
-                    for verse in verses {
-                        print("\(verse.number) \(verse.text)")
-                    }
+//                    print(reference)
+//                    print(text)
+//                    for verse in verses {
+//                        print("\(verse.number) \(verse.text)")
+//                    }
                 }
             })
         }

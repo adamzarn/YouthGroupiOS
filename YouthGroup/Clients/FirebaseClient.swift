@@ -124,7 +124,7 @@ class FirebaseClient: NSObject {
         }
     }
     
-    //MARK: Work with Groups
+    //MARK: Groups
     
     func createGroup(group: Group, completion: @escaping (_ groupUID: String?, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
@@ -165,7 +165,7 @@ class FirebaseClient: NSObject {
                         if data is NSNull {
                             completion(nil, nil)
                         } else {
-                            let groupUIDs = data as! [String]
+                            let groupUIDs = (data as! NSDictionary).allKeys as! [String]
                             completion(groupUIDs, nil)
                         }
                     } else {
@@ -195,11 +195,11 @@ class FirebaseClient: NSObject {
         }
     }
     
-    func updateUserGroups(email: String, groupUIDs: [String], completion: @escaping (_ success: Bool, _ error: String?) -> ()) {
+    func appendUserGroup(email: String, newGroupUID: String, completion: @escaping (_ success: Bool, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             if let email = email.encodeURIComponent() {
-                let userGroupsRef = ref.child("Users").child(email).child("groups")
-                userGroupsRef.setValue(groupUIDs) { (error, ref) -> Void in
+                let groupToAppendRef = ref.child("Users").child(email).child("groups").child(newGroupUID)
+                groupToAppendRef.setValue(true) { (error, ref) -> Void in
                     if let error = error {
                         completion(false, error.localizedDescription)
                     } else {
@@ -212,10 +212,27 @@ class FirebaseClient: NSObject {
         }
     }
     
-    func updateGroupMembers(uid: String, updatedMembers: [Member], type: String, completion: @escaping (_ success: Bool, _ error: String?) -> ()) {
+    func deleteUserGroup(email: String, groupUIDToDelete: String, completion: @escaping (_ success: Bool, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
-            let membersRef = ref.child("Groups").child(uid).child(type)
-            membersRef.setValue(membersToAnyObject(members: updatedMembers)) { (error, ref) -> Void in
+            if let email = email.encodeURIComponent() {
+                let groupToDeleteRef = ref.child("Users").child(email).child("groups").child(groupUIDToDelete)
+                groupToDeleteRef.removeValue() { (error, ref) -> Void in
+                    if let error = error {
+                        completion(false, error.localizedDescription)
+                    } else {
+                        completion(true, nil)
+                    }
+                }
+            }
+        } else {
+            completion(false, Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func appendGroupMember(uid: String, newMember: Member, type: String, completion: @escaping (_ success: Bool, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let memberRef = ref.child("Groups").child(uid).child(type).child(newMember.email.encodeURIComponent()!)
+            memberRef.setValue(newMember.name) { (error, ref) -> Void in
                 if let error = error {
                     completion(false, error.localizedDescription)
                 } else {
@@ -227,17 +244,19 @@ class FirebaseClient: NSObject {
         }
     }
     
-    func membersToAnyObject(members: [Member]?) -> [String : String]? {
-        if let members = members {
-            var membersObject = [:] as [String:String]
-            for member in members {
-                if let email = member.email.encodeURIComponent(), let name = member.name {
-                    membersObject[email] = name
+    func deleteGroupMember(uid: String, email: String, type: String, completion: @escaping (_ success: Bool, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let memberToDeleteRef = ref.child("Groups").child(uid).child(type).child(email.encodeURIComponent()!)
+            memberToDeleteRef.removeValue() { (error, ref) -> Void in
+                if let error = error {
+                    completion(false, error.localizedDescription)
+                } else {
+                    completion(true, nil)
                 }
             }
-            return membersObject
+        } else {
+            completion(false, Helper.getString(key: "noInternet"))
         }
-        return nil
     }
     
     func queryGroups(query: String, searchKey: String, completion: @escaping (_ groups: [Group]?, _ error: String?) -> ()) {
@@ -263,7 +282,28 @@ class FirebaseClient: NSObject {
         }
     }
     
-    //MARK: Members
+    //MARK: Events
+    
+    func getEvents(groupUID: String, completion: @escaping (_ events: [Event]?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let eventsRef = ref.child("Events").child(groupUID)
+            eventsRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    var events: [Event] = []
+                    for child in snapshot.children {
+                        let uid = (child as! DataSnapshot).key
+                        let info = (child as! DataSnapshot).value as! NSDictionary
+                        events.append(Event(uid: uid, info: info))
+                    }
+                    completion(events, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            })
+        } else {
+            completion(nil, Helper.getString(key: "noInternet"))
+        }
+    }
     
     //MARK: Prayer Requests
     
@@ -297,10 +337,25 @@ class FirebaseClient: NSObject {
         }
     }
     
-    func updatePrayingMembers(groupUID: String, prayerRequestUID: String, prayingMembers: [Member], completion: @escaping (_ error: String?) -> ()) {
+    func appendPrayingMember(groupUID: String, prayerRequestUID: String, newPrayingMember: Member, completion: @escaping (_ error: String?) -> ()) {
         if Helper.hasConnectivity() {
-            let prayerRequestRef = ref.child("PrayerRequests").child(groupUID).child(prayerRequestUID).child("prayingMembers")
-            prayerRequestRef.setValue(Helper.convertMembersToAnyObject(members: prayingMembers)) { (error, ref) -> Void in
+            let prayingMemberRef = ref.child("PrayerRequests").child(groupUID).child(prayerRequestUID).child("prayingMembers").child(newPrayingMember.email.encodeURIComponent()!)
+            prayingMemberRef.setValue(newPrayingMember.name) { (error, ref) -> Void in
+                if let error = error {
+                    completion(error.localizedDescription)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func deletePrayingMember(groupUID: String, prayerRequestUID: String, prayingMemberToDelete: Member, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let prayingMemberToDeleteRef = ref.child("PrayerRequests").child(groupUID).child(prayerRequestUID).child("prayingMembers").child(prayingMemberToDelete.email.encodeURIComponent()!)
+            prayingMemberToDeleteRef.removeValue() { (error, ref) -> Void in
                 if let error = error {
                     completion(error.localizedDescription)
                 } else {
@@ -409,6 +464,25 @@ class FirebaseClient: NSObject {
                 })
             } else {
                 completion(false, nil)
+            }
+        } else {
+            completion(true, Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func isLeader(groupUID: String, email: String, completion: @escaping(_ isLeader: Bool, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            if let encodedEmail = email.encodeURIComponent() {
+                let leaderRef = ref.child("Groups").child(groupUID).child("leaders").child(encodedEmail)
+                leaderRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                    if snapshot.exists() {
+                        completion(true, nil)
+                    } else {
+                        completion(false, nil)
+                    }
+                })
+            } else {
+                completion(false, "Bad Email.")
             }
         } else {
             completion(true, Helper.getString(key: "noInternet"))

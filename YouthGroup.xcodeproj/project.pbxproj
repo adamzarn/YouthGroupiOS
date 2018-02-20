@@ -37,6 +37,10 @@
 		DB4816AF2039CA2400C7FF38 /* NetworkClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816AE2039CA2400C7FF38 /* NetworkClient.swift */; };
 		DB4816B12039CC5600C7FF38 /* BiblePassage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B02039CC5600C7FF38 /* BiblePassage.swift */; };
 		DB4816B3203A3C5200C7FF38 /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B2203A3C5200C7FF38 /* Reachability.swift */; };
+		DB4816B5203BACF700C7FF38 /* EventCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B4203BACF700C7FF38 /* EventCell.swift */; };
+		DB4816B7203BAE7D00C7FF38 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B6203BAE7D00C7FF38 /* Event.swift */; };
+		DB4816B9203BBC7B00C7FF38 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B8203BBC7B00C7FF38 /* EventViewController.swift */; };
+		DB4816BB203BD06D00C7FF38 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */; };
 		DB6AF455203390B200738FF0 /* BouncingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF454203390B200738FF0 /* BouncingView.swift */; };
 		DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */; };
 		DB6AF45A2033ADEC00738FF0 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF4592033ADEC00738FF0 /* Buttons.swift */; };
@@ -123,6 +127,10 @@
 		DB4816AE2039CA2400C7FF38 /* NetworkClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkClient.swift; sourceTree = "<group>"; };
 		DB4816B02039CC5600C7FF38 /* BiblePassage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePassage.swift; sourceTree = "<group>"; };
 		DB4816B2203A3C5200C7FF38 /* Reachability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
+		DB4816B4203BACF700C7FF38 /* EventCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCell.swift; sourceTree = "<group>"; };
+		DB4816B6203BAE7D00C7FF38 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
+		DB4816B8203BBC7B00C7FF38 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
+		DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		DB6AF454203390B200738FF0 /* BouncingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncingView.swift; sourceTree = "<group>"; };
 		DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoViewController.swift; sourceTree = "<group>"; };
 		DB6AF4592033ADEC00738FF0 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -274,6 +282,8 @@
 				DB37B79B202BE855000DABE2 /* LoginViewController.swift */,
 				DB37B7D6202C8F07000DABE2 /* LessonsViewController.swift */,
 				DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */,
+				DB4816B8203BBC7B00C7FF38 /* EventViewController.swift */,
+				DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */,
 				DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */,
 				DBCCEC8D2037DA0C0050AC46 /* AddPrayerRequestViewController.swift */,
 				DB4816A82038CD4400C7FF38 /* PrayerRequestViewController.swift */,
@@ -308,6 +318,7 @@
 				DBCCEC832037A0EE0050AC46 /* JoinGroupCell.swift */,
 				DBCCEC852037A9670050AC46 /* PrayerRequestCell.swift */,
 				DBCCEC8B2037D0FD0050AC46 /* MemberCell.swift */,
+				DB4816B4203BACF700C7FF38 /* EventCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -341,6 +352,7 @@
 				DBF417B52036065100F2A4F8 /* Group.swift */,
 				DBCCEC872037A9880050AC46 /* PrayerRequest.swift */,
 				DB4816B02039CC5600C7FF38 /* BiblePassage.swift */,
+				DB4816B6203BAE7D00C7FF38 /* Event.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -630,10 +642,12 @@
 			files = (
 				DBCCEC8A2037CE4F0050AC46 /* MembersViewController.swift in Sources */,
 				DBF417B62036065100F2A4F8 /* Group.swift in Sources */,
+				DB4816B9203BBC7B00C7FF38 /* EventViewController.swift in Sources */,
 				DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */,
 				DB9C750E202C9C6300BA4B7D /* CreateAccountViewController.swift in Sources */,
 				DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */,
 				DB4816A92038CD4400C7FF38 /* PrayerRequestViewController.swift in Sources */,
+				DB4816BB203BD06D00C7FF38 /* CreateEventViewController.swift in Sources */,
 				DB4816AD2038D66F00C7FF38 /* BorderedTextView.swift in Sources */,
 				DB1313722036348000051ED7 /* Errors.swift in Sources */,
 				DBCCEC7E203788FD0050AC46 /* Helper.swift in Sources */,
@@ -652,6 +666,7 @@
 				DB1313742036561000051ED7 /* JoinGroupViewController.swift in Sources */,
 				DB37B7D5202C8CE0000DABE2 /* MainTabBarController.swift in Sources */,
 				DB6AF45A2033ADEC00738FF0 /* Buttons.swift in Sources */,
+				DB4816B5203BACF700C7FF38 /* EventCell.swift in Sources */,
 				DB6AF45C2033AF5B00738FF0 /* Colors.swift in Sources */,
 				DBCCEC8C2037D0FD0050AC46 /* MemberCell.swift in Sources */,
 				DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */,
@@ -667,6 +682,7 @@
 				DB37B7DB202C8F3B000DABE2 /* PrayerRequestsViewController.swift in Sources */,
 				DBCCEC862037A9670050AC46 /* PrayerRequestCell.swift in Sources */,
 				DB4816B3203A3C5200C7FF38 /* Reachability.swift in Sources */,
+				DB4816B7203BAE7D00C7FF38 /* Event.swift in Sources */,
 				DB13137020362B1D00051ED7 /* CreateGroupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

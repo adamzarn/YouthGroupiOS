@@ -37,6 +37,14 @@ class Helper {
         return members
     }
     
+    static func convertAnyObjectToAddress(dict: NSDictionary) -> Address {
+        let street = dict["street"] as! String
+        let city = dict["city"] as! String
+        let state = dict["state"] as! String
+        let zip = dict["zip"] as! String
+        return Address(street: street, city: city, state: state, zip: zip)
+    }
+    
     static func convertMembersToAnyObject(members: [Member]?) -> [String : String]? {
         if let members = members {
             var membersObject = [:] as [String:String]
@@ -109,6 +117,37 @@ class Helper {
         }
         
     }
+
+        
+    static let weekdays =
+        [1 : "Sunday",
+        2 :"Monday",
+        3 : "Tuesday",
+        4 : "Wednesday",
+        5 : "Thursday",
+        6 : "Friday",
+        7 : "Saturday"]
+    
+    static func getDayOfWeek(dateString: String) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd HH:mm:ss:SSS"
+        let date = formatter.date(from: dateString)!
+        let myCalendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
+        let myComponents = myCalendar.components(.weekday, from: date)
+        let weekday = myComponents.weekday
+        return weekdays[weekday!]!
+    }
+    
+    static func isLeader(group: Group) -> Bool {
+        if let leaders = group.leaders {
+            let leaderEmails = leaders.map { $0.email }
+            if let email = Auth.auth().currentUser?.email {
+                return leaderEmails.contains(where: { $0 == email })
+            }
+        }
+        return false
+    }
+    
 }
 
 extension String {

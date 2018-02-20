@@ -135,21 +135,38 @@ class PrayerRequestViewController: UIViewController {
             } else {
                 newPrayingMembers.insert(member, at: 0)
             }
-            FirebaseClient.shared.updatePrayingMembers(groupUID: groupUID, prayerRequestUID: prayerRequest.uid!, prayingMembers: newPrayingMembers, completion: { (error) in
-                if let error = error {
-                    Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
-                } else {
-                    if self.prayingMembers.count < newPrayingMembers.count {
-                        self.prayingButton.setTitle("NOT PRAYING", for: .normal)
-                    } else {
-                        self.prayingButton.setTitle("PRAYING", for: .normal)
-                    }
-                    self.prayingMembers = newPrayingMembers
-                    self.delegate?.update(prayingMembers: newPrayingMembers, indexPath: self.indexPath)
-                    self.tableView.reloadData()
-                }
-            })
+            if prayingMembers.count < newPrayingMembers.count {
+                appendPrayingMember(member: member, newPrayingMembers: newPrayingMembers)
+            } else {
+                deletePrayingMember(member: member, newPrayingMembers: newPrayingMembers)
+            }
         }
+    }
+    
+    func appendPrayingMember(member: Member, newPrayingMembers: [Member]) {
+        FirebaseClient.shared.appendPrayingMember(groupUID: groupUID, prayerRequestUID: prayerRequest.uid!, newPrayingMember: member, completion: { (error) in
+            if let error = error {
+                Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+            } else {
+                self.prayingButton.setTitle("NOT PRAYING", for: .normal)
+                self.prayingMembers = newPrayingMembers
+                self.delegate?.update(prayingMembers: newPrayingMembers, indexPath: self.indexPath)
+                self.tableView.reloadData()
+            }
+        })
+    }
+    
+    func deletePrayingMember(member: Member, newPrayingMembers: [Member]) {
+        FirebaseClient.shared.deletePrayingMember(groupUID: groupUID, prayerRequestUID: prayerRequest.uid!, prayingMemberToDelete: member, completion: { (error) in
+            if let error = error {
+                Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+            } else {
+                self.prayingButton.setTitle("PRAYING", for: .normal)
+                self.prayingMembers = newPrayingMembers
+                self.delegate?.update(prayingMembers: newPrayingMembers, indexPath: self.indexPath)
+                self.tableView.reloadData()
+            }
+        })
     }
     
 }

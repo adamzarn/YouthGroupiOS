@@ -195,12 +195,7 @@ extension JoinGroupViewController: UITableViewDataSource, UITableViewDelegate {
     }
     
     func joinGroup(email: String, group: Group) {
-        var newGroupUIDs: [String] = []
-        if let groupUIDs = groupUIDs {
-            newGroupUIDs += groupUIDs
-        }
-        newGroupUIDs.append(group.uid!)
-        FirebaseClient.shared.updateUserGroups(email: email, groupUIDs: newGroupUIDs, completion: { (success, error) in
+        FirebaseClient.shared.appendUserGroup(email: email, newGroupUID: group.uid!, completion: { (success, error) in
             if let error = error {
                 Alert.showBasic(title: self.getString(key: "error"), message: error, vc: self)
             } else {
@@ -216,12 +211,7 @@ extension JoinGroupViewController: UITableViewDataSource, UITableViewDelegate {
     func updateGroupMembers(group: Group) {
         if let user = Auth.auth().currentUser {
             let newStudent = Member(email: user.email!, name: user.displayName!, leader: false)
-            var updatedStudents: [Member] = []
-            if let currentStudents = group.students {
-                updatedStudents += currentStudents
-            }
-            updatedStudents.append(newStudent)
-            FirebaseClient.shared.updateGroupMembers(uid: group.uid!, updatedMembers: updatedStudents, type: "students", completion: { (success, error) in
+            FirebaseClient.shared.appendGroupMember(uid: group.uid!, newMember: newStudent, type: "students", completion: { (success, error) in
                 if let error = error {
                     Alert.showBasic(title: "Error", message: error, vc: self)
                 } else {

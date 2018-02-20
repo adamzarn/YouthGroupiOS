@@ -15,10 +15,6 @@ import FBSDKLoginKit
 class MainTabBarController: UITabBarController {
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.selectedIndex = UserDefaults.standard.integer(forKey: "tabToDisplay")
-    }
 
     override func viewDidAppear(_ animated: Bool) {
         if Auth.auth().currentUser == nil && FBSDKAccessToken.current() == nil {
@@ -33,7 +29,7 @@ class MainTabBarController: UITabBarController {
 
 enum Tabs: Int {
     case lessons = 0
-    case members = 1
+    case messages = 1
     case events = 2
     case prayerRequests = 3
     case account = 4

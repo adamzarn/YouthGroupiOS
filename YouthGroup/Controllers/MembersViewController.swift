@@ -75,6 +75,10 @@ class MembersViewController: UIViewController {
         self.refreshControl.endRefreshing()
     }
     
+    @IBAction func dismissButtonPressed(_ sender: Any) {
+        self.navigationController?.dismiss(animated: true, completion: nil)
+    }
+    
 }
 
 extension MembersViewController: UITableViewDelegate, UITableViewDataSource {

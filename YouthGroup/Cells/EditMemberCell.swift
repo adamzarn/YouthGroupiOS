@@ -17,9 +17,12 @@ class EditMemberCell: UITableViewCell {
         
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
     weak var delegate: EditMemberCellDelegate!
+    
     var member: Member!
     var leaderBoxChecked: Bool!
-        
+    var savedEmail: String!
+    
+    @IBOutlet weak var memberImageView: CircleImageView!
     @IBOutlet weak var leaderButton: CheckboxButton!
     @IBOutlet weak var nameLabel: UILabel!
         
@@ -31,6 +34,27 @@ class EditMemberCell: UITableViewCell {
         } else {
             leaderButton.setImage(nil, for: .normal)
         }
+        
+        savedEmail = member.email!
+        self.memberImageView.image = UIImage(named: "Boy")
+        
+        if let image = imageCache[member.email!] {
+            self.memberImageView.image = image
+        } else {
+            FirebaseClient.shared.getProfilePhoto(email: member.email!, completion: { (data, error) in
+                if let data = data {
+                    DispatchQueue.main.async {
+                        let image = UIImage(data: data)
+                        if self.savedEmail == member.email! {
+                            self.memberImageView.image = image
+                        }
+                        imageCache[member.email!] = image
+                    }
+                }
+            })
+        }
+        
+        
     }
     
     @IBAction func leaderBoxChecked(_ sender: Any) {

@@ -123,12 +123,7 @@ class CreateGroupViewController: UIViewController {
     }
     
     func joinGroup(email: String, groupUID: String) {
-        var newGroupUIDs: [String] = []
-        if let groupUIDs = groupUIDs {
-            newGroupUIDs += groupUIDs
-        }
-        newGroupUIDs.append(groupUID)
-        FirebaseClient.shared.updateUserGroups(email: email, groupUIDs: newGroupUIDs, completion: { (success, error) in
+        FirebaseClient.shared.appendUserGroup(email: email, newGroupUID: groupUID, completion: { (success, error) in
             Aiv.hide(aiv: self.aiv)
             if let error = error {
                 Alert.showBasic(title: self.getString(key: "error"), message: error, vc: self)

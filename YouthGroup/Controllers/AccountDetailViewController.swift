@@ -12,6 +12,12 @@ import FirebaseAuth
 import FBSDKCoreKit
 import FBSDKLoginKit
 
+enum Sections: Int {
+    case details = 0
+    case currentGroup = 1
+    case otherGroups = 2
+}
+
 class AccountDetailViewController: UIViewController {
     
     let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -189,9 +195,8 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
             }
         }
 
-        if let email = Auth.auth().currentUser?.email, let groupUIDs = groupUIDs {
-            let newGroupUIDs = groupUIDs.filter { $0 != group.uid }
-            FirebaseClient.shared.updateUserGroups(email: email, groupUIDs: newGroupUIDs, completion: { (success, error) in
+        if let email = Auth.auth().currentUser?.email {
+            FirebaseClient.shared.deleteUserGroup(email: email, groupUIDToDelete: group.uid!, completion: { (success, error) in
                 if let error = error {
                     Alert.showBasic(title: "Cannot Delete", message: error, vc: self)
                 } else {
@@ -202,10 +207,8 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func updateGroupMembers(group: Group, email: String) {
-        let memberType = isLeader(group: group) ? "leaders" : "students"
-        let currentMembers = (memberType == "leaders") ? group.leaders! : group.students!
-        let updatedMembers = currentMembers.filter { $0.email != email }
-        FirebaseClient.shared.updateGroupMembers(uid: group.uid!, updatedMembers: updatedMembers, type: memberType, completion: { (success, error) in
+        let memberType = Helper.isLeader(group: group) ? "leaders" : "students"
+        FirebaseClient.shared.deleteGroupMember(uid: group.uid!, email: email, type: memberType, completion: { (success, error) in
             if let error = error {
                 Alert.showBasic(title: "Cannot Delete", message: error, vc: self)
             } else {
@@ -220,12 +223,12 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0:
+        case Sections.details.rawValue:
             return appDelegate.userData?.count ?? 0
-        case 1:
+        case Sections.currentGroup.rawValue:
             if self.currentGroup != nil { return 1 }
             return 0
-        case 2:
+        case Sections.otherGroups.rawValue:
             return otherGroups.count + 2
         default:
             return 0
@@ -233,7 +236,7 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.section == 0 {
+        if indexPath.section == Sections.details.rawValue {
             if indexPath.row == 0 {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "profileCell") as! ProfileCell
                 cell.delegate = self
@@ -245,9 +248,9 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
                 cell.detailTextLabel?.text = appDelegate.userData?[indexPath.row].1
                 return cell
             }
-        } else if indexPath.section == 1 {
+        } else if indexPath.section == Sections.currentGroup.rawValue {
             let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell")! as UITableViewCell
-            if isLeader(group: self.currentGroup!) {
+            if Helper.isLeader(group: self.currentGroup!) {
                 cell.accessoryType = .detailDisclosureButton
             } else {
                 cell.accessoryType = .none
@@ -260,7 +263,7 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
             if indexPath.row < otherGroups.count {
                 let cell = tableView.dequeueReusableCell(withIdentifier: "groupCell")! as UITableViewCell
                 let currentGroup = otherGroups[indexPath.row]
-                if isLeader(group: currentGroup) {
+                if Helper.isLeader(group: currentGroup) {
                     cell.accessoryType = .detailDisclosureButton
                 } else {
                     cell.accessoryType = .none
@@ -281,19 +284,9 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
         }
     }
     
-    func isLeader(group: Group) -> Bool {
-        if let leaders = group.leaders {
-            let leaderEmails = leaders.map { $0.email }
-            if let email = Auth.auth().currentUser?.email {
-                return leaderEmails.contains(where: { $0 == email })
-            }
-        }
-        return false
-    }
-    
     func isOnlyLeader(group: Group) -> Bool {
         if let leaders = group.leaders {
-            if isLeader(group: group) && leaders.count == 1 {
+            if Helper.isLeader(group: group) && leaders.count == 1 {
                 return true
             }
         }
@@ -325,7 +318,12 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
-        if indexPath.section == 2 && indexPath.row < otherGroups.count {
+        if indexPath.section == Sections.currentGroup.rawValue {
+            let membersNC = self.storyboard?.instantiateViewController(withIdentifier: "MembersNavigationController") as! UINavigationController
+            let membersVC = membersNC.viewControllers[0] as! MembersViewController
+            present(membersNC, animated: true, completion: nil)
+        }
+        if indexPath.section == Sections.otherGroups.rawValue && indexPath.row < otherGroups.count {
             let alert = UIAlertController(title: "Set Current Group", message: "Would you like to make \(otherGroups[indexPath.row].church!) your current group?", preferredStyle: .actionSheet)
             alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) -> Void in
                 self.otherGroups.append(self.currentGroup!)
