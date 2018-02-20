@@ -59,6 +59,19 @@ class Event {
         }
     }
     
+    func toAnyObject() -> [String: Any] {
+        return ["name": self.name,
+                "date": self.date,
+                "startTime": self.startTime,
+                "endTime": self.endTime,
+                "locationName": self.locationName,
+                "address": Helper.convertAddressToAnyObject(address: self.address),
+                "notes": self.notes,
+                "attending": Helper.convertMembersToAnyObject(members: self.attending),
+                "maybe": Helper.convertMembersToAnyObject(members: self.maybe),
+                "notAttending": Helper.convertMembersToAnyObject(members: self.notAttending)]
+    }
+    
 }
 
 struct Address {

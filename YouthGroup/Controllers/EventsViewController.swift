@@ -121,7 +121,8 @@ class EventsViewController: UIViewController {
     
     @IBAction func createEventButtonPressed(_ sender: Any) {
         let createEventNC = self.storyboard?.instantiateViewController(withIdentifier: "CreateEventNavigationController") as! UINavigationController
-        //let createEventVC = createEventNC.viewControllers[0] as! CreateEventViewController
+        let createEventVC = createEventNC.viewControllers[0] as! CreateEventViewController
+        createEventVC.groupUID = groupUID
         present(createEventNC, animated: true, completion: nil)
     }
     
@@ -148,7 +149,7 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "eventCell") as! EventCell
         let event = eventsByDay[indexPath.section][indexPath.row]
-        cell.setUp(event: event)
+        cell.setUp(event: event, groupUID: groupUID!)
         return cell
     }
     
@@ -158,6 +159,14 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
         let eventVC = eventNC.viewControllers[0] as! EventViewController
         eventVC.event = eventsByDay[indexPath.section][indexPath.row]
         present(eventNC, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
+        let createEventNC = self.storyboard?.instantiateViewController(withIdentifier: "CreateEventNavigationController") as! UINavigationController
+        let createEventVC = createEventNC.viewControllers[0] as! CreateEventViewController
+        createEventVC.groupUID = groupUID
+        createEventVC.eventToEdit = eventsByDay[indexPath.section][indexPath.row]
+        present(createEventNC, animated: true, completion: nil)
     }
     
 }

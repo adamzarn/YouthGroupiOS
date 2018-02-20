@@ -26,12 +26,10 @@ class AddPrayerRequestViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let toolbar = UIToolbar(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 44))
-        toolbar.barStyle = .default
-        let flex = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(AddPrayerRequestViewController.dismissKeyboard))
-        toolbar.items = [flex, done]
         
+        let selector = #selector(AddPrayerRequestViewController.dismissKeyboard)
+        let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: selector)
+        let toolbar = Toolbar.getDoneToolbar(done: done)
         requestTextView.inputAccessoryView = toolbar
         
     }

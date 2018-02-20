@@ -41,6 +41,8 @@
 		DB4816B7203BAE7D00C7FF38 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B6203BAE7D00C7FF38 /* Event.swift */; };
 		DB4816B9203BBC7B00C7FF38 /* EventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816B8203BBC7B00C7FF38 /* EventViewController.swift */; };
 		DB4816BB203BD06D00C7FF38 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */; };
+		DB4816BD203BE5D500C7FF38 /* LessonElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816BC203BE5D500C7FF38 /* LessonElements.swift */; };
+		DB4816BF203C75F700C7FF38 /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816BE203C75F700C7FF38 /* Toolbar.swift */; };
 		DB6AF455203390B200738FF0 /* BouncingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF454203390B200738FF0 /* BouncingView.swift */; };
 		DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */; };
 		DB6AF45A2033ADEC00738FF0 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF4592033ADEC00738FF0 /* Buttons.swift */; };
@@ -131,6 +133,8 @@
 		DB4816B6203BAE7D00C7FF38 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		DB4816B8203BBC7B00C7FF38 /* EventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewController.swift; sourceTree = "<group>"; };
 		DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
+		DB4816BC203BE5D500C7FF38 /* LessonElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonElements.swift; sourceTree = "<group>"; };
+		DB4816BE203C75F700C7FF38 /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
 		DB6AF454203390B200738FF0 /* BouncingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncingView.swift; sourceTree = "<group>"; };
 		DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoViewController.swift; sourceTree = "<group>"; };
 		DB6AF4592033ADEC00738FF0 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -342,6 +346,7 @@
 				DB1313712036348000051ED7 /* Errors.swift */,
 				DBCCEC7B203772FE0050AC46 /* Constants.swift */,
 				DBCCEC7D203788FD0050AC46 /* Helper.swift */,
+				DB4816BE203C75F700C7FF38 /* Toolbar.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -353,6 +358,7 @@
 				DBCCEC872037A9880050AC46 /* PrayerRequest.swift */,
 				DB4816B02039CC5600C7FF38 /* BiblePassage.swift */,
 				DB4816B6203BAE7D00C7FF38 /* Event.swift */,
+				DB4816BC203BE5D500C7FF38 /* LessonElements.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -641,12 +647,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBCCEC8A2037CE4F0050AC46 /* MembersViewController.swift in Sources */,
+				DB4816BF203C75F700C7FF38 /* Toolbar.swift in Sources */,
 				DBF417B62036065100F2A4F8 /* Group.swift in Sources */,
 				DB4816B9203BBC7B00C7FF38 /* EventViewController.swift in Sources */,
 				DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */,
 				DB9C750E202C9C6300BA4B7D /* CreateAccountViewController.swift in Sources */,
 				DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */,
 				DB4816A92038CD4400C7FF38 /* PrayerRequestViewController.swift in Sources */,
+				DB4816BD203BE5D500C7FF38 /* LessonElements.swift in Sources */,
 				DB4816BB203BD06D00C7FF38 /* CreateEventViewController.swift in Sources */,
 				DB4816AD2038D66F00C7FF38 /* BorderedTextView.swift in Sources */,
 				DB1313722036348000051ED7 /* Errors.swift in Sources */,

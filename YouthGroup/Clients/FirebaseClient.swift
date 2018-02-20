@@ -284,6 +284,36 @@ class FirebaseClient: NSObject {
     
     //MARK: Events
     
+    func createEvent(event: Event, groupUID: String, completion: @escaping (_ eventUID: String?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let eventRef = ref.child("Events").child(groupUID).childByAutoId()
+            eventRef.setValue(event.toAnyObject()) { (error, ref) -> Void in
+                if let error = error {
+                    completion(nil, error.localizedDescription)
+                } else {
+                    completion(eventRef.key, nil)
+                }
+            }
+        } else {
+            completion(nil, Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func editEvent(groupUID: String, event: Event, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let eventRef = ref.child("Events").child(groupUID).child(event.uid!)
+            eventRef.setValue(event.toAnyObject()) { (error, ref) -> Void in
+                if let error = error {
+                    completion(error.localizedDescription)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
     func getEvents(groupUID: String, completion: @escaping (_ events: [Event]?, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             let eventsRef = ref.child("Events").child(groupUID)

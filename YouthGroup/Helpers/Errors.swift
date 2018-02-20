@@ -31,3 +31,16 @@ enum AddPrayerRequestError: Error {
     case missingTitle
     case missingRequest
 }
+
+enum CreateEventError: Error {
+    case missingName
+    case missingDate
+    case missingStartTime
+    case missingEndTime
+    case invalidEndTime
+    case missingLocationName
+    case missingStreet
+    case missingCity
+    case missingState
+    case missingZip
+}

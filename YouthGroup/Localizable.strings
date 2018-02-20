@@ -62,3 +62,36 @@
 
 "noInternet" = "You are not connected to the internet. Please establish an internet connection and try again.";
 
+"missingName" = "Missing Name";
+"missingNameMessage" = "You must provide a name.";
+
+"missingDate" = "Missing Date";
+"missingDateMessage" = "You must provide a date.";
+
+"missingStartTime" = "Missing Start Time";
+"missingStartTimeMessage" = "You must provide a start time.";
+
+"missingEndTime" = "Missing End Time";
+"missingEndTimeMessage" = "You must provide an end time.";
+
+"missingLocationName" = "Missing Location Name";
+"missingLocationNameMessage" = "You must provide a location name.";
+
+"missingStreet" = "Missing Street";
+"missingStreetMessage" = "You must provide a street for the address.";
+
+"missingCity" = "Missing City";
+"missingCityMessage" = "You must provide a city.";
+
+"missingState" = "Missing State";
+"missingStateMessage" = "You must provide a state.";
+
+"missingZip" = "Missing Zip";
+"missingZipMessage" = "You must provide a zip.";
+
+"invalidEndTime" = "Invalid End Time";
+"invalidEndTimeMessage" = "The end time must be after the start time.";
+
+"editedEventMessage" = "This event was successfully edited. We'll take you back to Events now.";
+"createdEventMessage" = "This event was successfully created. We'll take you back to Events now.";
+

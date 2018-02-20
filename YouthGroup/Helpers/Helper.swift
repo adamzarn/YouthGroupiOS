@@ -45,6 +45,13 @@ class Helper {
         return Address(street: street, city: city, state: state, zip: zip)
     }
     
+    static func convertAddressToAnyObject(address: Address) -> [String: String] {
+        return ["street": address.street,
+                "city": address.city,
+                "state": address.state,
+                "zip": address.zip]
+    }
+    
     static func convertMembersToAnyObject(members: [Member]?) -> [String : String]? {
         if let members = members {
             var membersObject = [:] as [String:String]
