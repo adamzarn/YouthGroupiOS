@@ -13,6 +13,11 @@
 		DB13137020362B1D00051ED7 /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */; };
 		DB1313722036348000051ED7 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1313712036348000051ED7 /* Errors.swift */; };
 		DB1313742036561000051ED7 /* JoinGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1313732036561000051ED7 /* JoinGroupViewController.swift */; };
+		DB1BC87C203DE3CF006B9FC4 /* ButtonsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC87B203DE3CF006B9FC4 /* ButtonsCell.swift */; };
+		DB1BC87E203E1DBC006B9FC4 /* CreateLessonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC87D203E1DBC006B9FC4 /* CreateLessonViewController.swift */; };
+		DB1BC880203E32EA006B9FC4 /* LessonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC87F203E32EA006B9FC4 /* LessonCell.swift */; };
+		DB1BC888203E3AA6006B9FC4 /* LessonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC887203E3AA6006B9FC4 /* LessonViewController.swift */; };
+		DB1BC88A203E6947006B9FC4 /* BiblePassageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC889203E6947006B9FC4 /* BiblePassageCell.swift */; };
 		DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B799202BE855000DABE2 /* AppDelegate.swift */; };
 		DB37B79C202BE855000DABE2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B79B202BE855000DABE2 /* LoginViewController.swift */; };
 		DB37B79F202BE855000DABE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB37B79D202BE855000DABE2 /* Main.storyboard */; };
@@ -43,6 +48,7 @@
 		DB4816BB203BD06D00C7FF38 /* CreateEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */; };
 		DB4816BD203BE5D500C7FF38 /* LessonElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816BC203BE5D500C7FF38 /* LessonElements.swift */; };
 		DB4816BF203C75F700C7FF38 /* Toolbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816BE203C75F700C7FF38 /* Toolbar.swift */; };
+		DB4816C1203DBE3F00C7FF38 /* RSVPCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB4816C0203DBE3F00C7FF38 /* RSVPCell.swift */; };
 		DB6AF455203390B200738FF0 /* BouncingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF454203390B200738FF0 /* BouncingView.swift */; };
 		DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */; };
 		DB6AF45A2033ADEC00738FF0 /* Buttons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB6AF4592033ADEC00738FF0 /* Buttons.swift */; };
@@ -99,6 +105,11 @@
 		DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
 		DB1313712036348000051ED7 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		DB1313732036561000051ED7 /* JoinGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoinGroupViewController.swift; sourceTree = "<group>"; };
+		DB1BC87B203DE3CF006B9FC4 /* ButtonsCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonsCell.swift; sourceTree = "<group>"; };
+		DB1BC87D203E1DBC006B9FC4 /* CreateLessonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateLessonViewController.swift; sourceTree = "<group>"; };
+		DB1BC87F203E32EA006B9FC4 /* LessonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonCell.swift; sourceTree = "<group>"; };
+		DB1BC887203E3AA6006B9FC4 /* LessonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonViewController.swift; sourceTree = "<group>"; };
+		DB1BC889203E6947006B9FC4 /* BiblePassageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePassageCell.swift; sourceTree = "<group>"; };
 		DB37B796202BE855000DABE2 /* YouthGroup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouthGroup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB37B799202BE855000DABE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DB37B79B202BE855000DABE2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -135,6 +146,7 @@
 		DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateEventViewController.swift; sourceTree = "<group>"; };
 		DB4816BC203BE5D500C7FF38 /* LessonElements.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonElements.swift; sourceTree = "<group>"; };
 		DB4816BE203C75F700C7FF38 /* Toolbar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Toolbar.swift; sourceTree = "<group>"; };
+		DB4816C0203DBE3F00C7FF38 /* RSVPCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSVPCell.swift; sourceTree = "<group>"; };
 		DB6AF454203390B200738FF0 /* BouncingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BouncingView.swift; sourceTree = "<group>"; };
 		DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPhotoViewController.swift; sourceTree = "<group>"; };
 		DB6AF4592033ADEC00738FF0 /* Buttons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Buttons.swift; sourceTree = "<group>"; };
@@ -201,6 +213,65 @@
 				B80922DC63D05DC9F95B81E3 /* Pods_YouthGroupUITests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		DB1BC881203E3A15006B9FC4 /* Lessons */ = {
+			isa = PBXGroup;
+			children = (
+				DB37B7D6202C8F07000DABE2 /* LessonsViewController.swift */,
+				DB1BC887203E3AA6006B9FC4 /* LessonViewController.swift */,
+				DB1BC87D203E1DBC006B9FC4 /* CreateLessonViewController.swift */,
+			);
+			path = Lessons;
+			sourceTree = "<group>";
+		};
+		DB1BC882203E3A23006B9FC4 /* Events */ = {
+			isa = PBXGroup;
+			children = (
+				DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */,
+				DB4816B8203BBC7B00C7FF38 /* EventViewController.swift */,
+				DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */,
+			);
+			path = Events;
+			sourceTree = "<group>";
+		};
+		DB1BC883203E3A30006B9FC4 /* PrayerRequests */ = {
+			isa = PBXGroup;
+			children = (
+				DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */,
+				DBCCEC8D2037DA0C0050AC46 /* AddPrayerRequestViewController.swift */,
+				DB4816A82038CD4400C7FF38 /* PrayerRequestViewController.swift */,
+			);
+			path = PrayerRequests;
+			sourceTree = "<group>";
+		};
+		DB1BC884203E3A4C006B9FC4 /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				DBD03FDF202D40A000030C43 /* Linking.swift */,
+				DB37B79B202BE855000DABE2 /* LoginViewController.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		DB1BC885203E3A62006B9FC4 /* Account */ = {
+			isa = PBXGroup;
+			children = (
+				DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */,
+				DBCCEC892037CE4F0050AC46 /* MembersViewController.swift */,
+				DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */,
+				DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */,
+			);
+			path = Account;
+			sourceTree = "<group>";
+		};
+		DB1BC886203E3A82006B9FC4 /* Groups */ = {
+			isa = PBXGroup;
+			children = (
+				DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */,
+				DB1313732036561000051ED7 /* JoinGroupViewController.swift */,
+			);
+			path = Groups;
 			sourceTree = "<group>";
 		};
 		DB2B6236078F3B1D3D8DC59D /* Pods */ = {
@@ -282,22 +353,13 @@
 		DB37B7DE202C8F67000DABE2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DB1BC886203E3A82006B9FC4 /* Groups */,
+				DB1BC885203E3A62006B9FC4 /* Account */,
+				DB1BC884203E3A4C006B9FC4 /* Login */,
+				DB1BC883203E3A30006B9FC4 /* PrayerRequests */,
+				DB1BC882203E3A23006B9FC4 /* Events */,
 				DB37B7D4202C8CE0000DABE2 /* MainTabBarController.swift */,
-				DB37B79B202BE855000DABE2 /* LoginViewController.swift */,
-				DB37B7D6202C8F07000DABE2 /* LessonsViewController.swift */,
-				DB37B7D8202C8F25000DABE2 /* EventsViewController.swift */,
-				DB4816B8203BBC7B00C7FF38 /* EventViewController.swift */,
-				DB4816BA203BD06D00C7FF38 /* CreateEventViewController.swift */,
-				DB37B7DA202C8F3B000DABE2 /* PrayerRequestsViewController.swift */,
-				DBCCEC8D2037DA0C0050AC46 /* AddPrayerRequestViewController.swift */,
-				DB4816A82038CD4400C7FF38 /* PrayerRequestViewController.swift */,
-				DB37B7DC202C8F59000DABE2 /* AccountDetailViewController.swift */,
-				DB9C750D202C9C6300BA4B7D /* CreateAccountViewController.swift */,
-				DB6AF45720339F8500738FF0 /* AddPhotoViewController.swift */,
-				DBD03FDF202D40A000030C43 /* Linking.swift */,
-				DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */,
-				DB1313732036561000051ED7 /* JoinGroupViewController.swift */,
-				DBCCEC892037CE4F0050AC46 /* MembersViewController.swift */,
+				DB1BC881203E3A15006B9FC4 /* Lessons */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -323,6 +385,10 @@
 				DBCCEC852037A9670050AC46 /* PrayerRequestCell.swift */,
 				DBCCEC8B2037D0FD0050AC46 /* MemberCell.swift */,
 				DB4816B4203BACF700C7FF38 /* EventCell.swift */,
+				DB4816C0203DBE3F00C7FF38 /* RSVPCell.swift */,
+				DB1BC87B203DE3CF006B9FC4 /* ButtonsCell.swift */,
+				DB1BC87F203E32EA006B9FC4 /* LessonCell.swift */,
+				DB1BC889203E6947006B9FC4 /* BiblePassageCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -657,14 +723,18 @@
 				DB4816BD203BE5D500C7FF38 /* LessonElements.swift in Sources */,
 				DB4816BB203BD06D00C7FF38 /* CreateEventViewController.swift in Sources */,
 				DB4816AD2038D66F00C7FF38 /* BorderedTextView.swift in Sources */,
+				DB1BC87C203DE3CF006B9FC4 /* ButtonsCell.swift in Sources */,
 				DB1313722036348000051ED7 /* Errors.swift in Sources */,
+				DB1BC880203E32EA006B9FC4 /* LessonCell.swift in Sources */,
 				DBCCEC7E203788FD0050AC46 /* Helper.swift in Sources */,
 				DBCCEC842037A0EE0050AC46 /* JoinGroupCell.swift in Sources */,
 				DBCCEC882037A9880050AC46 /* PrayerRequest.swift in Sources */,
+				DB4816C1203DBE3F00C7FF38 /* RSVPCell.swift in Sources */,
 				DB37B7D7202C8F07000DABE2 /* LessonsViewController.swift in Sources */,
 				DB37B7A2202BE855000DABE2 /* YouthGroup.xcdatamodeld in Sources */,
 				DBD03FDC202CC82300030C43 /* FacebookClient.swift in Sources */,
 				DBD03FDE202CE34A00030C43 /* KeyboardNotifications.swift in Sources */,
+				DB1BC888203E3AA6006B9FC4 /* LessonViewController.swift in Sources */,
 				DBD03FD8202CACB600030C43 /* Aiv.swift in Sources */,
 				DBCCEC8020378DF80050AC46 /* EditMemberCell.swift in Sources */,
 				DBD03FE0202D40A000030C43 /* Linking.swift in Sources */,
@@ -689,8 +759,10 @@
 				DB37B7CD202BED2E000DABE2 /* FirebaseClient.swift in Sources */,
 				DB37B7DB202C8F3B000DABE2 /* PrayerRequestsViewController.swift in Sources */,
 				DBCCEC862037A9670050AC46 /* PrayerRequestCell.swift in Sources */,
+				DB1BC88A203E6947006B9FC4 /* BiblePassageCell.swift in Sources */,
 				DB4816B3203A3C5200C7FF38 /* Reachability.swift in Sources */,
 				DB4816B7203BAE7D00C7FF38 /* Event.swift in Sources */,
+				DB1BC87E203E1DBC006B9FC4 /* CreateLessonViewController.swift in Sources */,
 				DB13137020362B1D00051ED7 /* CreateGroupViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

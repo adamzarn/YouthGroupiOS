@@ -30,7 +30,7 @@ struct PrayerRequest {
         self.answered = info["answered"] as! Bool
         self.anonymous = info["anonymous"] as! Bool
         if let prayingMembers = info["prayingMembers"] {
-            self.prayingMembers = Helper.convertAnyObjectToMembers(dict: prayingMembers as! [String : String], leader: false)
+            self.prayingMembers = Helper.convertAnyObjectToMembers(dict: prayingMembers as! [String:[String : String]], leader: false)
         }
     }
     

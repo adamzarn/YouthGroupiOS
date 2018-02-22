@@ -44,3 +44,9 @@ enum CreateEventError: Error {
     case missingState
     case missingZip
 }
+
+enum CreateLessonError: Error {
+    case missingTitle
+    case missingDate
+    case missingLeaders
+}

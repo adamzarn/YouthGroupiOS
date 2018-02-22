@@ -16,6 +16,7 @@ class EventsViewController: UIViewController {
     var events: [Event] = []
     var eventsByDay: [[Event]] = []
     var uniqueDates: [String] = []
+    var isLeader: Bool?
     var refreshControl: UIRefreshControl!
     
     @IBOutlet weak var tableView: UITableView!
@@ -26,17 +27,24 @@ class EventsViewController: UIViewController {
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(PrayerRequestsViewController.refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
+        tableView.rowHeight = 90.0
+        refresh()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        createEventButton.isEnabled = false
+        createEventButton.tintColor = .clear
+        if let groupUID = UserDefaults.standard.string(forKey: "currentGroup"), let email = Auth.auth().currentUser?.email {
+            self.groupUID = groupUID
+            checkIfIsLeader(groupUID: groupUID, email: email)
+        }
         refresh()
-        self.createEventButton.isEnabled = false
-        self.createEventButton.tintColor = .clear
     }
     
     @objc func refresh() {
         if let groupUID = UserDefaults.standard.string(forKey: "currentGroup") {
+            self.groupUID = groupUID
             checkIfUserBelongsToGroup(groupUID: groupUID)
         } else {
             self.reloadTableView(events: [])
@@ -67,6 +75,7 @@ class EventsViewController: UIViewController {
             if let error = error {
                 Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
             } else {
+                self.isLeader = isLeader
                 self.setUpCreateEventButton(isLeader: isLeader)
             }
         })
@@ -130,10 +139,31 @@ class EventsViewController: UIViewController {
 
 extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if let isLeader = isLeader, isLeader {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            if let groupUID = groupUID {
+                let event = eventsByDay[indexPath.section][indexPath.row]
+                FirebaseClient.shared.deleteEvent(groupUID: groupUID, eventUID: event.uid!, completion: { error in
+                    if let error = error {
+                        Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+                    }
+                })
+            }
+        }
+    }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         let date = uniqueDates[section]
         let weekday = Helper.getDayOfWeek(dateString: date)
-        let formattedDate = Helper.formattedTimestamp(ts: date, includeDate: true, includeTime: false)
+        let formattedDate = Helper.formattedDate(ts: date)
         
         return "\(weekday) \(formattedDate)"
     }
@@ -157,6 +187,7 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: false)
         let eventNC = self.storyboard?.instantiateViewController(withIdentifier: "EventNavigationController") as! UINavigationController
         let eventVC = eventNC.viewControllers[0] as! EventViewController
+        eventVC.groupUID = groupUID!
         eventVC.event = eventsByDay[indexPath.section][indexPath.row]
         present(eventNC, animated: true, completion: nil)
     }
@@ -166,6 +197,7 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource {
         let createEventVC = createEventNC.viewControllers[0] as! CreateEventViewController
         createEventVC.groupUID = groupUID
         createEventVC.eventToEdit = eventsByDay[indexPath.section][indexPath.row]
+        createEventVC.indexPath = indexPath
         present(createEventNC, animated: true, completion: nil)
     }
     

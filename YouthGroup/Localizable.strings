@@ -95,3 +95,11 @@
 "editedEventMessage" = "This event was successfully edited. We'll take you back to Events now.";
 "createdEventMessage" = "This event was successfully created. We'll take you back to Events now.";
 
+"missingLeaders" = "No Leader";
+"missingLeadersMessage" = "You must select at least one leader.";
+
+"editedLessonMessage" = "This lesson was successfully edited. We'll take you back to Lessons now.";
+"createdLessonMessage" = "This lesson was successfully created. We'll take you back to Lessons now.";
+
+"locked" = "Lesson Locked";
+"lessonLockedMessage" = "Your leader hasn't unlocked this lesson yet.";

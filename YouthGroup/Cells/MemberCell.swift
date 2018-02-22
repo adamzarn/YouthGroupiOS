@@ -20,7 +20,6 @@ class MemberCell: UITableViewCell {
     func setUp(member: Member) {
         nameLabel.text = member.name
         savedEmail = member.email!
-        
         self.memberImageView.image = UIImage(named: "Boy")
         
         if let image = imageCache[member.email!] {

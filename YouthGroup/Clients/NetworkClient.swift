@@ -14,7 +14,6 @@ class NetworkClient: NSObject {
     
     func getBibleVerses(parameters: String, completion: @escaping(_ reference: String?, _ text: String?, _ verses: [Verse]?) -> ()) {
         let urlString = BASE_URL + parameters
-        print(urlString)
         let url = URL(string: urlString)
         let session = URLSession.shared
         

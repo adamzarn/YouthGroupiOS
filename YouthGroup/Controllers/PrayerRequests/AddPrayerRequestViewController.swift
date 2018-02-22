@@ -10,10 +10,6 @@ import Foundation
 import UIKit
 import FirebaseAuth
 
-protocol AddPrayerRequestViewControllerDelegate: class {
-    func add(newPrayerRequest: PrayerRequest)
-}
-
 class AddPrayerRequestViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
@@ -21,8 +17,6 @@ class AddPrayerRequestViewController: UIViewController {
     @IBOutlet weak var anonymousButton: CheckboxButton!
     @IBOutlet weak var aiv: UIActivityIndicatorView!
     var checkmarkChecked = false
-
-    weak var delegate: AddPrayerRequestViewControllerDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -91,7 +85,6 @@ class AddPrayerRequestViewController: UIViewController {
                     } else {
                         let completion: (UIAlertAction) -> Void = {_ in
                             prayerRequest.uid = prayerRequestUID!
-                            self.delegate?.add(newPrayerRequest: prayerRequest)
                             UserDefaults.standard.setValue(Tabs.prayerRequests.rawValue, forKey: "tabToDisplay")
                             self.navigationController?.dismiss(animated: true, completion: nil)
                         }

@@ -19,11 +19,11 @@ class Event {
     var locationName: String
     var address: Address
     var notes: String?
-    var attending: [Member]?
-    var maybe: [Member]?
-    var notAttending: [Member]?
+    var going: [Bringer]?
+    var maybe: [Bringer]?
+    var notGoing: [Bringer]?
     
-    init(uid: String?, name: String, date: String, startTime: String, endTime: String, locationName: String, address: Address, notes: String?, attending: [Member]?, maybe: [Member]?, notAttending: [Member]?) {
+    init(uid: String?, name: String, date: String, startTime: String, endTime: String, locationName: String, address: Address, notes: String?, going: [Bringer]?, maybe: [Bringer]?, notGoing: [Bringer]?) {
         self.uid = uid
         self.name = name
         self.date = date
@@ -32,9 +32,9 @@ class Event {
         self.locationName = locationName
         self.address = address
         self.notes = notes
-        self.attending = attending
+        self.going = going
         self.maybe = maybe
-        self.notAttending = notAttending
+        self.notGoing = notGoing
     }
     
     init(uid: String, info: NSDictionary) {
@@ -48,14 +48,14 @@ class Event {
         if let notes = info["notes"] {
             self.notes = notes as? String
         }
-        if let attending = info["attending"] {
-            self.attending = Helper.convertAnyObjectToMembers(dict: attending as! [String : String], leader: false)
+        if let going = info["going"] {
+            self.going = Helper.convertAnyObjectToBringers(dict: going as! [String:[String : String]], leader: false)
         }
         if let maybe = info["maybe"] {
-            self.maybe = Helper.convertAnyObjectToMembers(dict: maybe as! [String : String], leader: false)
+            self.maybe = Helper.convertAnyObjectToBringers(dict: maybe as! [String:[String : String]], leader: false)
         }
-        if let notAttending = info["notAttending"] {
-            self.notAttending = Helper.convertAnyObjectToMembers(dict: notAttending as! [String : String], leader: false)
+        if let notGoing = info["notGoing"] {
+            self.notGoing = Helper.convertAnyObjectToBringers(dict: notGoing as! [String:[String : String]], leader: false)
         }
     }
     
@@ -67,9 +67,9 @@ class Event {
                 "locationName": self.locationName,
                 "address": Helper.convertAddressToAnyObject(address: self.address),
                 "notes": self.notes,
-                "attending": Helper.convertMembersToAnyObject(members: self.attending),
-                "maybe": Helper.convertMembersToAnyObject(members: self.maybe),
-                "notAttending": Helper.convertMembersToAnyObject(members: self.notAttending)]
+                "going": Helper.convertBringersToAnyObject(bringers: self.going),
+                "maybe": Helper.convertBringersToAnyObject(bringers: self.maybe),
+                "notGoing": Helper.convertBringersToAnyObject(bringers: self.notGoing)]
     }
     
 }

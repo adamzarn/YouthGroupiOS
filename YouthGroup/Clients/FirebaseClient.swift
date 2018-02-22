@@ -195,6 +195,24 @@ class FirebaseClient: NSObject {
         }
     }
     
+    func getGroupLeaders(groupUID: String, completion: @escaping (_ leaders: [Member]?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let leadersRef = ref.child("Groups").child(groupUID).child("leaders")
+            leadersRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if snapshot.exists() {
+                    let dict = snapshot.value as! [String: [String: String]]
+                    let leaders = Helper.convertAnyObjectToMembers(dict: dict, leader: true)
+                    completion(leaders, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            })
+        } else {
+            completion(nil, Helper.getString(key: "noInternet"))
+        }
+    }
+
+    
     func appendUserGroup(email: String, newGroupUID: String, completion: @escaping (_ success: Bool, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             if let email = email.encodeURIComponent() {
@@ -232,7 +250,8 @@ class FirebaseClient: NSObject {
     func appendGroupMember(uid: String, newMember: Member, type: String, completion: @escaping (_ success: Bool, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             let memberRef = ref.child("Groups").child(uid).child(type).child(newMember.email.encodeURIComponent()!)
-            memberRef.setValue(newMember.name) { (error, ref) -> Void in
+            let value = ["name": newMember.name]
+            memberRef.setValue(value) { (error, ref) -> Void in
                 if let error = error {
                     completion(false, error.localizedDescription)
                 } else {
@@ -282,7 +301,114 @@ class FirebaseClient: NSObject {
         }
     }
     
+    //MARK: Lessons
+    
+    func createLesson(groupUID: String, lesson: Lesson, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let lessonRef = ref.child("Lessons").child(groupUID).childByAutoId()
+            lessonRef.setValue(lesson.toAnyObject()) { (error, ref) -> Void in
+                if let error = error {
+                    completion(error.localizedDescription)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func editLesson(groupUID: String, lesson: Lesson, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let lessonRef = ref.child("Lessons").child(groupUID).child(lesson.uid!)
+            lessonRef.setValue(lesson.toAnyObject()) { (error, ref) -> Void in
+                if let error = error {
+                    completion(error.localizedDescription)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func deleteLesson(groupUID: String, lessonUID: String, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let lessonRef = ref.child("Lessons").child(groupUID).child(lessonUID)
+            lessonRef.removeValue() { (error, ref) -> Void in
+                if let error = error {
+                    completion(error.localizedDescription)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func getLessons(groupUID: String, completion: @escaping (_ lessons: [Lesson]?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let lessonsRef = ref.child("Lessons").child(groupUID)
+            lessonsRef.observe(.value, with: { (snapshot) in
+                if snapshot.exists() {
+                    var lessons: [Lesson] = []
+                    for child in snapshot.children {
+                        let uid = (child as! DataSnapshot).key
+                        let info = (child as! DataSnapshot).value as! NSDictionary
+                        lessons.append(Lesson(uid: uid, info: info))
+                    }
+                    completion(lessons, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            })
+        } else {
+            completion(nil, Helper.getString(key: "noInternet"))
+        }
+    }
+    
     //MARK: Events
+    
+    func updateRSVP(groupUID: String, eventUID: String, rsvp: String, bringer: Bringer, completion: @escaping (_ error: String?) -> ()) {
+        let rsvps = ["going", "maybe", "notGoing"]
+        let rsvpsToRemove = rsvps.filter { $0 != rsvp }
+        if Helper.hasConnectivity() {
+            if let email = bringer.email.encodeURIComponent() {
+                let rsvpRef = ref.child("Events").child(groupUID).child(eventUID).child(rsvp).child(email)
+                let value = ["name":bringer.name, "bringing": bringer.bringing]
+                rsvpRef.setValue(value) { (error, ref) -> Void in
+                    if let error = error {
+                        completion(error.localizedDescription)
+                    } else {
+                        completion(nil)
+                    }
+                }
+                for rsvpToRemove in rsvpsToRemove {
+                    let rsvpsToRemoveRef = ref.child("Events").child(groupUID).child(eventUID).child(rsvpToRemove).child(email)
+                    rsvpsToRemoveRef.removeValue()
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func removeRSVP(groupUID: String, eventUID: String, rsvp: String, bringer: Bringer, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let rsvpRef = ref.child("Events").child(groupUID).child(eventUID).child(rsvp).child(bringer.email)
+            rsvpRef.removeValue() { (error, ref) -> Void in
+                if let error = error {
+                    completion(error.localizedDescription)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
     
     func createEvent(event: Event, groupUID: String, completion: @escaping (_ eventUID: String?, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
@@ -317,7 +443,7 @@ class FirebaseClient: NSObject {
     func getEvents(groupUID: String, completion: @escaping (_ events: [Event]?, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             let eventsRef = ref.child("Events").child(groupUID)
-            eventsRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            eventsRef.observe(.value, with: { (snapshot) in
                 if snapshot.exists() {
                     var events: [Event] = []
                     for child in snapshot.children {
@@ -334,6 +460,22 @@ class FirebaseClient: NSObject {
             completion(nil, Helper.getString(key: "noInternet"))
         }
     }
+    
+    func deleteEvent(groupUID: String, eventUID: String, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let prayerRequestRef = ref.child("Events").child(groupUID).child(eventUID)
+            prayerRequestRef.removeValue() { (error, ref) -> Void in
+                if let error = error {
+                    completion(error.localizedDescription)
+                } else {
+                    completion(nil)
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
     
     //MARK: Prayer Requests
     
@@ -370,7 +512,8 @@ class FirebaseClient: NSObject {
     func appendPrayingMember(groupUID: String, prayerRequestUID: String, newPrayingMember: Member, completion: @escaping (_ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             let prayingMemberRef = ref.child("PrayerRequests").child(groupUID).child(prayerRequestUID).child("prayingMembers").child(newPrayingMember.email.encodeURIComponent()!)
-            prayingMemberRef.setValue(newPrayingMember.name) { (error, ref) -> Void in
+            let value = ["name":newPrayingMember.name]
+            prayingMemberRef.setValue(value) { (error, ref) -> Void in
                 if let error = error {
                     completion(error.localizedDescription)
                 } else {
@@ -415,7 +558,7 @@ class FirebaseClient: NSObject {
     func getPrayerRequests(groupUID: String, completion: @escaping (_ prayerRequests: [PrayerRequest]?, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             let groupRef = ref.child("PrayerRequests").child(groupUID)
-            groupRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            groupRef.queryOrdered(byChild: "timestamp").queryLimited(toLast: 50).observe(.value, with: { (snapshot) in
                 if snapshot.exists() {
                     var prayerRequests: [PrayerRequest] = []
                     for child in snapshot.children {

@@ -26,15 +26,38 @@ class Helper {
         return nil
     }
     
-    static func convertAnyObjectToMembers(dict: [String: String], leader: Bool) -> [Member] {
-        var members: [Member] = []
+    static func convertAnyObjectToBringers(dict: [String:[String: String]], leader: Bool) -> [Bringer] {
+        var bringers: [Bringer] = []
         for (key,value) in dict {
             if let email = key.decodeURIComponent() {
-                let newMember = Member(email: email, name: value, leader: leader)
-                members.append(newMember)
+                let name = value["name"]
+                var bringing: String?
+                if let bringingValue = value["bringing"] {
+                    bringing = bringingValue
+                }
+                let newBringer = Bringer(email: email, name: name!, leader: leader, bringing: bringing)
+                bringers.append(newBringer)
             }
         }
-        return members
+        return bringers
+    }
+    
+    static func convertBringersToAnyObject(bringers: [Bringer]?) ->  [String: [String: String]]? {
+        if let bringers = bringers {
+            var bringersObject = [:] as [String: [String: String]]
+            for bringer in bringers {
+                if let email = bringer.email.encodeURIComponent() {
+                    var value = [:] as [String: String]
+                    value["name"] = bringer.name
+                    if let bringing = bringer.bringing {
+                        value["bringing"] = bringing
+                    }
+                    bringersObject[email] = value
+                }
+            }
+            return bringersObject
+        }
+        return nil
     }
     
     static func convertAnyObjectToAddress(dict: NSDictionary) -> Address {
@@ -52,12 +75,24 @@ class Helper {
                 "zip": address.zip]
     }
     
-    static func convertMembersToAnyObject(members: [Member]?) -> [String : String]? {
+    static func convertAnyObjectToMembers(dict: [String: [String:String]], leader: Bool) -> [Member] {
+        var members: [Member] = []
+        for (key,value) in dict {
+            if let email = key.decodeURIComponent() {
+                let name = value["name"] as! String
+                let newMember = Member(email: email, name: name, leader: leader)
+                members.append(newMember)
+            }
+        }
+        return members
+    }
+    
+    static func convertMembersToAnyObject(members: [Member]?) ->  [String: [String: String]]? {
         if let members = members {
-            var membersObject = [:] as [String:String]
+            var membersObject = [:] as [String: [String: String]]
             for member in members {
                 if let email = member.email.encodeURIComponent(), let name = member.name {
-                    membersObject[email] = name
+                    membersObject[email] = ["name": name]
                 }
             }
             return membersObject
@@ -70,15 +105,15 @@ class Helper {
         if let leaders = group.leaders {
             let sortedLeaders = leaders.sorted(by: { $0.name < $1.name })
             for leader in sortedLeaders {
-                let newMember = Member(email: leader.email, name: leader.name, leader: true)
-                members.append(newMember)
+                let newLeader = Member(email: leader.email, name: leader.name, leader: true)
+                members.append(newLeader)
             }
         }
         if let students = group.students {
             let sortedStudents = students.sorted(by: { $0.name < $1.name })
             for student in sortedStudents {
-                let newMember = Member(email: student.email, name: student.name, leader: false)
-                members.append(newMember)
+                let newStudent = Member(email: student.email, name: student.name, leader: false)
+                members.append(newStudent)
             }
         }
         return members
@@ -124,6 +159,30 @@ class Helper {
         }
         
     }
+    
+    static func formattedDate(ts: String) -> String {
+        let year = ts.substring(with: 2..<4)
+        let month = Int(ts.substring(with: 4..<6))
+        let day = Int(ts.substring(with: 6..<8))
+        return "\(month!)/\(day!)/\(year)"
+    }
+    
+    static func formattedTime(ts: String) -> String {
+        var hour = Int(ts.substring(with: 0..<2))
+        let minute = ts.substring(with: 3..<5)
+        var suffix = "AM"
+        if hour! > 11 {
+            suffix = "PM"
+        }
+        if hour! > 12 {
+            hour = hour! - 12
+        }
+        if hour! == 0 {
+            hour = 12
+        }
+        return "\(hour!):\(minute) \(suffix)"
+
+    }
 
         
     static let weekdays =
@@ -137,7 +196,7 @@ class Helper {
     
     static func getDayOfWeek(dateString: String) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd HH:mm:ss:SSS"
+        formatter.dateFormat = "yyyyMMdd"
         let date = formatter.date(from: dateString)!
         let myCalendar = NSCalendar(calendarIdentifier: NSCalendar.Identifier.gregorian)!
         let myComponents = myCalendar.components(.weekday, from: date)

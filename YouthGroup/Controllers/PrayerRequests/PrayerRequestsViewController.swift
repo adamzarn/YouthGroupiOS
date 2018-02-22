@@ -22,11 +22,14 @@ class PrayerRequestsViewController: UIViewController {
         refreshControl = UIRefreshControl()
         refreshControl.addTarget(self, action: #selector(PrayerRequestsViewController.refresh), for: .valueChanged)
         tableView.refreshControl = refreshControl
+        refresh()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        refresh()
+        if prayerRequests.count == 0 {
+            refresh()
+        }
     }
     
     @objc func refresh() {
@@ -77,8 +80,6 @@ class PrayerRequestsViewController: UIViewController {
     
     @IBAction func addButtonPressed(_ sender: Any) {
         let addPrayerRequestNC = self.storyboard?.instantiateViewController(withIdentifier: "AddPrayerRequestNavigationController") as! UINavigationController
-        let addPrayerRequestVC = addPrayerRequestNC.viewControllers[0] as! AddPrayerRequestViewController
-        addPrayerRequestVC.delegate = self
         present(addPrayerRequestNC, animated: true, completion: nil)
     }
     
@@ -104,9 +105,6 @@ extension PrayerRequestsViewController: UITableViewDelegate, UITableViewDataSour
                 FirebaseClient.shared.deletePrayerRequest(groupUID: groupUID, prayerRequestUID: prayerRequestUID, completion: { error in
                     if let error = error {
                         Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
-                    } else {
-                        self.prayerRequests.remove(at: indexPath.row)
-                        tableView.deleteRows(at: [indexPath], with: .automatic)
                     }
                 })
             }
@@ -132,20 +130,12 @@ extension PrayerRequestsViewController: UITableViewDelegate, UITableViewDataSour
         tableView.deselectRow(at: indexPath, animated: false)
         let prayerRequestNC = self.storyboard?.instantiateViewController(withIdentifier: "PrayerRequestNavigationController") as! UINavigationController
         let prayerRequestVC = prayerRequestNC.viewControllers[0] as! PrayerRequestViewController
-        prayerRequestVC.delegate = self
         prayerRequestVC.prayerRequest = prayerRequests[indexPath.row]
         prayerRequestVC.indexPath = indexPath
         prayerRequestVC.groupUID = groupUID
         present(prayerRequestNC, animated: true, completion: nil)
     }
     
-}
-
-extension PrayerRequestsViewController: AddPrayerRequestViewControllerDelegate {
-    func add(newPrayerRequest: PrayerRequest) {
-        prayerRequests.insert(newPrayerRequest, at: 0)
-        tableView.reloadData()
-    }
 }
 
 extension PrayerRequestsViewController: PrayerRequestViewControllerDelegate {

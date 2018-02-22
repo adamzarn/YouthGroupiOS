@@ -19,8 +19,8 @@ class EventCell: UITableViewCell {
     func setUp(event: Event, groupUID: String) {
         eventNameLabel.text = event.name
         locationNameLabel.text = event.locationName
-        let startTime = Helper.formattedTimestamp(ts: event.startTime, includeDate: false, includeTime: true)
-        let endTime = Helper.formattedTimestamp(ts: event.endTime, includeDate: false, includeTime: true)
+        let startTime = Helper.formattedTime(ts: event.startTime)
+        let endTime = Helper.formattedTime(ts: event.endTime)
         timeLabel.text = "\(startTime) - \(endTime)"
         
         if let email = Auth.auth().currentUser?.email {

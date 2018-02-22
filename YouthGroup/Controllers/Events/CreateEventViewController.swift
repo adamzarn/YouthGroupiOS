@@ -40,6 +40,8 @@ class CreateEventViewController: UIViewController {
     
     var groupUID: String!
     var eventToEdit: Event?
+
+    var indexPath: IndexPath?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,18 +75,24 @@ class CreateEventViewController: UIViewController {
     }
     
     @objc func setDateAndTime(sender: UIDatePicker) {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd HH:mm:ss:SSS"
-        let text = formatter.string(from: sender.date)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        
+        let timeFormatter = DateFormatter()
+        timeFormatter.dateFormat = "HH:mm:ss:SSS"
+        
+        let dateText = dateFormatter.string(from: sender.date)
+        let timeText = timeFormatter.string(from: sender.date)
+        
         if dateTextField.isFirstResponder {
-            dateToSubmit = text
-            dateTextField.text = Helper.formattedTimestamp(ts: text, includeDate: true, includeTime: false)
+            dateToSubmit = dateText
+            dateTextField.text = Helper.formattedDate(ts: dateText)
         } else if startTimeTextField.isFirstResponder {
-            startTimeToSubmit = text
-            startTimeTextField.text = Helper.formattedTimestamp(ts: text, includeDate: false, includeTime: true)
+            startTimeToSubmit = timeText
+            startTimeTextField.text = Helper.formattedTime(ts: timeText)
         } else if endTimeTextField.isFirstResponder {
-            endTimeToSubmit = text
-            endTimeTextField.text = Helper.formattedTimestamp(ts: text, includeDate: false, includeTime: true)
+            endTimeToSubmit = timeText
+            endTimeTextField.text = Helper.formattedTime(ts: timeText)
         }
     }
     
@@ -111,9 +119,9 @@ class CreateEventViewController: UIViewController {
         if let event = eventToEdit {
             title = "Edit Event"
             nameTextField.text = event.name
-            dateTextField.text = Helper.formattedTimestamp(ts: event.date, includeDate: true, includeTime: false)
-            startTimeTextField.text = Helper.formattedTimestamp(ts: event.startTime, includeDate: false, includeTime: true)
-            endTimeTextField.text = Helper.formattedTimestamp(ts: event.endTime, includeDate: false, includeTime: true)
+            dateTextField.text = Helper.formattedDate(ts: event.date)
+            startTimeTextField.text = Helper.formattedTime(ts: event.startTime)
+            endTimeTextField.text = Helper.formattedTime(ts: event.endTime)
             locationNameTextField.text = event.locationName
             streetTextField.text = event.address.street
             cityTextField.text = event.address.city
@@ -225,13 +233,13 @@ class CreateEventViewController: UIViewController {
         
         let address = Address(street: street, city: city, state: state, zip: zip)
         
-        let event = Event(uid: nil, name: name, date: finalDate, startTime: finalStartTime, endTime: finalEndTime, locationName: locationName, address: address, notes: notes, attending: nil, maybe: nil, notAttending: nil)
+        let event = Event(uid: nil, name: name, date: finalDate, startTime: finalStartTime, endTime: finalEndTime, locationName: locationName, address: address, notes: notes, going: nil, maybe: nil, notGoing: nil)
         
         if let eventToEdit = eventToEdit {
             event.uid = eventToEdit.uid
-            event.attending = eventToEdit.attending
+            event.going = eventToEdit.going
             event.maybe = eventToEdit.maybe
-            event.notAttending = eventToEdit.notAttending
+            event.notGoing = eventToEdit.notGoing
             FirebaseClient.shared.editEvent(groupUID: groupUID, event: event, completion: { (error) in
                 Aiv.hide(aiv: self.aiv)
                 if let error = error {
@@ -256,11 +264,6 @@ class CreateEventViewController: UIViewController {
                 }
             })
         }
-        
-    }
-    
-    func createEvent() {
-        
         
     }
     

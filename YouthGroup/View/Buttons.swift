@@ -24,6 +24,7 @@ class YouthGroupButton: UIButton {
         layer.cornerRadius = 5.0
         titleEdgeInsets.left = 5.0
         titleEdgeInsets.right = 5.0
+        layer.borderWidth = 1.0
         
     }
     

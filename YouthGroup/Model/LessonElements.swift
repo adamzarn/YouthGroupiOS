@@ -10,19 +10,39 @@ import Foundation
 
 class Lesson {
     var uid: String?
-    var name: String!
+    var title: String!
     var date: String!
     var locked: Bool!
     var leaders: [Member]!
     var elements: [LessonElement]?
-    init(uid: String?, name: String, date: String, locked: Bool, leaders: [Member], elements: [LessonElement]?) {
+    init(uid: String?, title: String, date: String, locked: Bool, leaders: [Member], elements: [LessonElement]?) {
         self.uid = uid
-        self.name = name
+        self.title = title
         self.date = date
         self.locked = locked
         self.leaders = leaders
         self.elements = elements
     }
+    
+    init(uid: String, info: NSDictionary) {
+        self.uid = uid
+        self.title = info["title"] as! String
+        self.date = info["date"] as! String
+        self.locked = info["locked"] as! Bool
+        self.leaders = Helper.convertAnyObjectToMembers(dict: info["leaders"] as! [String:[String : String]], leader: true)
+        //if let elements = info["elements"] {
+            //self.students = Helper.convertAnyObjectToLessonElements(dict: students as! [String: [String : String]], leader: false)
+        //}
+    }
+    
+    func toAnyObject() -> [String: Any] {
+        return ["title": title,
+                "date": date,
+                "locked": locked,
+                "leaders": Helper.convertMembersToAnyObject(members: leaders),
+                "elements": ""]
+    }
+    
 }
 
 class LessonElement {
@@ -32,11 +52,13 @@ class LessonElement {
 
 class Passage: LessonElement {
     var reference: String!
-    init(uid: String?, position: Int, reference: String) {
+    var text: String!
+    init(uid: String?, position: Int, reference: String, text: String) {
         super.init()
         super.uid = uid
         super.position = position
         self.reference = reference
+        self.text = text
     }
 }
 

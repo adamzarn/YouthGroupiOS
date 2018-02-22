@@ -50,10 +50,10 @@ struct Group {
             self.description = description as? String
         }
         if let leaders = info["leaders"] {
-            self.leaders = Helper.convertAnyObjectToMembers(dict: leaders as! [String : String], leader: true)
+            self.leaders = Helper.convertAnyObjectToMembers(dict: leaders as! [String:[String : String]], leader: true)
         }
         if let students = info["students"] {
-            self.students = Helper.convertAnyObjectToMembers(dict: students as! [String : String], leader: false)
+            self.students = Helper.convertAnyObjectToMembers(dict: students as! [String: [String : String]], leader: false)
         }
     }
     
@@ -72,14 +72,14 @@ struct Group {
     
 }
 
-struct Member {
+class Member {
     
     var email: String!
     var name: String!
     var leader: Bool?
     var groups: [Group]?
     
-    init(email: String, name: String, leader: Bool) {
+    init(email: String, name: String, leader: Bool?) {
         self.email = email
         self.name = name
         self.leader = leader
@@ -87,3 +87,12 @@ struct Member {
     }
     
 }
+
+class Bringer: Member {
+    var bringing: String?
+    init(email: String, name: String, leader: Bool?, bringing: String?) {
+        super.init(email: email, name: name, leader: leader)
+        self.bringing = bringing
+    }
+}
+
