@@ -34,7 +34,7 @@ class ButtonsCell: UITableViewCell {
     func setUp(event: Event) {
         buttons = [goingButton, maybeButton, notGoingButton]
         for button in buttons {
-            button.layer.borderColor = Colors.primary.cgColor
+            button.layer.borderColor = Colors.darkBlue.cgColor
         }
         switch getRSVP(event: event) {
         case RSVP.going:
@@ -52,13 +52,13 @@ class ButtonsCell: UITableViewCell {
         for button in buttons {
             if button == buttonToSelect {
                 button.isEnabled = false
-                button.backgroundColor = Colors.primary
+                button.backgroundColor = Colors.darkBlue
                 button.setTitleColor(UIColor.white, for: .normal)
-                button.layer.borderColor = Colors.primary.cgColor
+                button.layer.borderColor = Colors.darkBlue.cgColor
             } else {
                 button.isEnabled = true
                 button.backgroundColor = .white
-                button.setTitleColor(Colors.primary, for: .normal)
+                button.setTitleColor(Colors.darkBlue, for: .normal)
             }
         }
     }
@@ -66,7 +66,7 @@ class ButtonsCell: UITableViewCell {
     func deselectAllButtons() {
         for button in buttons {
             button.isEnabled = true
-            button.backgroundColor = Colors.primary
+            button.backgroundColor = Colors.darkBlue
         }
     }
     

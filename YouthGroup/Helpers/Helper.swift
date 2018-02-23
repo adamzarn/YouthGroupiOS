@@ -100,6 +100,94 @@ class Helper {
         return nil
     }
     
+    static func convertAnyObjectToAnswerers(dict: [String: [String:String]], leader: Bool) -> [Answerer] {
+        var answerers: [Answerer] = []
+        for (key,value) in dict {
+            if let email = key.decodeURIComponent() {
+                let name = value["name"] as! String
+                let answer = value["answer"] as! String
+                let answerer = Answerer(email: email, name: name, leader: leader, answer: answer)
+                answerers.append(answerer)
+            }
+        }
+        return answerers
+    }
+    
+    static func convertAnswerersToAnyObject(answerers: [Answerer]?) ->  [String: [String: String]]? {
+        if let answerers = answerers {
+            var answerersObject = [:] as [String: [String: String]]
+            for answerer in answerers {
+                if let email = answerer.email.encodeURIComponent(), let name = answerer.name {
+                    answerersObject[email] = ["name": name, "answer": answerer.answer!]
+                }
+            }
+            return answerersObject
+        }
+        return nil
+    }
+    
+    static func convertLessonElementsToAnyObject(elements: [LessonElement]?) -> [String: Any]? {
+        if let elements = elements {
+            var elementsObject = [:] as [String: Any]
+            for element in elements {
+                if element is Activity {
+                    elementsObject[element.uid!] = (element as! Activity).toAnyObject()
+                }
+                if element is Passage {
+                    elementsObject[element.uid!] = (element as! Passage).toAnyObject()
+                }
+                if element is MultipleChoiceQuestion {
+                    elementsObject[element.uid!] = (element as! MultipleChoiceQuestion).toAnyObject()
+                }
+                if element is FreeResponseQuestion {
+                    elementsObject[element.uid!] = (element as! FreeResponseQuestion).toAnyObject()
+                }
+            }
+            return elementsObject
+        }
+        return nil
+    }
+    
+    static func convertAnyObjectToLessonElements(dict: [String: [String:Any]]?) -> [LessonElement]? {
+        if let dict = dict {
+            var elements: [LessonElement] = []
+            for (key, info) in dict {
+                let uid = key
+                let type = info["type"] as! Int
+                switch type {
+                case Elements.activity.rawValue:
+                    elements.append(Activity(uid: uid, info: info))
+                case Elements.passage.rawValue:
+                    elements.append(Passage(uid: uid, info: info))
+                case Elements.multipleChoiceQuestion.rawValue:
+                    elements.append(MultipleChoiceQuestion(uid: uid, info: info))
+                case Elements.freeResponseQuestion.rawValue:
+                    elements.append(FreeResponseQuestion(uid: uid, info: info))
+                default:
+                    ()
+                }
+            }
+            return elements
+        }
+        return nil
+    }
+    
+    static func convertAnyObjectToStringArray(dict: [String: Bool]) -> [String] {
+        var incorrectAnswers: [String] = []
+        for (key, _) in dict {
+            incorrectAnswers.append(key)
+        }
+        return incorrectAnswers
+    }
+    
+    static func convertIncorrectAnswersToAnyObject(incorrectAnswers: [String]) -> [String: Bool]? {
+        var object: [String: Bool] = [:]
+        for incorrectAnswer in incorrectAnswers {
+            object[incorrectAnswer] = true
+        }
+        return object
+    }
+    
     static func combineLeadersAndStudents(group: Group) -> [Member] {
         var members: [Member] = []
         if let leaders = group.leaders {
@@ -184,7 +272,6 @@ class Helper {
 
     }
 
-        
     static let weekdays =
         [1 : "Sunday",
         2 :"Monday",

@@ -99,7 +99,36 @@
 "missingLeadersMessage" = "You must select at least one leader.";
 
 "editedLessonMessage" = "This lesson was successfully edited. We'll take you back to Lessons now.";
+
 "createdLessonMessage" = "This lesson was successfully created. We'll take you back to Lessons now.";
 
 "locked" = "Lesson Locked";
 "lessonLockedMessage" = "Your leader hasn't unlocked this lesson yet.";
+
+"missingReference" = "Missing Reference";
+"missingReferenceMessage" = "You must provide a reference.";
+
+"missingText" = "Bad Reference";
+"missingTextMessage" = "The reference you provided is invalid.";
+
+"editElementMessage" = "This element was successfully edited. We'll take you back to the lesson now.";
+"addElementMessage" = "This element was successfully added. We'll take you back to the lesson now.";
+
+"missingName" = "Missing Name";
+"missingNameMessage" = "You must provide a name for this activity.";
+
+"missingDirections" = "Missing Directions";
+"missingDirectionsMessage" = "You must provide directions for this activity.";
+
+"missingQuestion" = "Missing Question";
+"missingQuestionMessage" = "You must provide a question.";
+
+"missingAnswer" = "Missing Correct Answer";
+"missingAnswerMessage" = "You must provide a correct answer.";
+
+"invalidIncorrectAnswer" = "Invalid Incorrect Answer";
+"invalidIncorrectAnswerMessage" = "One of your incorrect answers is the correct answer.";
+
+"missingIncorrectAnswers" = "No Incorrect Answers";
+"missingIncorrectAnswersMessage" = "You must provide at least 1 incorrect answer.";
+

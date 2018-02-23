@@ -243,9 +243,10 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
                 cell.setUp(image: self.chosenImage, user: Auth.auth().currentUser)
                 return cell
             } else {
-                let cell = tableView.dequeueReusableCell(withIdentifier: "accountDetailCell")! as UITableViewCell
+                let cell = tableView.dequeueReusableCell(withIdentifier: "accountDetailCell") as! AccountDetailCell
                 cell.textLabel?.text = appDelegate.userData?[indexPath.row].0
                 cell.detailTextLabel?.text = appDelegate.userData?[indexPath.row].1
+                cell.setUp()
                 return cell
             }
         } else if indexPath.section == Sections.currentGroup.rawValue {
@@ -320,7 +321,6 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
         tableView.deselectRow(at: indexPath, animated: false)
         if indexPath.section == Sections.currentGroup.rawValue {
             let membersNC = self.storyboard?.instantiateViewController(withIdentifier: "MembersNavigationController") as! UINavigationController
-            let membersVC = membersNC.viewControllers[0] as! MembersViewController
             present(membersNC, animated: true, completion: nil)
         }
         if indexPath.section == Sections.otherGroups.rawValue && indexPath.row < otherGroups.count {

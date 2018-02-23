@@ -47,8 +47,12 @@ class EventViewController: UIViewController {
 extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if section > EventSections.notes.rawValue {
+        if section >= EventSections.notes.rawValue {
             switch section {
+            case EventSections.notes.rawValue:
+                if event.notes == "" {
+                    return nil
+                }
             case EventSections.buttons.rawValue:
                 return nil
             case EventSections.going.rawValue:
@@ -83,6 +87,12 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
+        case EventSections.notes.rawValue:
+            if event.notes == "" {
+                return 0
+            } else {
+                return 1
+            }
         case EventSections.going.rawValue:
             return event.going?.count ?? 0
         case EventSections.maybe.rawValue:

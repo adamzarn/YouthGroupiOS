@@ -50,3 +50,20 @@ enum CreateLessonError: Error {
     case missingDate
     case missingLeaders
 }
+
+enum AddPassageError: Error {
+    case missingReference
+    case missingText
+}
+
+enum AddActivityError: Error {
+    case missingName
+    case missingDirections
+}
+
+enum AddMultipleChoiceQuestionError: Error {
+    case missingQuestion
+    case missingAnswer
+    case invalidIncorrectAnswer
+    case missingIncorrectAnswers
+}

@@ -8,6 +8,13 @@
 
 import Foundation
 
+enum Elements: Int {
+    case activity = 0
+    case passage = 1
+    case multipleChoiceQuestion = 2
+    case freeResponseQuestion = 3
+}
+
 class Lesson {
     var uid: String?
     var title: String!
@@ -30,9 +37,7 @@ class Lesson {
         self.date = info["date"] as! String
         self.locked = info["locked"] as! Bool
         self.leaders = Helper.convertAnyObjectToMembers(dict: info["leaders"] as! [String:[String : String]], leader: true)
-        //if let elements = info["elements"] {
-            //self.students = Helper.convertAnyObjectToLessonElements(dict: students as! [String: [String : String]], leader: false)
-        //}
+        self.elements = Helper.convertAnyObjectToLessonElements(dict: info["elements"] as? [String:[String: Any]])
     }
     
     func toAnyObject() -> [String: Any] {
@@ -40,7 +45,7 @@ class Lesson {
                 "date": date,
                 "locked": locked,
                 "leaders": Helper.convertMembersToAnyObject(members: leaders),
-                "elements": ""]
+                "elements": Helper.convertLessonElementsToAnyObject(elements: elements)]
     }
     
 }
@@ -48,65 +53,151 @@ class Lesson {
 class LessonElement {
     var uid: String?
     var position: Int!
+    var type: Int!
+}
+
+class Activity: LessonElement {
+    var name: String!
+    var directions: String!
+    init(uid: String?, position: Int, type: Int, name: String, directions: String) {
+        super.init()
+        super.uid = uid
+        super.position = position
+        super.type = type
+        self.name = name
+        self.directions = directions
+    }
+    
+    init(uid: String, info: [String:Any]) {
+        super.init()
+        self.uid = uid
+        self.position = info["position"] as! Int
+        self.type = info["type"] as! Int
+        self.name = info["name"] as! String
+        self.directions = info["directions"] as! String
+    }
+    
+    func toAnyObject() -> [String: Any] {
+        return ["position": position,
+                "type": type,
+                "name": name,
+                "directions": directions]
+    }
+    
 }
 
 class Passage: LessonElement {
     var reference: String!
     var text: String!
-    init(uid: String?, position: Int, reference: String, text: String) {
+    init(uid: String?, position: Int, type: Int, reference: String, text: String) {
         super.init()
         super.uid = uid
         super.position = position
+        super.type = type
         self.reference = reference
         self.text = text
     }
+    
+    init(uid: String, info: [String:Any]) {
+        super.init()
+        self.uid = uid
+        self.position = info["position"] as! Int
+        self.type = info["type"] as! Int
+        self.reference = info["reference"] as! String
+        self.text = info["text"] as! String
+    }
+    
+    func toAnyObject() -> [String: Any] {
+        return ["position": position,
+                "type": type,
+                "reference": reference,
+                "text": text]
+    }
+    
 }
 
 class MultipleChoiceQuestion: LessonElement {
     var correctAnswer: String!
     var incorrectAnswers: [String]!
     var question: String!
-    var correctMembers: [Member]?
-    var incorrectMembers: [Member]?
-    init(uid: String?, position: Int, correctAnswer: String, incorrectAnswers: [String], question: String, correctMembers: [Member]?, incorrectMembers: [Member]?) {
+    var correctMembers: [Answerer]?
+    var incorrectMembers: [Answerer]?
+    var insert: Int!
+    init(uid: String?, position: Int, type: Int, correctAnswer: String, incorrectAnswers: [String], question: String, correctMembers: [Answerer]?, incorrectMembers: [Answerer]?, insert: Int) {
         super.init()
         super.uid = uid
         super.position = position
+        super.type = type
         self.correctAnswer = correctAnswer
         self.incorrectAnswers = incorrectAnswers
         self.question = question
         self.correctMembers = correctMembers
         self.incorrectMembers = incorrectMembers
+        self.insert = insert
     }
+    
+    init(uid: String, info: [String:Any]) {
+        super.init()
+        self.uid = uid
+        self.position = info["position"] as! Int
+        self.type = info["type"] as! Int
+        self.correctAnswer = info["correctAnswer"] as! String
+        self.question = info["question"] as! String
+        self.incorrectAnswers = Helper.convertAnyObjectToStringArray(dict: info["incorrectAnswers"] as! [String: Bool])
+        if let correctMembers = info["correctMembers"] {
+            self.correctMembers = Helper.convertAnyObjectToAnswerers(dict: correctMembers as! [String:[String : String]], leader: false)
+        }
+        if let incorrectMembers = info["incorrectMembers"] {
+            self.incorrectMembers = Helper.convertAnyObjectToAnswerers(dict: incorrectMembers as! [String:[String : String]], leader: false)
+        }
+        self.insert = info["insert"] as! Int
+    }
+    
+    func toAnyObject() -> [String: Any] {
+        return ["position": position,
+                "type": type,
+                "correctAnswer": correctAnswer,
+                "question": question,
+                "incorrectAnswers": Helper.convertIncorrectAnswersToAnyObject(incorrectAnswers: incorrectAnswers),
+                "correctMembers": Helper.convertAnswerersToAnyObject(answerers: correctMembers),
+                "incorrectMembers": Helper.convertAnswerersToAnyObject(answerers: incorrectMembers),
+                "insert": insert]
+    }
+    
 }
 
 class FreeResponseQuestion: LessonElement {
     var question: String!
     var responses: [Response]?
-    init(uid: String?, position: Int, question: String, responses: [Response]?) {
+    init(uid: String?, position: Int, type: Int, question: String, responses: [Response]?) {
         super.init()
         super.uid = uid
         super.position = position
+        super.type = type
         self.question = question
         self.responses = responses
     }
+    
+    init(uid: String, info: [String:Any]) {
+        super.init()
+        self.uid = uid
+        self.position = info["position"] as! Int
+        self.type = info["type"] as! Int
+        self.question = info["question"] as! String
+        //self.responses =
+    }
+    
+    func toAnyObject() -> [String: Any] {
+        return ["position": position,
+                "type": type,
+                "question": question]
+    }
+    
 }
 
 struct Response {
     var email: String!
     var name: String!
     var response: String!
-}
-
-class Activity: LessonElement {
-    var name: String!
-    var directions: String!
-    init(uid: String?, position: Int, name: String, directions: String) {
-        super.init()
-        super.uid = uid
-        super.position = position
-        self.name = name
-        self.directions = directions
-    }
 }
 

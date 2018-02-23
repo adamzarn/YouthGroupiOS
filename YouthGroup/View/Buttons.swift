@@ -11,7 +11,7 @@ import UIKit
 
 class YouthGroupButton: UIButton {
     
-    var color: UIColor = Colors.secondary
+    var color: UIColor = Colors.darkBlue
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -25,6 +25,7 @@ class YouthGroupButton: UIButton {
         titleEdgeInsets.left = 5.0
         titleEdgeInsets.right = 5.0
         layer.borderWidth = 1.0
+        layer.borderColor = Colors.darkBlue.cgColor
         
     }
     
@@ -33,9 +34,25 @@ class YouthGroupButton: UIButton {
 class CheckboxButton: UIButton {
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        setUp()
+    }
+    
+    init(){
+        super.init(frame: CGRect.zero)
+        setUp()
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setUp()
+    }
+    
+    func setUp(){
         layer.borderColor = UIColor.lightGray.cgColor
         layer.borderWidth = 1
         layer.cornerRadius = 5
+        layer.masksToBounds = true
     }
+    
 }
 

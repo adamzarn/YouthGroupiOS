@@ -369,6 +369,104 @@ class FirebaseClient: NSObject {
         }
     }
     
+    func pushElement(groupUID: String, lessonUID: String, element: LessonElement, completion: @escaping (_ error: String?, _ successMessage: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            var elementRef: DatabaseReference
+            var successMessage: String
+            if let elementUID = element.uid {
+                elementRef = ref.child("Lessons").child(groupUID).child(lessonUID).child("elements").child(elementUID)
+                successMessage = Helper.getString(key: "editElementMessage")
+            } else {
+                elementRef = ref.child("Lessons").child(groupUID).child(lessonUID).child("elements").childByAutoId()
+                successMessage = Helper.getString(key: "addElementMessage")
+            }
+
+            var value: [String: Any]? = nil
+            switch element.type {
+            case Elements.activity.rawValue:
+                value = (element as! Activity).toAnyObject()
+            case Elements.passage.rawValue:
+                value = (element as! Passage).toAnyObject()
+            case Elements.multipleChoiceQuestion.rawValue:
+                value = (element as! MultipleChoiceQuestion).toAnyObject()
+            case Elements.freeResponseQuestion.rawValue:
+                value = (element as! FreeResponseQuestion).toAnyObject()
+            default:
+                ()
+            }
+            elementRef.setValue(value) { (error, ref) -> Void in
+                if let error = error {
+                    completion(error.localizedDescription, nil)
+                } else {
+                    completion(nil, successMessage)
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"), nil)
+        }
+    }
+    
+    func deleteElement(groupUID: String, lessonUID: String, elementUID: String, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let elementRef = ref.child("Lessons").child(groupUID).child(lessonUID).child("elements").child(elementUID)
+            elementRef.removeValue()
+            completion(nil)
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+            
+    func getElements(groupUID: String, lessonUID: String, completion: @escaping (_ elements: [LessonElement]?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let elementsRef = ref.child("Lessons").child(groupUID).child(lessonUID).child("elements")
+            elementsRef.observe(.value, with: { (snapshot) in
+                if snapshot.exists() {
+                    let dict = snapshot.value as! [String: [String: Any]]
+                    let elements = Helper.convertAnyObjectToLessonElements(dict: dict)
+                    completion(elements, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            })
+        } else {
+            completion(nil, Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func setPosition(groupUID: String, lessonUID: String, elementUID: String, position: Int, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let positionRef = ref.child("Lessons").child(groupUID).child(lessonUID).child("elements").child(elementUID).child("position")
+            positionRef.setValue(position)
+            completion(nil)
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func answerMultipleChoiceQuestion(groupUID: String, lessonUID: String, elementUID: String, correct: Bool, answer: String, completion: @escaping (_ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let elementRef = ref.child("Lessons").child(groupUID).child(lessonUID).child("elements").child(elementUID)
+            var answerRef: DatabaseReference!
+            if correct {
+                answerRef = elementRef.child("correctMembers")
+            } else {
+                answerRef = elementRef.child("incorrectMembers")
+            }
+            if let member = Helper.createMemberFromUser() {
+                let value = [member.email.encodeURIComponent()!: ["name": member.name, "answer": answer]]
+                answerRef.setValue(value) { (error, ref) -> Void in
+                    if let error = error {
+                        completion(error.localizedDescription)
+                    } else {
+                        completion(nil)
+                    }
+                }
+            }
+        } else {
+            completion(Helper.getString(key: "noInternet"))
+        }
+    }
+    
     //MARK: Events
     
     func updateRSVP(groupUID: String, eventUID: String, rsvp: String, bringer: Bringer, completion: @escaping (_ error: String?) -> ()) {

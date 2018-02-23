@@ -130,6 +130,7 @@ class CreateLessonViewController: UIViewController {
         
         if let lessonToEdit = lessonToEdit {
             lesson.uid = lessonToEdit.uid
+            lesson.elements = lessonToEdit.elements
             FirebaseClient.shared.editLesson(groupUID: groupUID, lesson: lesson, completion: { (error) in
                 if let error = error {
                     Alert.showBasic(title: Helper.getString(key: "Error"), message: error, vc: self)

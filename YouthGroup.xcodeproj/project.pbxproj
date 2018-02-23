@@ -18,6 +18,13 @@
 		DB1BC880203E32EA006B9FC4 /* LessonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC87F203E32EA006B9FC4 /* LessonCell.swift */; };
 		DB1BC888203E3AA6006B9FC4 /* LessonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC887203E3AA6006B9FC4 /* LessonViewController.swift */; };
 		DB1BC88A203E6947006B9FC4 /* BiblePassageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC889203E6947006B9FC4 /* BiblePassageCell.swift */; };
+		DB1BC88D203EE766006B9FC4 /* AddPassageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC88C203EE766006B9FC4 /* AddPassageViewController.swift */; };
+		DB1BC88F203F1454006B9FC4 /* ActivityCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC88E203F1454006B9FC4 /* ActivityCell.swift */; };
+		DB1BC891203F145F006B9FC4 /* MultipleChoiceQuestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC890203F145F006B9FC4 /* MultipleChoiceQuestionCell.swift */; };
+		DB1BC893203F146C006B9FC4 /* FreeResponseQuestionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC892203F146C006B9FC4 /* FreeResponseQuestionCell.swift */; };
+		DB1BC895203F58EB006B9FC4 /* AddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC894203F58EB006B9FC4 /* AddActivityViewController.swift */; };
+		DB1BC897203F6DDD006B9FC4 /* AccountDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC896203F6DDD006B9FC4 /* AccountDetailCell.swift */; };
+		DB1BC899203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC898203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift */; };
 		DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B799202BE855000DABE2 /* AppDelegate.swift */; };
 		DB37B79C202BE855000DABE2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B79B202BE855000DABE2 /* LoginViewController.swift */; };
 		DB37B79F202BE855000DABE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB37B79D202BE855000DABE2 /* Main.storyboard */; };
@@ -110,6 +117,13 @@
 		DB1BC87F203E32EA006B9FC4 /* LessonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonCell.swift; sourceTree = "<group>"; };
 		DB1BC887203E3AA6006B9FC4 /* LessonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonViewController.swift; sourceTree = "<group>"; };
 		DB1BC889203E6947006B9FC4 /* BiblePassageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BiblePassageCell.swift; sourceTree = "<group>"; };
+		DB1BC88C203EE766006B9FC4 /* AddPassageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddPassageViewController.swift; sourceTree = "<group>"; };
+		DB1BC88E203F1454006B9FC4 /* ActivityCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCell.swift; sourceTree = "<group>"; };
+		DB1BC890203F145F006B9FC4 /* MultipleChoiceQuestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleChoiceQuestionCell.swift; sourceTree = "<group>"; };
+		DB1BC892203F146C006B9FC4 /* FreeResponseQuestionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeResponseQuestionCell.swift; sourceTree = "<group>"; };
+		DB1BC894203F58EB006B9FC4 /* AddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityViewController.swift; sourceTree = "<group>"; };
+		DB1BC896203F6DDD006B9FC4 /* AccountDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailCell.swift; sourceTree = "<group>"; };
+		DB1BC898203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMultipleChoiceQuestionViewController.swift; sourceTree = "<group>"; };
 		DB37B796202BE855000DABE2 /* YouthGroup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouthGroup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB37B799202BE855000DABE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DB37B79B202BE855000DABE2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -274,6 +288,16 @@
 			path = Groups;
 			sourceTree = "<group>";
 		};
+		DB1BC88B203EE751006B9FC4 /* LessonElements */ = {
+			isa = PBXGroup;
+			children = (
+				DB1BC88C203EE766006B9FC4 /* AddPassageViewController.swift */,
+				DB1BC894203F58EB006B9FC4 /* AddActivityViewController.swift */,
+				DB1BC898203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift */,
+			);
+			path = LessonElements;
+			sourceTree = "<group>";
+		};
 		DB2B6236078F3B1D3D8DC59D /* Pods */ = {
 			isa = PBXGroup;
 			children = (
@@ -353,6 +377,7 @@
 		DB37B7DE202C8F67000DABE2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DB1BC88B203EE751006B9FC4 /* LessonElements */,
 				DB1BC886203E3A82006B9FC4 /* Groups */,
 				DB1BC885203E3A62006B9FC4 /* Account */,
 				DB1BC884203E3A4C006B9FC4 /* Login */,
@@ -388,7 +413,11 @@
 				DB4816C0203DBE3F00C7FF38 /* RSVPCell.swift */,
 				DB1BC87B203DE3CF006B9FC4 /* ButtonsCell.swift */,
 				DB1BC87F203E32EA006B9FC4 /* LessonCell.swift */,
+				DB1BC88E203F1454006B9FC4 /* ActivityCell.swift */,
 				DB1BC889203E6947006B9FC4 /* BiblePassageCell.swift */,
+				DB1BC890203F145F006B9FC4 /* MultipleChoiceQuestionCell.swift */,
+				DB1BC892203F146C006B9FC4 /* FreeResponseQuestionCell.swift */,
+				DB1BC896203F6DDD006B9FC4 /* AccountDetailCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -729,10 +758,12 @@
 				DBCCEC7E203788FD0050AC46 /* Helper.swift in Sources */,
 				DBCCEC842037A0EE0050AC46 /* JoinGroupCell.swift in Sources */,
 				DBCCEC882037A9880050AC46 /* PrayerRequest.swift in Sources */,
+				DB1BC88D203EE766006B9FC4 /* AddPassageViewController.swift in Sources */,
 				DB4816C1203DBE3F00C7FF38 /* RSVPCell.swift in Sources */,
 				DB37B7D7202C8F07000DABE2 /* LessonsViewController.swift in Sources */,
 				DB37B7A2202BE855000DABE2 /* YouthGroup.xcdatamodeld in Sources */,
 				DBD03FDC202CC82300030C43 /* FacebookClient.swift in Sources */,
+				DB1BC891203F145F006B9FC4 /* MultipleChoiceQuestionCell.swift in Sources */,
 				DBD03FDE202CE34A00030C43 /* KeyboardNotifications.swift in Sources */,
 				DB1BC888203E3AA6006B9FC4 /* LessonViewController.swift in Sources */,
 				DBD03FD8202CACB600030C43 /* Aiv.swift in Sources */,
@@ -740,17 +771,22 @@
 				DBD03FE0202D40A000030C43 /* Linking.swift in Sources */,
 				DB6AF45E2033F89B00738FF0 /* ProfileCell.swift in Sources */,
 				DB4816AF2039CA2400C7FF38 /* NetworkClient.swift in Sources */,
+				DB1BC897203F6DDD006B9FC4 /* AccountDetailCell.swift in Sources */,
 				DB37B79C202BE855000DABE2 /* LoginViewController.swift in Sources */,
 				DB1313742036561000051ED7 /* JoinGroupViewController.swift in Sources */,
 				DB37B7D5202C8CE0000DABE2 /* MainTabBarController.swift in Sources */,
 				DB6AF45A2033ADEC00738FF0 /* Buttons.swift in Sources */,
+				DB1BC893203F146C006B9FC4 /* FreeResponseQuestionCell.swift in Sources */,
 				DB4816B5203BACF700C7FF38 /* EventCell.swift in Sources */,
 				DB6AF45C2033AF5B00738FF0 /* Colors.swift in Sources */,
 				DBCCEC8C2037D0FD0050AC46 /* MemberCell.swift in Sources */,
+				DB1BC899203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift in Sources */,
 				DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */,
+				DB1BC895203F58EB006B9FC4 /* AddActivityViewController.swift in Sources */,
 				DBCCEC7C203772FE0050AC46 /* Constants.swift in Sources */,
 				DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */,
 				DB4816B12039CC5600C7FF38 /* BiblePassage.swift in Sources */,
+				DB1BC88F203F1454006B9FC4 /* ActivityCell.swift in Sources */,
 				DBD03FD6202CA1BC00030C43 /* Alert.swift in Sources */,
 				DB4816AB2038D44100C7FF38 /* CircleImageView.swift in Sources */,
 				DBCCEC8E2037DA0C0050AC46 /* AddPrayerRequestViewController.swift in Sources */,

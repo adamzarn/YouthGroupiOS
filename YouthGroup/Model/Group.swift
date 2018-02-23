@@ -96,3 +96,11 @@ class Bringer: Member {
     }
 }
 
+class Answerer: Member {
+    var answer: String?
+    init(email: String, name: String, leader: Bool?, answer: String?) {
+        super.init(email: email, name: name, leader: leader)
+        self.answer = answer
+    }
+}
+
