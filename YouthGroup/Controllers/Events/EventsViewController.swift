@@ -19,16 +19,16 @@ class EventsViewController: UIViewController {
     
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
-    let threshold = CGFloat(10.0)
     var groupUID: String?
+    var email: String?
     var events: [Event] = []
     var eventsByDay: [[Event]] = []
     var uniqueDates: [String] = []
     var isLeader: Bool?
     var allLoaded = false
+    var firstTime = true
     var isLoadingMore = false
     var lastEventDate: String?
-    var refreshControl: UIRefreshControl!
     
     @IBOutlet weak var aiv: UIActivityIndicatorView!
     
@@ -48,23 +48,24 @@ class EventsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(EventsViewController.refresh), for: .valueChanged)
-        tableView.refreshControl = refreshControl
         tableView.rowHeight = 90.0
+        createEventButton.isEnabled = false
+        createEventButton.tintColor = .clear
         refresh()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        createEventButton.isEnabled = false
-        createEventButton.tintColor = .clear
-        if let groupUID = UserDefaults.standard.string(forKey: "currentGroup"), let email = Auth.auth().currentUser?.email {
-            self.groupUID = groupUID
-            checkIfIsLeader(groupUID: groupUID, email: email)
-        }
+        
         self.tabBarController?.tabBar.isHidden = false
-        refresh()
+        let currentGroupUID = UserDefaults.standard.string(forKey: "currentGroup")
+        if currentGroupUID != groupUID || Auth.auth().currentUser?.email != email {
+            createEventButton.isEnabled = false
+            createEventButton.tintColor = .clear
+            isLoadingMore = true
+            firstTime = true
+            refresh()
+        }
     }
     
     @objc func refresh() {
@@ -78,11 +79,14 @@ class EventsViewController: UIViewController {
     
     func checkIfUserBelongsToGroup(groupUID: String) {
         if let email = Auth.auth().currentUser?.email {
+            self.email = email
             FirebaseClient.shared.getGroupUIDs(email: email, completion: { (groupUIDs, error) in
                 if let error = error {
+                    self.reloadTableView(events: [])
                     Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                 } else {
                     if let groupUIDs = groupUIDs, groupUIDs.contains(groupUID) {
+                        self.startObservingNewEvents(groupUID: groupUID)
                         self.groupUID = groupUID
                         self.checkIfIsLeader(groupUID: groupUID, email: email)
                         self.startGettingEvents()
@@ -93,6 +97,24 @@ class EventsViewController: UIViewController {
                 }
             })
         }
+    }
+    
+    func startObservingNewEvents(groupUID: String) {
+        FirebaseClient.shared.removeObservers(node: "Events", uid: groupUID)
+        FirebaseClient.shared.observeNewEvents(groupUID: groupUID, completion: { (event, error) in
+            if let error = error {
+                self.reloadTableView(events: [])
+                Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+            } else {
+                if let event = event, !self.firstTime {
+                    self.events.insert(event, at: 0)
+                    self.filterEventsByDay()
+                    self.tableView.reloadData()
+                } else {
+                    self.firstTime = false
+                }
+            }
+        })
     }
 
     func startGettingEvents() {
@@ -134,6 +156,7 @@ class EventsViewController: UIViewController {
             self.allLoaded = false
             self.lastEventDate = nil
             if let error = error {
+                self.reloadTableView(events: [])
                 Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
             } else {
                 if let events = events {
@@ -157,6 +180,7 @@ class EventsViewController: UIViewController {
                 Aiv.hide(aiv: self.aiv)
                 self.aivView.isHidden = true
                 if let error = error {
+                    self.reloadTableView(events: [])
                     Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                 } else {
                     if let events = events {
@@ -205,11 +229,11 @@ class EventsViewController: UIViewController {
         filterEventsByDay()
         tableView.reloadData()
         self.isLoadingMore = false
-        self.refreshControl.endRefreshing()
     }
     
     @IBAction func createEventButtonPressed(_ sender: Any) {
         let createEventVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateEventViewController") as! CreateEventViewController
+        createEventVC.delegate = self
         createEventVC.groupUID = groupUID
         self.navigationController?.pushViewController(createEventVC, animated: true)
     }
@@ -233,6 +257,13 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource, UISc
                 FirebaseClient.shared.deleteEvent(groupUID: groupUID, eventUID: event.uid!, completion: { error in
                     if let error = error {
                         Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+                    } else {
+                        if self.eventsByDay[indexPath.section].count == 1 {
+                            self.eventsByDay.remove(at: indexPath.section)
+                        } else {
+                            self.eventsByDay[indexPath.section].remove(at: indexPath.row)
+                        }
+                        self.tableView.reloadData()
                     }
                 })
             }
@@ -272,6 +303,7 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource, UISc
     
     func tableView(_ tableView: UITableView, accessoryButtonTappedForRowWith indexPath: IndexPath) {
         let createEventVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateEventViewController") as! CreateEventViewController
+        createEventVC.delegate = self
         createEventVC.groupUID = groupUID
         createEventVC.eventToEdit = eventsByDay[indexPath.section][indexPath.row]
         createEventVC.indexPath = indexPath
@@ -287,12 +319,42 @@ extension EventsViewController: UITableViewDelegate, UITableViewDataSource, UISc
         let contentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
-        if !isLoadingMore && (maximumOffset - contentOffset < threshold) {
+        if !isLoadingMore && (maximumOffset - contentOffset < Constants.threshold) {
             self.isLoadingMore = true
             Aiv.show(aiv: self.aiv)
             self.aivView.isHidden = false
             self.getMoreEvents(groupUID: groupUID!, start: self.lastEventDate, end: nil)
         }
+    }
+    
+}
+
+extension EventsViewController: CreateEventViewControllerDelegate {
+    
+    func push(event: Event, groupUID: String) {
+        if events.count == 0 {
+            firstTime = true
+            events.insert(event, at: 0)
+            filterEventsByDay()
+            tableView.reloadData()
+            startObservingNewEvents(groupUID: groupUID)
+        }
+    }
+    
+    func edit(event: Event, indexPath: IndexPath) {
+        eventsByDay[indexPath.section][indexPath.row] = event
+        events = []
+        for day in eventsByDay {
+            for event in day {
+                events.append(event)
+            }
+        }
+        filterEventsByDay()
+        tableView.reloadData()
+    }
+    
+    func displayError(error: String) {
+        Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
     }
     
 }

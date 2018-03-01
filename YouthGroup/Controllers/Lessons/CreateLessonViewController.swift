@@ -41,6 +41,7 @@ class CreateLessonViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
         getGroupLeaders()
         if let lesson = lessonToEdit {
             title = "Edit Lesson"
@@ -172,10 +173,6 @@ class CreateLessonViewController: UIViewController {
             Alert.showBasic(title: Helper.getString(key: "error"), message: Helper.getString(key: "ue_m"), vc: self)
         }
         
-    }
-    
-    @IBAction func cancelButtonPressed(_ sender: Any) {
-        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
 }

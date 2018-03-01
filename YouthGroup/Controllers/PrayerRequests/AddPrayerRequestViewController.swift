@@ -11,7 +11,8 @@ import UIKit
 import FirebaseAuth
 
 protocol AddPrayerRequestViewControllerDelegate: class {
-    func push(prayerRequest: PrayerRequest)
+    func push(prayerRequest: PrayerRequest, groupUID: String)
+    func displayError(error: String)
 }
 
 class AddPrayerRequestViewController: UIViewController {
@@ -81,19 +82,22 @@ class AddPrayerRequestViewController: UIViewController {
         if let user = Auth.auth().currentUser, let name = user.displayName, let email = user.email {
             var prayerRequest = PrayerRequest(uid: nil, submittedBy: name, submittedByEmail: email, timestamp: -1*Int64(Helper.getCurrentDateAndTime())!, title: title, request: request, answered: false, anonymous: checkmarkChecked, prayingMembers: nil)
             if let groupUID = UserDefaults.standard.string(forKey: "currentGroup") {
-                FirebaseClient.shared.addPrayerRequest(prayerRequest: prayerRequest, groupUID: groupUID, completion: { (prayerRequestUID, error) in
-                    Aiv.hide(aiv: self.aiv)
-                    if let error = error {
-                        Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
-                    } else {
-                        let completion: (UIAlertAction) -> Void = {_ in
-                            prayerRequest.uid = prayerRequestUID!
-                            self.delegate?.push(prayerRequest: prayerRequest)
-                            self.navigationController?.popViewController(animated: true)
+                
+                FirebaseClient.shared.doesRefExist(node: "PrayerRequests", uid: groupUID, completion: { exists in
+                    FirebaseClient.shared.pushPrayerRequest(prayerRequest: prayerRequest, groupUID: groupUID, completion: { (prayerRequestUID, error) in
+                        Aiv.hide(aiv: self.aiv)
+                        if let error = error {
+                            self.delegate?.displayError(error: error)
+                        } else {
+                            if !exists {
+                                prayerRequest.uid = prayerRequestUID
+                                self.delegate?.push(prayerRequest: prayerRequest, groupUID: groupUID)
+                            }
                         }
-                        Alert.showBasicWithCompletion(title: Helper.getString(key: "success"), message: Helper.getString(key: "prayerSubmittedMessage"), vc: self, completion: completion)
-                    }
+                        self.navigationController?.popViewController(animated: true)
+                    })
                 })
+                
             }
         }
         

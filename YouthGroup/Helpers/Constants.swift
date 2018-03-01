@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 struct NotificationKeys {
     static let reloadAccount = "reloadAccount"
@@ -19,4 +20,8 @@ struct QueryLimits {
     static let posts: UInt = 21
     static let prayerRequests: UInt = 21
     static let events: UInt = 21
+}
+
+struct Constants {
+    static let threshold = CGFloat(10.0)
 }

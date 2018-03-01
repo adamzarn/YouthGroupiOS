@@ -16,15 +16,13 @@ class Post {
     var name: String!
     var timestamp: Int64!
     var text: String!
-    var comments: [Post]?
     
-    init(uid: String?, email: String, name: String, timestamp: Int64, text: String, comments: [Post]?) {
+    init(uid: String?, email: String, name: String, timestamp: Int64, text: String) {
         self.uid = uid
         self.email = email
         self.name = name
         self.timestamp = timestamp
         self.text = text
-        self.comments = comments
     }
     
     init(uid: String, info: NSDictionary) {
@@ -33,17 +31,13 @@ class Post {
         self.name = info["name"] as! String
         self.timestamp = info["timestamp"] as! Int64
         self.text = info["text"] as! String
-        if let comments = info["comments"] {
-            self.comments = Helper.convertAnyObjectToPosts(dict: comments as! [String:[String : Any]])
-        }
     }
     
     func toAnyObject() -> [String: Any] {
         return ["email": self.email,
                 "name": self.name,
                 "timestamp": self.timestamp,
-                "text": self.text,
-                "comments": Helper.convertPostsToAnyObject(posts: self.comments)]
+                "text": self.text]
     }
     
 }

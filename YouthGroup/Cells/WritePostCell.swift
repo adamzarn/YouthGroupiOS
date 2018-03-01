@@ -11,7 +11,13 @@ import Foundation
 import UIKit
 
 protocol WritePostCellDelegate: class {
-    func push(post: Post)
+    func push(post: Post, groupUID: String)
+    func displayError(error: String)
+}
+
+protocol WriteCommentCellDelegate: class {
+    func push(comment: Post, originalPostUID: String)
+    func displayError(error: String)
 }
 
 class WritePostCell: UITableViewCell {
@@ -20,11 +26,13 @@ class WritePostCell: UITableViewCell {
     @IBOutlet weak var postTextView: UITextView!
     @IBOutlet weak var postButton: YouthGroupButton!
     
+    weak var messagesDelegate: WritePostCellDelegate?
+    weak var commentsDelegate: WriteCommentCellDelegate?
+    
     var member: Member!
     var groupUID: String?
+    var postUID: String?
     var savedEmail: String!
-    
-    weak var delegate: WritePostCellDelegate?
     
     override func awakeFromNib() {
         let selector = #selector(WritePostCell.dismissKeyboard)
@@ -33,10 +41,11 @@ class WritePostCell: UITableViewCell {
         postTextView.inputAccessoryView = toolbar
     }
     
-    func setUp(groupUID: String?) {
+    func setUp(groupUID: String?, postUID: String?) {
         if let member = Helper.createMemberFromUser() {
             self.member = member
             self.groupUID = groupUID
+            self.postUID = postUID
             savedEmail = member.email!
             memberImageView.image = UIImage(named: "Boy")
         
@@ -64,16 +73,52 @@ class WritePostCell: UITableViewCell {
     
     @IBAction func postButtonPressed(_ sender: Any) {
         let text = postTextView.text!
-        if !text.isEmpty && text != "Write Post..." {
-            if let groupUID = self.groupUID {
-                postTextView.text = "Write Post..."
-                postTextView.textColor = UIColor.lightGray
-                let post = Post(uid: nil, email: member.email, name: member.name, timestamp: -1*Int64(Helper.getCurrentDateAndTime())!, text: text, comments: nil)
-                FirebaseClient.shared.pushPost(groupUID: groupUID, post: post, completion: { error in
-                    if error == nil {
-                        self.delegate?.push(post: post)
-                    }
+        
+        if let postUID = postUID {
+            
+            if !text.isEmpty && text != "Write Comment..." {
+                
+                let comment = Post(uid: nil, email: member.email, name: member.name, timestamp: -1*Int64(Helper.getCurrentDateAndTime())!, text: text)
+                
+                FirebaseClient.shared.doesRefExist(node: "Comments", uid: postUID, completion: { exists in
+                    FirebaseClient.shared.pushComment(originalPostUID: postUID, comment: comment, completion: { (commentUID, error) in
+                        if let error = error {
+                            self.commentsDelegate?.displayError(error: error)
+                        } else {
+                            self.postTextView.text = "Write Comment..."
+                            self.postTextView.textColor = UIColor.lightGray
+                            if !exists {
+                                comment.uid = commentUID
+                                self.commentsDelegate?.push(comment: comment, originalPostUID: postUID)
+                            }
+                        }
+                    })
                 })
+                
+            }
+            
+        } else {
+        
+            if !text.isEmpty && text != "Write Post..." {
+                if let groupUID = self.groupUID {
+                    
+                    let post = Post(uid: nil, email: member.email, name: member.name, timestamp: -1*Int64(Helper.getCurrentDateAndTime())!, text: text)
+                    
+                    FirebaseClient.shared.doesRefExist(node: "Posts", uid: groupUID, completion: { exists in
+                        FirebaseClient.shared.pushPost(groupUID: groupUID, post: post, completion: { (postUID, error) in
+                            if let error = error {
+                                self.messagesDelegate?.displayError(error: error)
+                            } else {
+                                self.postTextView.text = "Write Post..."
+                                self.postTextView.textColor = UIColor.lightGray
+                                if !exists {
+                                    post.uid = postUID
+                                    self.messagesDelegate?.push(post: post, groupUID: groupUID)
+                                }
+                            }
+                        })
+                    })
+                }
             }
         }
     }

@@ -87,6 +87,7 @@
 		DBD03FDC202CC82300030C43 /* FacebookClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDB202CC82300030C43 /* FacebookClient.swift */; };
 		DBD03FDE202CE34A00030C43 /* KeyboardNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */; };
 		DBD03FE0202D40A000030C43 /* Linking.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBD03FDF202D40A000030C43 /* Linking.swift */; };
+		DBE35F9B2048A1640044F3BF /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBE35F9A2048A1640044F3BF /* CommentsViewController.swift */; };
 		DBF417B62036065100F2A4F8 /* Group.swift in Sources */ = {isa = PBXBuildFile; fileRef = DBF417B52036065100F2A4F8 /* Group.swift */; };
 		F667CD0A9836E71BEB2890F8 /* Pods_YouthGroupUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B80922DC63D05DC9F95B81E3 /* Pods_YouthGroupUITests.framework */; };
 /* End PBXBuildFile section */
@@ -202,6 +203,7 @@
 		DBD03FDB202CC82300030C43 /* FacebookClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookClient.swift; sourceTree = "<group>"; };
 		DBD03FDD202CE34A00030C43 /* KeyboardNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardNotifications.swift; sourceTree = "<group>"; };
 		DBD03FDF202D40A000030C43 /* Linking.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Linking.swift; sourceTree = "<group>"; };
+		DBE35F9A2048A1640044F3BF /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
 		DBF417B52036065100F2A4F8 /* Group.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Group.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -400,6 +402,7 @@
 		DB37B7DE202C8F67000DABE2 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				DBE35F9C2048A1AC0044F3BF /* Messages */,
 				DB1BC88B203EE751006B9FC4 /* LessonElements */,
 				DB1BC886203E3A82006B9FC4 /* Groups */,
 				DB1BC885203E3A62006B9FC4 /* Account */,
@@ -408,7 +411,6 @@
 				DB1BC882203E3A23006B9FC4 /* Events */,
 				DB37B7D4202C8CE0000DABE2 /* MainTabBarController.swift */,
 				DB1BC881203E3A15006B9FC4 /* Lessons */,
-				DB03B9072044CBB5007EB43D /* MessagesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -422,6 +424,15 @@
 				DB4816AC2038D66F00C7FF38 /* BorderedTextView.swift */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		DBE35F9C2048A1AC0044F3BF /* Messages */ = {
+			isa = PBXGroup;
+			children = (
+				DB03B9072044CBB5007EB43D /* MessagesViewController.swift */,
+				DBE35F9A2048A1640044F3BF /* CommentsViewController.swift */,
+			);
+			path = Messages;
 			sourceTree = "<group>";
 		};
 		DBF417B2203605D400F2A4F8 /* Cells */ = {
@@ -802,6 +813,7 @@
 				DBD03FD8202CACB600030C43 /* Aiv.swift in Sources */,
 				DBCCEC8020378DF80050AC46 /* EditMemberCell.swift in Sources */,
 				DBD03FE0202D40A000030C43 /* Linking.swift in Sources */,
+				DBE35F9B2048A1640044F3BF /* CommentsViewController.swift in Sources */,
 				DB1BC89D2041F562006B9FC4 /* AddFreeResponseQuestionViewController.swift in Sources */,
 				DB6AF45E2033F89B00738FF0 /* ProfileCell.swift in Sources */,
 				DB4816AF2039CA2400C7FF38 /* NetworkClient.swift in Sources */,

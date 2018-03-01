@@ -14,12 +14,13 @@ class PrayerRequestsViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var aivView: UIView!
+    @IBOutlet weak var churchLabel: UIBarButtonItem!
     
-    let threshold = CGFloat(10.0)
     var prayerRequests: [PrayerRequest] = []
-    var refreshControl: UIRefreshControl!
     var groupUID: String?
+    var email: String?
     var allLoaded = false
+    var firstTime = true
     var lastPrayerRequestTimestamp: Int64?
     var isLoadingMore = false
     
@@ -31,16 +32,15 @@ class PrayerRequestsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(PrayerRequestsViewController.refresh), for: .valueChanged)
-        tableView.refreshControl = refreshControl
-        refresh()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tabBarController?.tabBar.isHidden = false
-        if prayerRequests.count == 0 {
+        let currentGroupUID = UserDefaults.standard.string(forKey: "currentGroup")
+        if currentGroupUID != groupUID || Auth.auth().currentUser?.email != email {
+            isLoadingMore = true
+            firstTime = true
             refresh()
         }
     }
@@ -55,12 +55,16 @@ class PrayerRequestsViewController: UIViewController {
     
     func checkIfUserBelongsToGroup(groupUID: String) {
         if let email = Auth.auth().currentUser?.email {
+            self.email = email
             FirebaseClient.shared.getGroupUIDs(email: email, completion: { (groupUIDs, error) in
                 if let error = error {
                     self.aivView.isHidden = true
+                    self.reloadTableView(prayerRequests: [])
                     Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                 } else {
                     if let groupUIDs = groupUIDs, groupUIDs.contains(groupUID) {
+                        self.startObservingNewPrayerRequests(groupUID: groupUID)
+                        Helper.setChurchName(groupUID: groupUID, button: self.churchLabel)
                         self.groupUID = groupUID
                         self.getPrayerRequests(groupUID: groupUID, start: nil)
                     } else {
@@ -72,6 +76,23 @@ class PrayerRequestsViewController: UIViewController {
         }
     }
     
+    func startObservingNewPrayerRequests(groupUID: String) {
+        FirebaseClient.shared.removeObservers(node: "PrayerRequests", uid: groupUID)
+        FirebaseClient.shared.observeNewPrayerRequests(groupUID: groupUID, completion: { (prayerRequest, error) in
+            if let error = error {
+                self.reloadTableView(prayerRequests: [])
+                Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+            } else {
+                if let prayerRequest = prayerRequest, !self.firstTime {
+                    self.prayerRequests.insert(prayerRequest, at: 0)
+                    self.tableView.reloadData()
+                } else {
+                    self.firstTime = false
+                }
+            }
+        })
+    }
+    
     func getPrayerRequests(groupUID: String, start: Int64?) {
         self.prayerRequests = []
         FirebaseClient.shared.queryPrayerRequests(groupUID: groupUID, start: start, completion: { (prayerRequests, error) in
@@ -80,6 +101,7 @@ class PrayerRequestsViewController: UIViewController {
             self.lastPrayerRequestTimestamp = nil
             if let error = error {
                 self.aivView.isHidden = true
+                self.reloadTableView(prayerRequests: [])
                 Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
             } else {
                 if let prayerRequests = prayerRequests {
@@ -103,6 +125,7 @@ class PrayerRequestsViewController: UIViewController {
                 self.aivView.isHidden = true
                 if let error = error {
                     self.aivView.isHidden = true
+                    self.reloadTableView(prayerRequests: [])
                     Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                 } else {
                     if let prayerRequests = prayerRequests {
@@ -128,7 +151,6 @@ class PrayerRequestsViewController: UIViewController {
     func reloadTableView(prayerRequests: [PrayerRequest]) {
         self.prayerRequests = prayerRequests.sorted(by: { $0.timestamp < $1.timestamp })
         self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
     }
     
     @IBAction func addButtonPressed(_ sender: Any) {
@@ -159,6 +181,9 @@ extension PrayerRequestsViewController: UITableViewDelegate, UITableViewDataSour
                 FirebaseClient.shared.deletePrayerRequest(groupUID: groupUID, prayerRequestUID: prayerRequestUID, completion: { error in
                     if let error = error {
                         Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
+                    } else {
+                        self.prayerRequests.remove(at: indexPath.row)
+                        self.tableView.reloadData()
                     }
                 })
             }
@@ -187,6 +212,7 @@ extension PrayerRequestsViewController: UITableViewDelegate, UITableViewDataSour
         prayerRequestVC.indexPath = indexPath
         prayerRequestVC.groupUID = groupUID
         prayerRequestVC.delegate = self
+        print(prayerRequests[indexPath.row].uid!)
         self.navigationController?.pushViewController(prayerRequestVC, animated: true)
     }
     
@@ -199,10 +225,12 @@ extension PrayerRequestsViewController: UITableViewDelegate, UITableViewDataSour
         let contentOffset = scrollView.contentOffset.y
         let maximumOffset = scrollView.contentSize.height - scrollView.frame.size.height
         
-        if !isLoadingMore && (maximumOffset - contentOffset < threshold) {
+        if !isLoadingMore && (maximumOffset - contentOffset < Constants.threshold) {
             self.isLoadingMore = true
             self.aivView.isHidden = false
-            self.getMorePrayerRequests(groupUID: groupUID!, start: self.lastPrayerRequestTimestamp)
+            if let groupUID = groupUID {
+                self.getMorePrayerRequests(groupUID: groupUID, start: self.lastPrayerRequestTimestamp)
+            }
         }
     }
     
@@ -223,9 +251,18 @@ extension PrayerRequestsViewController: PrayerRequestViewControllerDelegate {
 }
 
 extension PrayerRequestsViewController: AddPrayerRequestViewControllerDelegate {
-    func push(prayerRequest: PrayerRequest) {
-        self.prayerRequests.insert(prayerRequest, at: 0)
-        self.tableView.reloadData()
+    
+    func push(prayerRequest: PrayerRequest, groupUID: String) {
+        if prayerRequests.count == 0 {
+            firstTime = true
+            prayerRequests.insert(prayerRequest, at: 0)
+            tableView.reloadData()
+            startObservingNewPrayerRequests(groupUID: groupUID)
+        }
+    }
+    
+    func displayError(error: String) {
+        Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
     }
     
 }

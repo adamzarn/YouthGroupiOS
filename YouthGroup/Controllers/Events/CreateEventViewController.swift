@@ -9,6 +9,12 @@
 import Foundation
 import UIKit
 
+protocol CreateEventViewControllerDelegate: class {
+    func push(event: Event, groupUID: String)
+    func edit(event: Event, indexPath: IndexPath)
+    func displayError(error: String)
+}
+
 class CreateEventViewController: UIViewController {
     
     @IBOutlet weak var scrollView: UIScrollView!
@@ -24,6 +30,8 @@ class CreateEventViewController: UIViewController {
     @IBOutlet weak var zipTextField: UITextField!
     @IBOutlet weak var notesTextView: BorderedTextView!
     @IBOutlet weak var aiv: UIActivityIndicatorView!
+    
+    weak var delegate: CreateEventViewControllerDelegate?
     
     var keyboardMovers: [Any]!
     
@@ -234,7 +242,7 @@ class CreateEventViewController: UIViewController {
         
         let event = Event(uid: nil, name: name, date: finalDate, startTime: finalStartTime, endTime: finalEndTime, locationName: locationName, address: address, notes: notes, going: nil, maybe: nil, notGoing: nil)
         
-        if let eventToEdit = eventToEdit {
+        if let eventToEdit = eventToEdit, let indexPath = indexPath {
             event.uid = eventToEdit.uid
             event.going = eventToEdit.going
             event.maybe = eventToEdit.maybe
@@ -245,22 +253,26 @@ class CreateEventViewController: UIViewController {
                     Alert.showBasic(title: Helper.getString(key: "Error"), message: error, vc: self)
                 } else {
                     let completion: (UIAlertAction) -> Void = {_ in
+                        self.delegate?.edit(event: event, indexPath: indexPath)
                         self.navigationController?.popViewController(animated: true)
                     }
                     Alert.showBasicWithCompletion(title: Helper.getString(key: "success"), message: Helper.getString(key: "editedEventMessage"), vc: self, completion: completion)
                 }
             })
         } else {
-            FirebaseClient.shared.createEvent(event: event, groupUID: groupUID, completion: { (eventUID, error) in
-                Aiv.hide(aiv: self.aiv)
-                if let error = error {
-                    Alert.showBasic(title: Helper.getString(key: "Error"), message: error, vc: self)
-                } else {
-                    let completion: (UIAlertAction) -> Void = {_ in
-                        self.navigationController?.popViewController(animated: true)
+            FirebaseClient.shared.doesRefExist(node: "Events", uid: groupUID, completion: { exists in
+                FirebaseClient.shared.createEvent(event: event, groupUID: self.groupUID, completion: { (eventUID, error) in
+                    Aiv.hide(aiv: self.aiv)
+                    if let error = error {
+                        self.delegate?.displayError(error: error)
+                    } else {
+                        if !exists {
+                            event.uid = eventUID
+                            self.delegate?.push(event: event, groupUID: self.groupUID)
+                        }
                     }
-                    Alert.showBasicWithCompletion(title: Helper.getString(key: "success"), message: Helper.getString(key: "createdEventMessage"), vc: self, completion: completion)
-                }
+                    self.navigationController?.popViewController(animated: true)
+                })
             })
         }
         

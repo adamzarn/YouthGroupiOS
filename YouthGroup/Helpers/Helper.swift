@@ -108,11 +108,7 @@ class Helper {
             let name = value["name"] as! String
             let timestamp = value["email"] as! Int64
             let text = value["text"] as! String
-            var comments: [Post]?
-            if let commentsDict = value["comments"] {
-                comments = Helper.convertAnyObjectToPosts(dict: commentsDict as! [String:[String: Any]])
-            }
-            let post = Post(uid: uid, email: email, name: name, timestamp: timestamp, text: text, comments: comments)
+            let post = Post(uid: uid, email: email, name: name, timestamp: timestamp, text: text)
             posts.append(post)
         }
         return posts
@@ -127,7 +123,6 @@ class Helper {
                 value["name"] = post.name
                 value["timestamp"] = post.timestamp
                 value["text"] = post.text
-                value["comments"] = Helper.convertPostsToAnyObject(posts: post.comments)
                 postsObject[post.uid!] = value
             }
             return postsObject
@@ -364,6 +359,14 @@ class Helper {
             }
         }
         return nil
+    }
+    
+    static func setChurchName(groupUID: String, button: UIBarButtonItem) {
+        FirebaseClient.shared.getChurchName(groupUID: groupUID, completion: { (churchName) in
+            if let churchName = churchName {
+                button.title = churchName
+            }
+        })
     }
     
 }

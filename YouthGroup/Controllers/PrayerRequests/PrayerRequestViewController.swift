@@ -119,7 +119,7 @@ class PrayerRequestViewController: UIViewController {
                 }
             })
         } else {
-            Alert.showBasic(title: Helper.getString(key: "notAllowed"), message: Helper.getString(key: "answeredPrayerNotAllowed"), vc: self)
+            Alert.showBasic(title: Helper.getString(key: "notAllowed"), message: Helper.getString(key: "answeredPrayerNotAllowedMessage"), vc: self)
         }
     }
     

@@ -595,13 +595,13 @@ class FirebaseClient: NSObject {
     
     //MARK: Posts
     
-    func queryPosts(groupUID: String, start: Int64?, completion: @escaping (_ posts: [Post]?, _ error: String?) -> ()) {
+    func queryPosts(node: String, uid: String, start: Int64?, completion: @escaping (_ results: [Post]?, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             var postsQuery: DatabaseQuery?
             if let start = start {
-                postsQuery = self.ref.child("Posts").child(groupUID).queryOrdered(byChild: "timestamp").queryStarting(atValue: start).queryLimited(toFirst: QueryLimits.posts)
+                postsQuery = self.ref.child(node).child(uid).queryOrdered(byChild: "timestamp").queryStarting(atValue: start).queryLimited(toFirst: QueryLimits.posts)
             } else {
-                postsQuery = self.ref.child("Posts").child(groupUID).queryOrdered(byChild: "timestamp").queryLimited(toFirst: QueryLimits.posts)
+                postsQuery = self.ref.child(node).child(uid).queryOrdered(byChild: "timestamp").queryLimited(toFirst: QueryLimits.posts)
             }
             postsQuery?.observeSingleEvent(of: .value, with: { snapshot in
                 if snapshot.exists() {
@@ -626,7 +626,38 @@ class FirebaseClient: NSObject {
         }
     }
     
-    func pushPost(groupUID: String, post: Post, completion: @escaping ( _ error: String?) -> ()) {
+    func observeNewPosts(node: String, uid: String, completion: @escaping (_ result: Post?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let postsQuery = self.ref.child(node).child(uid).queryLimited(toLast: 1)
+            postsQuery.observe(.childAdded, with: { snapshot in
+                if snapshot.exists() {
+                    let post = Post(uid: snapshot.key, info: snapshot.value as! NSDictionary)
+                    completion(post, nil)
+                } else {
+                    completion(nil, nil)
+                }
+            })
+        } else {
+            completion(nil, Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func removeObservers(node: String, uid: String) {
+        ref.child(node).child(uid).removeAllObservers()
+    }
+    
+    func doesRefExist(node: String, uid: String, completion: @escaping (_ exists: Bool) -> ()) {
+        let ref = self.ref.child(node).child(uid)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            if snapshot.exists() {
+                completion(true)
+            } else {
+                completion(false)
+            }
+        })
+    }
+    
+    func pushPost(groupUID: String, post: Post, completion: @escaping (_ postUID: String?, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             var postRef: DatabaseReference!
             if let postUID = post.uid {
@@ -636,13 +667,33 @@ class FirebaseClient: NSObject {
             }
             postRef.setValue(post.toAnyObject()) { (error, ref) -> Void in
                 if let error = error {
-                    completion(error.localizedDescription)
+                    completion(nil, error.localizedDescription)
                 } else {
-                    completion(nil)
+                    completion(postRef.key, nil)
                 }
             }
         } else {
-            completion(Helper.getString(key: "noInternet"))
+            completion(nil, Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func pushComment(originalPostUID: String, comment: Post, completion: @escaping (_ postUID: String?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            var commentRef: DatabaseReference!
+            if let commentUID = comment.uid {
+                commentRef = ref.child("Comments").child(originalPostUID).child(commentUID)
+            } else {
+                commentRef = ref.child("Comments").child(originalPostUID).childByAutoId()
+            }
+            commentRef.setValue(comment.toAnyObject()) { (error, ref) -> Void in
+                if let error = error {
+                    completion(nil, error.localizedDescription)
+                } else {
+                    completion(commentRef.key, nil)
+                }
+            }
+        } else {
+            completion(nil, Helper.getString(key: "noInternet"))
         }
     }
     
@@ -735,6 +786,22 @@ class FirebaseClient: NSObject {
                     }
                     completion(events, nil)
                 } else {
+                    completion([], nil)
+                }
+            })
+        } else {
+            completion([], Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func observeNewEvents(groupUID: String, completion: @escaping (_ event: Event?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let eventQuery = self.ref.child("Events").child(groupUID).queryLimited(toLast: 1)
+            eventQuery.observe(.childAdded, with: { snapshot in
+                if snapshot.exists() {
+                    let event = Event(uid: snapshot.key, info: snapshot.value as! NSDictionary)
+                    completion(event, nil)
+                } else {
                     completion(nil, nil)
                 }
             })
@@ -761,7 +828,7 @@ class FirebaseClient: NSObject {
     
     //MARK: Prayer Requests
     
-    func addPrayerRequest(prayerRequest: PrayerRequest, groupUID: String, completion: @escaping (_ prayerRequestUID: String?, _ error: String?) -> ()) {
+    func pushPrayerRequest(prayerRequest: PrayerRequest, groupUID: String, completion: @escaping (_ prayerRequestUID: String?, _ error: String?) -> ()) {
         if Helper.hasConnectivity() {
             let prayerRequestRef = ref.child("PrayerRequests").child(groupUID).childByAutoId()
             prayerRequestRef.setValue(prayerRequest.toAnyObject()) { (error, ref) -> Void in
@@ -855,6 +922,22 @@ class FirebaseClient: NSObject {
                     }
                     completion(prayerRequests, nil)
                 } else {
+                    completion([], nil)
+                }
+            })
+        } else {
+            completion([], Helper.getString(key: "noInternet"))
+        }
+    }
+    
+    func observeNewPrayerRequests(groupUID: String, completion: @escaping (_ prayerRequest: PrayerRequest?, _ error: String?) -> ()) {
+        if Helper.hasConnectivity() {
+            let prayerRequestQuery = self.ref.child("PrayerRequests").child(groupUID).queryLimited(toLast: 1)
+            prayerRequestQuery.observe(.childAdded, with: { snapshot in
+                if snapshot.exists() {
+                    let prayerRequest = PrayerRequest(uid: snapshot.key, info: snapshot.value as! NSDictionary)
+                    completion(prayerRequest, nil)
+                } else {
                     completion(nil, nil)
                 }
             })
@@ -947,6 +1030,13 @@ class FirebaseClient: NSObject {
         } else {
             completion(true, Helper.getString(key: "noInternet"))
         }
+    }
+    
+    func getChurchName(groupUID: String, completion: @escaping (_ churchName: String?) -> ()) {
+        let churchRef = ref.child("Groups").child(groupUID).child("church")
+        churchRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            completion(snapshot.value as? String)
+        })
     }
     
     static let shared = FirebaseClient()

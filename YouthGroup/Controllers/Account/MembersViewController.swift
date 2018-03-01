@@ -12,14 +12,6 @@ class MembersViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
     var members: [[Member]] = []
-    var refreshControl: UIRefreshControl!
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(MembersViewController.refresh), for: .valueChanged)
-        tableView.refreshControl = refreshControl
-    }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -27,7 +19,7 @@ class MembersViewController: UIViewController {
         refresh()
     }
     
-    @objc func refresh() {
+    func refresh() {
         if let groupUID = UserDefaults.standard.string(forKey: "currentGroup") {
             checkIfUserBelongsToGroup(groupUID: groupUID)
         } else {
@@ -73,7 +65,6 @@ class MembersViewController: UIViewController {
     func reloadTableView(members: [[Member]]) {
         self.members = members
         self.tableView.reloadData()
-        self.refreshControl.endRefreshing()
     }
     
 }

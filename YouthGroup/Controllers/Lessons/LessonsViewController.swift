@@ -14,6 +14,7 @@ class LessonsViewController: UIViewController {
     
     @IBOutlet weak var createLessonButton: UIBarButtonItem!
     
+    @IBOutlet weak var churchLabel: UIBarButtonItem!
     var groupUID: String?
     var lessons: [Lesson] = []
     var lessonsByDay: [[Lesson]] = []
@@ -24,14 +25,17 @@ class LessonsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 60.0
+        createLessonButton.isEnabled = false
+        createLessonButton.tintColor = .clear
         refresh()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        createLessonButton.isEnabled = false
-        createLessonButton.tintColor = .clear
+        self.tabBarController?.tabBar.isHidden = false
         if let groupUID = UserDefaults.standard.string(forKey: "currentGroup"), let email = Auth.auth().currentUser?.email {
+            createLessonButton.isEnabled = false
+            createLessonButton.tintColor = .clear
             self.groupUID = groupUID
             checkIfIsLeader(groupUID: groupUID, email: email)
         }
@@ -54,6 +58,7 @@ class LessonsViewController: UIViewController {
                     Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                 } else {
                     if let groupUIDs = groupUIDs, groupUIDs.contains(groupUID) {
+                        Helper.setChurchName(groupUID: groupUID, button: self.churchLabel)
                         self.groupUID = groupUID
                         self.checkIfIsLeader(groupUID: groupUID, email: email)
                         self.getLessons(groupUID: groupUID)
@@ -123,10 +128,9 @@ class LessonsViewController: UIViewController {
         }
     }
     @IBAction func createLessonButtonPressed(_ sender: Any) {
-        let createLessonNC = self.storyboard?.instantiateViewController(withIdentifier: "CreateLessonNavigationController") as! UINavigationController
-        let createLessonVC = createLessonNC.viewControllers[0] as! CreateLessonViewController
+        let createLessonVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateLessonViewController") as! CreateLessonViewController
         createLessonVC.groupUID = groupUID
-        present(createLessonNC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(createLessonVC, animated: true)
     }
     
 }

@@ -101,7 +101,10 @@ class AccountDetailViewController: UIViewController {
                         if currentGroupUID == uid {
                             self.currentGroup = group
                         } else {
-                            self.otherGroups.append(group)
+                            let uids = self.otherGroups.map { $0.uid } as! [String]
+                            if !uids.contains(uid) {
+                                self.otherGroups.append(group)
+                            }
                         }
                     }
                     if fetchedGroups == totalGroups {
