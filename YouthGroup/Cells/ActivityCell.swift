@@ -15,9 +15,18 @@ class ActivityCell: UITableViewCell {
     @IBOutlet weak var directionsLabel: UILabel!
     @IBOutlet weak var backgroundCardView: UIView!
     
-    func setUp(activity: Activity) {
+    func setUp(activity: Activity, editing: Bool) {
         nameLabel.text = activity.name
-        directionsLabel.text = activity.directions
+        
+        if editing {
+            nameLabel.numberOfLines = 1
+            nameLabel.minimumScaleFactor = 1.0
+            directionsLabel.text = ""
+        } else {
+            nameLabel.numberOfLines = 0
+            nameLabel.minimumScaleFactor = 0.5
+            directionsLabel.text = activity.directions
+        }
         
         backgroundCardView.makeCardView()
         backgroundCardView.backgroundColor = Colors.beige

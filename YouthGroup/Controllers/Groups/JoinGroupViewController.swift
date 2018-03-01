@@ -86,12 +86,12 @@ class JoinGroupViewController: UIViewController {
     }
     
     @IBAction func criteriaButtonPressed(_ sender: Any) {
-        let alert = UIAlertController(title: "Set Search Criteria", message: nil, preferredStyle: .actionSheet)
-        alert.addAction(UIAlertAction(title: "By Church Name", style: .default, handler: { (UIAlertAction) -> Void in
+        let alert = UIAlertController(title: Helper.getString(key: "setSearchCriteria"), message: nil, preferredStyle: .actionSheet)
+        alert.addAction(UIAlertAction(title: Helper.getString(key: "byChurchName"), style: .default, handler: { (UIAlertAction) -> Void in
             UserDefaults.standard.set(0, forKey: "searchCriteria")
             self.setSearchCriteria()
         }))
-        alert.addAction(UIAlertAction(title: "By Leader Name", style: .default, handler: { (UIAlertAction) -> Void in
+        alert.addAction(UIAlertAction(title: Helper.getString(key: "byLeaderName"), style: .default, handler: { (UIAlertAction) -> Void in
             UserDefaults.standard.set(1, forKey: "searchCriteria")
             self.setSearchCriteria()
         }))
@@ -102,13 +102,13 @@ class JoinGroupViewController: UIViewController {
     func setSearchCriteria() {
         switch UserDefaults.standard.integer(forKey: "searchCriteria") {
         case 0:
-            searchController.searchBar.placeholder = "Enter a church name..."
+            searchController.searchBar.placeholder = Helper.getString(key: "enterChurchName")
             performSearch(key: "lowercasedChurch")
         case 1:
-            searchController.searchBar.placeholder = "Enter a leader's name..."
+            searchController.searchBar.placeholder = Helper.getString(key: "enterLeaderName")
             performSearch(key: "lowercasedCreatedBy")
         default:
-            searchController.searchBar.placeholder = "Enter a church name..."
+            searchController.searchBar.placeholder = Helper.getString(key: "enterChurchName")
             performSearch(key: "lowercasedChurch")
         }
     }
@@ -161,25 +161,25 @@ extension JoinGroupViewController: UITableViewDataSource, UITableViewDelegate {
         if let email = Auth.auth().currentUser?.email {
             let emails = members.map { $0.email }
             if emails.contains(where: {$0 == email}) {
-                Alert.showBasic(title: "Cannot Join", message: "You've already joined this group.", vc: self)
+                Alert.showBasic(title: Helper.getString(key: "cannotJoin"), message: Helper.getString(key: "cannotJoinMessage"), vc: self)
             }
         }
         
-        let alertController = UIAlertController(title: "Password Required", message: "Enter the password to join this group.", preferredStyle: .alert)
+        let alertController = UIAlertController(title: Helper.getString(key: "passwordRequired"), message: Helper.getString(key: "passwordRequiredMessage"), preferredStyle: .alert)
         
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { (_) in
+        let submitAction = UIAlertAction(title: Helper.getString(key: "submit"), style: .default) { (_) in
             if let field = alertController.textFields?[0] {
                 if selectedGroup.password == field.text {
                     if let email = Auth.auth().currentUser?.email {
                         self.joinGroup(email: email, group: selectedGroup)
                     }
                 } else {
-                    Alert.showBasic(title: "Incorrect Password", message: "Please try again.", vc: self)
+                    Alert.showBasic(title: Helper.getString(key: "incorrectPassword"), message: Helper.getString(key: "tryAgain"), vc: self)
                 }
             }
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Helper.getString(key: "cancel"), style: .cancel, handler: nil)
         
         alertController.addTextField { (textField) in
             textField.textAlignment = .center
@@ -213,7 +213,7 @@ extension JoinGroupViewController: UITableViewDataSource, UITableViewDelegate {
             let newStudent = Member(email: user.email!, name: user.displayName!, leader: false)
             FirebaseClient.shared.appendGroupMember(uid: group.uid!, newMember: newStudent, type: "students", completion: { (success, error) in
                 if let error = error {
-                    Alert.showBasic(title: "Error", message: error, vc: self)
+                    Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                 } else {
                     let completion: (UIAlertAction) -> Void = {_ in
                         NotificationCenter.default.post(name: self.reloadAccountName, object: nil)

@@ -10,6 +10,10 @@ import Foundation
 import UIKit
 import FirebaseAuth
 
+protocol AddPrayerRequestViewControllerDelegate: class {
+    func push(prayerRequest: PrayerRequest)
+}
+
 class AddPrayerRequestViewController: UIViewController {
     
     @IBOutlet weak var titleTextField: UITextField!
@@ -18,6 +22,8 @@ class AddPrayerRequestViewController: UIViewController {
     @IBOutlet weak var aiv: UIActivityIndicatorView!
     var checkmarkChecked = false
     
+    weak var delegate: AddPrayerRequestViewControllerDelegate?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -25,6 +31,8 @@ class AddPrayerRequestViewController: UIViewController {
         let done = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: selector)
         let toolbar = Toolbar.getDoneToolbar(done: done)
         requestTextView.inputAccessoryView = toolbar
+        
+        self.tabBarController?.tabBar.isHidden = true
         
     }
     
@@ -59,11 +67,6 @@ class AddPrayerRequestViewController: UIViewController {
         
     }
     
-    @IBAction func cancelButtonPressed(_ sender: Any) {
-        UserDefaults.standard.setValue(Tabs.prayerRequests.rawValue, forKey: "tabToDisplay")
-        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
-    
     func submitPrayerRequest() throws {
         let title = titleTextField.text!
         let request = requestTextView.text!
@@ -76,19 +79,19 @@ class AddPrayerRequestViewController: UIViewController {
         }
         
         if let user = Auth.auth().currentUser, let name = user.displayName, let email = user.email {
-            var prayerRequest = PrayerRequest(uid: nil, submittedBy: name, submittedByEmail: email, timestamp: Helper.getCurrentDateAndTime(), title: title, request: request, answered: false, anonymous: checkmarkChecked, prayingMembers: nil)
+            var prayerRequest = PrayerRequest(uid: nil, submittedBy: name, submittedByEmail: email, timestamp: -1*Int64(Helper.getCurrentDateAndTime())!, title: title, request: request, answered: false, anonymous: checkmarkChecked, prayingMembers: nil)
             if let groupUID = UserDefaults.standard.string(forKey: "currentGroup") {
                 FirebaseClient.shared.addPrayerRequest(prayerRequest: prayerRequest, groupUID: groupUID, completion: { (prayerRequestUID, error) in
                     Aiv.hide(aiv: self.aiv)
                     if let error = error {
-                        Alert.showBasic(title: "Error", message: error, vc: self)
+                        Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                     } else {
                         let completion: (UIAlertAction) -> Void = {_ in
                             prayerRequest.uid = prayerRequestUID!
-                            UserDefaults.standard.setValue(Tabs.prayerRequests.rawValue, forKey: "tabToDisplay")
-                            self.navigationController?.dismiss(animated: true, completion: nil)
+                            self.delegate?.push(prayerRequest: prayerRequest)
+                            self.navigationController?.popViewController(animated: true)
                         }
-                        Alert.showBasicWithCompletion(title: "Success", message: "Your prayer was successfully added.", vc: self, completion: completion)
+                        Alert.showBasicWithCompletion(title: Helper.getString(key: "success"), message: Helper.getString(key: "prayerSubmittedMessage"), vc: self, completion: completion)
                     }
                 })
             }

@@ -14,18 +14,18 @@ extension LoginViewController {
     
     func startLinkingFacebookWithEmailPasswordAccount(email: String) {
         linkingInProgress = true
-        let alert = UIAlertController(title: "Email in Use", message: "A YouthGroup account with the email \"\(email.lowercased())\" has already been used to log in. Enter your password below, select \"Link\", and then we'll link it with your facebook account.", preferredStyle: .alert)
+        let alert = UIAlertController(title: Helper.getString(key: "Email in Use"), message: Helper.getString(key: "linkWithFacebook"), preferredStyle: .alert)
         alert.addTextField { (textField) in
-            textField.placeholder = "Password"
+            textField.placeholder = Helper.getString(key: "password");
             textField.isSecureTextEntry = true
         }
-        alert.addAction(UIAlertAction(title: "Link", style: .default) { (_) in
+        alert.addAction(UIAlertAction(title: Helper.getString(key: "link"), style: .default) { (_) in
             if let field = alert.textFields?[0] {
                 self.password.text = field.text
                 self.loginButton.sendActions(for: .touchUpInside)
             }
         })
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+        alert.addAction(UIAlertAction(title: Helper.getString(key: "cancel"), style: .cancel) { (_) in
             self.linkingInProgress = false
             Aiv.hide(aiv: self.aiv)
         })
@@ -38,7 +38,7 @@ extension LoginViewController {
                 self.linkingInProgress = false
                 self.fbCredentialForLinking = nil
                 if let error = error {
-                    Alert.showBasic(title: "Error", message: error.localizedDescription, vc: self)
+                    Alert.showBasic(title: Helper.getString(key: "error"), message: error.localizedDescription, vc: self)
                     Aiv.hide(aiv: self.aiv)
                 } else {
                     FirebaseClient.shared.setUserData(user: user!)
@@ -55,13 +55,13 @@ extension LoginViewController {
     
     func startLinkingEmailPasswordWithFacebookAccount(email: String) {
         linkingInProgress = true
-        let alert = UIAlertController(title: "Email in Use", message: "A facebook account with the email \"\(email.lowercased())\" has already been used to log in. Select \"Link\" to login with facebook and then we'll link it to the email/password credentials you just provided.", preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "Link", style: .default) { (_) in
+        let alert = UIAlertController(title: Helper.getString(key: "emailInUse"), message: Helper.getString(key: "linkWithYouthGroup"), preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: Helper.getString(key: "link"), style: .default) { (_) in
             self.defaults.setValue(self.email.text!, forKey: "lastUsedEmail")
             self.defaults.setValue(self.password.text!, forKey: "lastUsedPassword")
             self.fbLoginButton.sendActions(for: .touchUpInside)
         })
-        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel) { (_) in
+        alert.addAction(UIAlertAction(title: Helper.getString(key: "cancel"), style: .cancel) { (_) in
             self.linkingInProgress = false
             Aiv.hide(aiv: self.aiv)
         })
@@ -73,7 +73,7 @@ extension LoginViewController {
         user.link(with: credential) { (user, error) in
             self.linkingInProgress = false
             if let error = error {
-                Alert.showBasic(title: "Error", message: error.localizedDescription, vc: self)
+                Alert.showBasic(title: Helper.getString(key: "error"), message: error.localizedDescription, vc: self)
                 Aiv.hide(aiv: self.aiv)
             } else {
                 FirebaseClient.shared.setUserData(user: user!)
@@ -98,10 +98,10 @@ extension LoginViewController {
                 Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
             } else {
                 if hasPhoto {
-                    Alert.showBasicWithCompletion(title: "Success", message: "Your accounts have been linked.", vc: self, completion: {_ in self.navigationController?.dismiss(animated: true, completion: nil)
+                    Alert.showBasicWithCompletion(title: Helper.getString(key: "success"), message: Helper.getString(key: "accountsLinked"), vc: self, completion: {_ in self.navigationController?.dismiss(animated: true, completion: nil)
                     })
                 } else {
-                    Alert.showBasicWithCompletion(title: "Success", message: "Your accounts have been linked.", vc: self, completion: {_ in
+                    Alert.showBasicWithCompletion(title: Helper.getString(key: "success"), message: Helper.getString(key: "accountsLinked"), vc: self, completion: {_ in
                         let addPhotoVC = self.storyboard?.instantiateViewController(withIdentifier: "AddPhotoViewController") as! AddPhotoViewController
                         self.navigationController?.pushViewController(addPhotoVC, animated: true)
                     })

@@ -29,7 +29,7 @@ class PrayerRequestCell: UITableViewCell {
         self.prayerRequestImageView.image = UIImage(named: "Boy")
         
         titleLabel.text = request.title
-        timestampLabel.text = Helper.formattedTimestamp(ts: request.timestamp, includeDate: true, includeTime: true)
+        timestampLabel.text = Helper.formattedTimestamp(ts: String(request.timestamp), includeDate: true, includeTime: true)
         
         if request.anonymous {
             nameLabel.text = Helper.getString(key: "anonymous")

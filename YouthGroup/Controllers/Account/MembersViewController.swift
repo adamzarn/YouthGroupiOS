@@ -23,6 +23,7 @@ class MembersViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
         refresh()
     }
     
@@ -73,10 +74,6 @@ class MembersViewController: UIViewController {
         self.members = members
         self.tableView.reloadData()
         self.refreshControl.endRefreshing()
-    }
-    
-    @IBAction func dismissButtonPressed(_ sender: Any) {
-        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
 }

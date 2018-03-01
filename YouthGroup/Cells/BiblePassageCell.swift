@@ -16,10 +16,19 @@ class BiblePassageCell: UITableViewCell {
     @IBOutlet weak var referenceLabel: UILabel!
     @IBOutlet weak var versesLabel: UILabel!
     
-    func setUp(passage: Passage, groupUID: String) {
+    func setUp(passage: Passage, groupUID: String, editing: Bool) {
         
         referenceLabel.text = passage.reference
-        versesLabel.text = passage.text
+        
+        if editing {
+            versesLabel.numberOfLines = 1
+            versesLabel.minimumScaleFactor = 1.0
+            versesLabel.text = ""
+        } else {
+            versesLabel.numberOfLines = 0
+            versesLabel.minimumScaleFactor = 0.5
+            versesLabel.text = passage.text
+        }
         
         backgroundCardView.makeCardView()
         backgroundCardView.backgroundColor = Colors.lightBlue

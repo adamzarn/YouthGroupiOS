@@ -132,3 +132,66 @@
 "missingIncorrectAnswers" = "No Incorrect Answers";
 "missingIncorrectAnswersMessage" = "You must provide at least 1 incorrect answer.";
 
+"answerSuccessfullySubmitted" = "Your answer was successfully submitted.";
+
+"notAllowed" = "Not Allowed";
+"leaderErrorMessage" = "There must always be at least 1 leader.";
+
+"cannotJoin" = "Cannot Join";
+"cannotJoinMessage" = "You've already joined this group.";
+
+"passwordRequired" = "Password Required";
+"passwordRequiredMessage" = "Enter the password to join this group.";
+
+"incorrectPassword" = "Incorrect Password";
+"tryAgain" = "Please try again.";
+
+"cannotDelete" = "Cannot Delete";
+"cannotDeleteGroupMessage" = "You cannot delete this group because you are its only leader";
+
+"cancel" = "Cancel";
+"ok" = "OK";
+"submit" = "Submit";
+"yes" = "Yes";
+
+"prayerSubmittedMessage" = "Your prayer was successfully added.";
+"answeredPrayerNotAllowedMessage" = "Only the person who submitted this prayer request can mark it as answered or not.";
+
+"facebookEmailMessage" = "Could not retrieve Facebook Email";
+
+"setCurrentGroup" = "Set Current Group";
+
+"addIncorrectAnswer" = "Add Incorrect Answer";
+"setSearchCriteria" = "Set Search Criteria";
+"byChurchName" = "By Church Name";
+"byLeaderName" = "By Leader Name";
+
+"enterChurchName" = "Enter a church name...";
+"enterLeaderName" = "Enter a leader's name...";
+
+"emailInUse" = "Email in Use";
+"link" = "Link";
+
+"password" = "Password";
+
+"googleMaps" = "Google Maps";
+"appleMaps" = "Apple Maps";
+"bringing" = "What are you bringing?";
+"nothing" = "Nothing";
+
+"addLessonElement" = "Add Lesson Element";
+"activity" = "Activity";
+"biblePassage" = "Bible Passage";
+"multipleChoiceQuestion" = "multipleChoiceQuestion";
+"freeResponseQuestion" = "freeResponseQuestion";
+"editQuestion" = "Edit Question";
+"seeResults" = "See Results";
+
+"changeCurrentGroup" = "Would you like to make this your current group?";
+
+"linkWithFacebook" = "A YouthGroup account with this email has already been used to log in. Enter your password below, select \"Link\", and then we'll link it with your facebook account.";
+"linkWithYouthGroup" = "A facebook account with this email has already been used to log in. Select \"Link\" to login with facebook and then we'll link it to the email/password credentials you just provided.";
+"accountsLinked" = "Your accounts have been linked.";
+
+
+

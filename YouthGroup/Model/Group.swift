@@ -97,10 +97,19 @@ class Bringer: Member {
 }
 
 class Answerer: Member {
-    var answer: String?
-    init(email: String, name: String, leader: Bool?, answer: String?) {
+    var answer: String!
+    var timestamp: Int64!
+    init(email: String, name: String, leader: Bool?, answer: String?, timestamp: Int64) {
         super.init(email: email, name: name, leader: leader)
         self.answer = answer
+        self.timestamp = timestamp
     }
+    
+    func toAnyObject() -> [String: Any] {
+        return ["name": name,
+                "answer": answer,
+                "timestamp": timestamp]
+    }
+    
 }
 

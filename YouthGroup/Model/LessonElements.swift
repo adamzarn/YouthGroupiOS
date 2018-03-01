@@ -145,10 +145,10 @@ class MultipleChoiceQuestion: LessonElement {
         self.question = info["question"] as! String
         self.incorrectAnswers = Helper.convertAnyObjectToStringArray(dict: info["incorrectAnswers"] as! [String: Bool])
         if let correctMembers = info["correctMembers"] {
-            self.correctMembers = Helper.convertAnyObjectToAnswerers(dict: correctMembers as! [String:[String : String]], leader: false)
+            self.correctMembers = Helper.convertAnyObjectToAnswerers(dict: correctMembers as! [String:[String : Any]], leader: false)
         }
         if let incorrectMembers = info["incorrectMembers"] {
-            self.incorrectMembers = Helper.convertAnyObjectToAnswerers(dict: incorrectMembers as! [String:[String : String]], leader: false)
+            self.incorrectMembers = Helper.convertAnyObjectToAnswerers(dict: incorrectMembers as! [String:[String : Any]], leader: false)
         }
         self.insert = info["insert"] as! Int
     }
@@ -168,14 +168,14 @@ class MultipleChoiceQuestion: LessonElement {
 
 class FreeResponseQuestion: LessonElement {
     var question: String!
-    var responses: [Response]?
-    init(uid: String?, position: Int, type: Int, question: String, responses: [Response]?) {
+    var answerers: [Answerer]?
+    init(uid: String?, position: Int, type: Int, question: String, answerers: [Answerer]?) {
         super.init()
         super.uid = uid
         super.position = position
         super.type = type
         self.question = question
-        self.responses = responses
+        self.answerers = answerers
     }
     
     init(uid: String, info: [String:Any]) {
@@ -184,20 +184,16 @@ class FreeResponseQuestion: LessonElement {
         self.position = info["position"] as! Int
         self.type = info["type"] as! Int
         self.question = info["question"] as! String
-        //self.responses =
+        if let answerers = info["answerers"] {
+            self.answerers = Helper.convertAnyObjectToAnswerers(dict: answerers as! [String:[String : Any]], leader: false)
+        }
     }
     
     func toAnyObject() -> [String: Any] {
         return ["position": position,
                 "type": type,
-                "question": question]
+                "question": question,
+                "answerers": Helper.convertAnswerersToAnyObject(answerers: answerers)]
     }
     
 }
-
-struct Response {
-    var email: String!
-    var name: String!
-    var response: String!
-}
-

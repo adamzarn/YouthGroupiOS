@@ -35,6 +35,7 @@ class PrayerRequestViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.rowHeight = 60.0
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,7 +49,7 @@ class PrayerRequestViewController: UIViewController {
         
         nameLabel.text = "Submitted by \(prayerRequest.submittedBy)"
         titleLabel.text = prayerRequest.title
-        timestampLabel.text = Helper.formattedTimestamp(ts: prayerRequest.timestamp, includeDate: true, includeTime: true)
+        timestampLabel.text = Helper.formattedTimestamp(ts: String(prayerRequest.timestamp), includeDate: true, includeTime: true)
         requestTextView.text = prayerRequest.request
         setProfileImage()
         setCheckmark(answered: prayerRequest.answered)
@@ -105,11 +106,6 @@ class PrayerRequestViewController: UIViewController {
         }
     }
     
-    @IBAction func dismissButtonPressed(_ sender: Any) {
-        UserDefaults.standard.setValue(Tabs.prayerRequests.rawValue, forKey: "tabToDisplay")
-        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
-    
     @IBAction func toggleCheckmark(_ sender: Any) {
         if let email = Auth.auth().currentUser?.email, email == prayerRequest.submittedByEmail {
             let newStatus = !prayerRequest.answered
@@ -123,7 +119,7 @@ class PrayerRequestViewController: UIViewController {
                 }
             })
         } else {
-            Alert.showBasic(title: "Not Allowed", message: "Only the person who submitted this prayer request can mark it as answered or not.", vc: self)
+            Alert.showBasic(title: Helper.getString(key: "notAllowed"), message: Helper.getString(key: "answeredPrayerNotAllowed"), vc: self)
         }
     }
     

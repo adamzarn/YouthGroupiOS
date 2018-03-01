@@ -42,9 +42,11 @@ class ProfileCell: UITableViewCell {
         if let cachedImage = self.cachedImage {
             profileImageView.isUserInteractionEnabled = true
             profileImageView.image = cachedImage
+            self.delegate?.didSetProfilePhoto(image: cachedImage)
         } else if let image = image {
             profileImageView.isUserInteractionEnabled = true
             profileImageView.image = image
+            self.delegate?.didSetProfilePhoto(image: image)
         } else {
             profileImageView.image = UIImage(named: "Boy")
             if let user = user, let email = user.email {

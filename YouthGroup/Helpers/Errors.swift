@@ -67,3 +67,7 @@ enum AddMultipleChoiceQuestionError: Error {
     case invalidIncorrectAnswer
     case missingIncorrectAnswers
 }
+
+enum AddFreeResponseQuestionError: Error {
+    case missingQuestion
+}

@@ -49,9 +49,9 @@ class AddMultipleChoiceQuestionViewController: UIViewController {
     }
     
     @IBAction func addIncorrectAnswerButtonPressed(_ sender: Any) {
-        let alertController = UIAlertController(title: "Add Incorrect Answer", message: nil, preferredStyle: .alert)
+        let alertController = UIAlertController(title: Helper.getString(key: "addIncorrectAnswer"), message: nil, preferredStyle: .alert)
         
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { (_) in
+        let submitAction = UIAlertAction(title: Helper.getString(key: "submit"), style: .default) { (_) in
             if let field = alertController.textFields?[0] {
                 if !(field.text?.isEmpty)! {
                     self.incorrectAnswers.append(field.text!)
@@ -60,7 +60,7 @@ class AddMultipleChoiceQuestionViewController: UIViewController {
             }
         }
         
-        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        let cancelAction = UIAlertAction(title: Helper.getString(key: "cancel"), style: .cancel, handler: nil)
         
         alertController.addTextField { (textField) in
             textField.textAlignment = .center

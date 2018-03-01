@@ -73,6 +73,7 @@ class AccountDetailViewController: UIViewController {
     func getGroupUIDs(email: String) {
         FirebaseClient.shared.getGroupUIDs(email: email, completion: { (groupUIDs, error) in
             if let error = error {
+                Aiv.hide(aiv: self.aiv)
                 Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
             } else {
                 if let groupUIDs = groupUIDs {
@@ -92,6 +93,7 @@ class AccountDetailViewController: UIViewController {
             let currentGroupUID = UserDefaults.standard.string(forKey: "currentGroup")
             FirebaseClient.shared.getGroup(groupUID: groupUID, completion: { (group, error) in
                 if let error = error {
+                    Aiv.hide(aiv: self.aiv)
                     Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                 } else {
                     fetchedGroups += 1
@@ -124,6 +126,7 @@ class AccountDetailViewController: UIViewController {
         let selector = #selector(AccountDetailViewController.refresh)
         NotificationCenter.default.addObserver(self, selector:selector, name: name, object: nil)
         refreshAccountDetail(reloadGroupsOnly: false)
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -178,7 +181,7 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
             let group = (indexPath.section == 1) ? currentGroup! : otherGroups[indexPath.row]
             let isCurrentGroup = (indexPath.section == 1)
             if isOnlyLeader(group: group) {
-                Alert.showBasic(title: "Cannot Delete", message: "You cannot delete this group because you are its only leader.", vc: self)
+                Alert.showBasic(title: Helper.getString(key: "cannotDelete"), message: Helper.getString(key: "cannotDeleteGroupMessage"), vc: self)
             } else {
                 removeGroup(group: group, isCurrentGroup: isCurrentGroup)
             }
@@ -198,7 +201,7 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
         if let email = Auth.auth().currentUser?.email {
             FirebaseClient.shared.deleteUserGroup(email: email, groupUIDToDelete: group.uid!, completion: { (success, error) in
                 if let error = error {
-                    Alert.showBasic(title: "Cannot Delete", message: error, vc: self)
+                    Alert.showBasic(title: Helper.getString(key: "cannotDelete"), message: error, vc: self)
                 } else {
                     self.updateGroupMembers(group: group, email: email)
                 }
@@ -210,7 +213,7 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
         let memberType = Helper.isLeader(group: group) ? "leaders" : "students"
         FirebaseClient.shared.deleteGroupMember(uid: group.uid!, email: email, type: memberType, completion: { (success, error) in
             if let error = error {
-                Alert.showBasic(title: "Cannot Delete", message: error, vc: self)
+                Alert.showBasic(title: Helper.getString(key: "cannotDelete"), message: error, vc: self)
             } else {
                 self.refreshAccountDetail(reloadGroupsOnly: true)
             }
@@ -320,12 +323,12 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
         if indexPath.section == Sections.currentGroup.rawValue {
-            let membersNC = self.storyboard?.instantiateViewController(withIdentifier: "MembersNavigationController") as! UINavigationController
-            present(membersNC, animated: true, completion: nil)
+            let membersVC = self.storyboard?.instantiateViewController(withIdentifier: "MembersViewController") as! MembersViewController
+            self.navigationController?.pushViewController(membersVC, animated: true)
         }
         if indexPath.section == Sections.otherGroups.rawValue && indexPath.row < otherGroups.count {
-            let alert = UIAlertController(title: "Set Current Group", message: "Would you like to make \(otherGroups[indexPath.row].church!) your current group?", preferredStyle: .actionSheet)
-            alert.addAction(UIAlertAction(title: "Yes", style: .default, handler: { (UIAlertAction) -> Void in
+            let alert = UIAlertController(title: Helper.getString(key: "setCurrentGroup"), message: Helper.getString(key: "changeCurrentGroup"), preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: Helper.getString(key: "yes"), style: .default, handler: { (UIAlertAction) -> Void in
                 self.otherGroups.append(self.currentGroup!)
                 self.currentGroup = self.otherGroups[indexPath.row]
                 self.otherGroups.remove(at: indexPath.row)
@@ -333,7 +336,7 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
                 let sections = IndexSet(integersIn: 1...2)
                 self.tableView.reloadSections(sections, with: .automatic)
             }))
-            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: Helper.getString(key: "cancel"), style: .cancel, handler: nil))
             self.present(alert, animated: true, completion: nil)
         }
     }
@@ -345,11 +348,10 @@ extension AccountDetailViewController: UITableViewDelegate, UITableViewDataSourc
         } else {
             groupToEdit = otherGroups[indexPath.row]
         }
-        let createGroupNC = self.storyboard?.instantiateViewController(withIdentifier: "CreateGroupNavigationController") as! UINavigationController
-        let createGroupVC = createGroupNC.viewControllers[0] as! CreateGroupViewController
+        let createGroupVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateGroupViewController") as! CreateGroupViewController
         createGroupVC.delegate = self
         createGroupVC.groupToEdit = groupToEdit
-        present(createGroupNC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(createGroupVC, animated: true)
     }
     
 }
@@ -398,12 +400,11 @@ extension AccountDetailViewController: ButtonCellDelegate {
             joinGroupVC.cancelButton.isEnabled = true
             present(joinGroupNC, animated: true)
         } else if buttonType == .create {
-            let createGroupNC = self.storyboard?.instantiateViewController(withIdentifier: "CreateGroupNavigationController") as! UINavigationController
-            let createGroupVC = createGroupNC.viewControllers[0] as! CreateGroupViewController
+            let createGroupVC = self.storyboard?.instantiateViewController(withIdentifier: "CreateGroupViewController") as! CreateGroupViewController
             createGroupVC.delegate = self
             createGroupVC.groupUIDs = groupUIDs
             createGroupVC.groupToEdit = nil
-            present(createGroupNC, animated: true, completion: nil)
+            self.navigationController?.pushViewController(createGroupVC, animated: true)
         }
     }
 }

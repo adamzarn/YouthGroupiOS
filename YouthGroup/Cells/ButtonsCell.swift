@@ -66,7 +66,8 @@ class ButtonsCell: UITableViewCell {
     func deselectAllButtons() {
         for button in buttons {
             button.isEnabled = true
-            button.backgroundColor = Colors.darkBlue
+            button.backgroundColor = .white
+            button.setTitleColor(Colors.darkBlue, for: .normal)
         }
     }
     

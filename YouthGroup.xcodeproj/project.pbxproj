@@ -9,6 +9,11 @@
 /* Begin PBXBuildFile section */
 		3852E45B676F83AF682A3EE7 /* Pods_YouthGroupTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8E7A6EDB3AAC24A44F7F75FD /* Pods_YouthGroupTests.framework */; };
 		75B7407D4D9D66B06821DA54 /* Pods_YouthGroup.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83D011E8F1EB0A17F0A1854F /* Pods_YouthGroup.framework */; };
+		DB03B90420438EBB007EB43D /* CheckedInMembersCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB03B90320438EBB007EB43D /* CheckedInMembersCell.swift */; };
+		DB03B9062044C9AC007EB43D /* WritePostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB03B9052044C9AC007EB43D /* WritePostCell.swift */; };
+		DB03B9082044CBB5007EB43D /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB03B9072044CBB5007EB43D /* MessagesViewController.swift */; };
+		DB03B90A2044CC03007EB43D /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB03B9092044CC03007EB43D /* Post.swift */; };
+		DB03B90C2044CDE7007EB43D /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB03B90B2044CDE7007EB43D /* PostCell.swift */; };
 		DB13136E2036271300051ED7 /* ButtonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB13136D2036271300051ED7 /* ButtonCell.swift */; };
 		DB13137020362B1D00051ED7 /* CreateGroupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */; };
 		DB1313722036348000051ED7 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1313712036348000051ED7 /* Errors.swift */; };
@@ -25,6 +30,11 @@
 		DB1BC895203F58EB006B9FC4 /* AddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC894203F58EB006B9FC4 /* AddActivityViewController.swift */; };
 		DB1BC897203F6DDD006B9FC4 /* AccountDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC896203F6DDD006B9FC4 /* AccountDetailCell.swift */; };
 		DB1BC899203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC898203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift */; };
+		DB1BC89B2040DE7F006B9FC4 /* ResultsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC89A2040DE7F006B9FC4 /* ResultsViewController.swift */; };
+		DB1BC89D2041F562006B9FC4 /* AddFreeResponseQuestionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC89C2041F562006B9FC4 /* AddFreeResponseQuestionViewController.swift */; };
+		DB1BC89F2041F9BA006B9FC4 /* AnswersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC89E2041F9BA006B9FC4 /* AnswersViewController.swift */; };
+		DB1BC8A12041FB4E006B9FC4 /* AnswerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC8A02041FB4E006B9FC4 /* AnswerCell.swift */; };
+		DB1BC8A3204208C0006B9FC4 /* CheckedInCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB1BC8A2204208C0006B9FC4 /* CheckedInCell.swift */; };
 		DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B799202BE855000DABE2 /* AppDelegate.swift */; };
 		DB37B79C202BE855000DABE2 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB37B79B202BE855000DABE2 /* LoginViewController.swift */; };
 		DB37B79F202BE855000DABE2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DB37B79D202BE855000DABE2 /* Main.storyboard */; };
@@ -108,6 +118,11 @@
 		83D011E8F1EB0A17F0A1854F /* Pods_YouthGroup.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouthGroup.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8E7A6EDB3AAC24A44F7F75FD /* Pods_YouthGroupTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouthGroupTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B80922DC63D05DC9F95B81E3 /* Pods_YouthGroupUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YouthGroupUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		DB03B90320438EBB007EB43D /* CheckedInMembersCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedInMembersCell.swift; sourceTree = "<group>"; };
+		DB03B9052044C9AC007EB43D /* WritePostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritePostCell.swift; sourceTree = "<group>"; };
+		DB03B9072044CBB5007EB43D /* MessagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewController.swift; sourceTree = "<group>"; };
+		DB03B9092044CC03007EB43D /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		DB03B90B2044CDE7007EB43D /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
 		DB13136D2036271300051ED7 /* ButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonCell.swift; sourceTree = "<group>"; };
 		DB13136F20362B1D00051ED7 /* CreateGroupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateGroupViewController.swift; sourceTree = "<group>"; };
 		DB1313712036348000051ED7 /* Errors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
@@ -124,6 +139,11 @@
 		DB1BC894203F58EB006B9FC4 /* AddActivityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddActivityViewController.swift; sourceTree = "<group>"; };
 		DB1BC896203F6DDD006B9FC4 /* AccountDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccountDetailCell.swift; sourceTree = "<group>"; };
 		DB1BC898203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddMultipleChoiceQuestionViewController.swift; sourceTree = "<group>"; };
+		DB1BC89A2040DE7F006B9FC4 /* ResultsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResultsViewController.swift; sourceTree = "<group>"; };
+		DB1BC89C2041F562006B9FC4 /* AddFreeResponseQuestionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFreeResponseQuestionViewController.swift; sourceTree = "<group>"; };
+		DB1BC89E2041F9BA006B9FC4 /* AnswersViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswersViewController.swift; sourceTree = "<group>"; };
+		DB1BC8A02041FB4E006B9FC4 /* AnswerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnswerCell.swift; sourceTree = "<group>"; };
+		DB1BC8A2204208C0006B9FC4 /* CheckedInCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckedInCell.swift; sourceTree = "<group>"; };
 		DB37B796202BE855000DABE2 /* YouthGroup.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = YouthGroup.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB37B799202BE855000DABE2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DB37B79B202BE855000DABE2 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
@@ -294,6 +314,9 @@
 				DB1BC88C203EE766006B9FC4 /* AddPassageViewController.swift */,
 				DB1BC894203F58EB006B9FC4 /* AddActivityViewController.swift */,
 				DB1BC898203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift */,
+				DB1BC89A2040DE7F006B9FC4 /* ResultsViewController.swift */,
+				DB1BC89C2041F562006B9FC4 /* AddFreeResponseQuestionViewController.swift */,
+				DB1BC89E2041F9BA006B9FC4 /* AnswersViewController.swift */,
 			);
 			path = LessonElements;
 			sourceTree = "<group>";
@@ -385,6 +408,7 @@
 				DB1BC882203E3A23006B9FC4 /* Events */,
 				DB37B7D4202C8CE0000DABE2 /* MainTabBarController.swift */,
 				DB1BC881203E3A15006B9FC4 /* Lessons */,
+				DB03B9072044CBB5007EB43D /* MessagesViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -418,6 +442,11 @@
 				DB1BC890203F145F006B9FC4 /* MultipleChoiceQuestionCell.swift */,
 				DB1BC892203F146C006B9FC4 /* FreeResponseQuestionCell.swift */,
 				DB1BC896203F6DDD006B9FC4 /* AccountDetailCell.swift */,
+				DB1BC8A02041FB4E006B9FC4 /* AnswerCell.swift */,
+				DB1BC8A2204208C0006B9FC4 /* CheckedInCell.swift */,
+				DB03B90320438EBB007EB43D /* CheckedInMembersCell.swift */,
+				DB03B9052044C9AC007EB43D /* WritePostCell.swift */,
+				DB03B90B2044CDE7007EB43D /* PostCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -454,6 +483,7 @@
 				DB4816B02039CC5600C7FF38 /* BiblePassage.swift */,
 				DB4816B6203BAE7D00C7FF38 /* Event.swift */,
 				DB4816BC203BE5D500C7FF38 /* LessonElements.swift */,
+				DB03B9092044CC03007EB43D /* Post.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -745,6 +775,7 @@
 				DB4816BF203C75F700C7FF38 /* Toolbar.swift in Sources */,
 				DBF417B62036065100F2A4F8 /* Group.swift in Sources */,
 				DB4816B9203BBC7B00C7FF38 /* EventViewController.swift in Sources */,
+				DB1BC89F2041F9BA006B9FC4 /* AnswersViewController.swift in Sources */,
 				DB6AF45820339F8500738FF0 /* AddPhotoViewController.swift in Sources */,
 				DB9C750E202C9C6300BA4B7D /* CreateAccountViewController.swift in Sources */,
 				DB37B7DD202C8F59000DABE2 /* AccountDetailViewController.swift in Sources */,
@@ -752,6 +783,7 @@
 				DB4816BD203BE5D500C7FF38 /* LessonElements.swift in Sources */,
 				DB4816BB203BD06D00C7FF38 /* CreateEventViewController.swift in Sources */,
 				DB4816AD2038D66F00C7FF38 /* BorderedTextView.swift in Sources */,
+				DB1BC8A3204208C0006B9FC4 /* CheckedInCell.swift in Sources */,
 				DB1BC87C203DE3CF006B9FC4 /* ButtonsCell.swift in Sources */,
 				DB1313722036348000051ED7 /* Errors.swift in Sources */,
 				DB1BC880203E32EA006B9FC4 /* LessonCell.swift in Sources */,
@@ -764,11 +796,13 @@
 				DB37B7A2202BE855000DABE2 /* YouthGroup.xcdatamodeld in Sources */,
 				DBD03FDC202CC82300030C43 /* FacebookClient.swift in Sources */,
 				DB1BC891203F145F006B9FC4 /* MultipleChoiceQuestionCell.swift in Sources */,
+				DB1BC89B2040DE7F006B9FC4 /* ResultsViewController.swift in Sources */,
 				DBD03FDE202CE34A00030C43 /* KeyboardNotifications.swift in Sources */,
 				DB1BC888203E3AA6006B9FC4 /* LessonViewController.swift in Sources */,
 				DBD03FD8202CACB600030C43 /* Aiv.swift in Sources */,
 				DBCCEC8020378DF80050AC46 /* EditMemberCell.swift in Sources */,
 				DBD03FE0202D40A000030C43 /* Linking.swift in Sources */,
+				DB1BC89D2041F562006B9FC4 /* AddFreeResponseQuestionViewController.swift in Sources */,
 				DB6AF45E2033F89B00738FF0 /* ProfileCell.swift in Sources */,
 				DB4816AF2039CA2400C7FF38 /* NetworkClient.swift in Sources */,
 				DB1BC897203F6DDD006B9FC4 /* AccountDetailCell.swift in Sources */,
@@ -780,8 +814,11 @@
 				DB4816B5203BACF700C7FF38 /* EventCell.swift in Sources */,
 				DB6AF45C2033AF5B00738FF0 /* Colors.swift in Sources */,
 				DBCCEC8C2037D0FD0050AC46 /* MemberCell.swift in Sources */,
+				DB03B9062044C9AC007EB43D /* WritePostCell.swift in Sources */,
+				DB03B90C2044CDE7007EB43D /* PostCell.swift in Sources */,
 				DB1BC899203F9800006B9FC4 /* AddMultipleChoiceQuestionViewController.swift in Sources */,
 				DB37B7D9202C8F25000DABE2 /* EventsViewController.swift in Sources */,
+				DB03B90420438EBB007EB43D /* CheckedInMembersCell.swift in Sources */,
 				DB1BC895203F58EB006B9FC4 /* AddActivityViewController.swift in Sources */,
 				DBCCEC7C203772FE0050AC46 /* Constants.swift in Sources */,
 				DB37B79A202BE855000DABE2 /* AppDelegate.swift in Sources */,
@@ -789,6 +826,8 @@
 				DB1BC88F203F1454006B9FC4 /* ActivityCell.swift in Sources */,
 				DBD03FD6202CA1BC00030C43 /* Alert.swift in Sources */,
 				DB4816AB2038D44100C7FF38 /* CircleImageView.swift in Sources */,
+				DB03B9082044CBB5007EB43D /* MessagesViewController.swift in Sources */,
+				DB03B90A2044CC03007EB43D /* Post.swift in Sources */,
 				DBCCEC8E2037DA0C0050AC46 /* AddPrayerRequestViewController.swift in Sources */,
 				DB6AF455203390B200738FF0 /* BouncingView.swift in Sources */,
 				DB13136E2036271300051ED7 /* ButtonCell.swift in Sources */,
@@ -798,6 +837,7 @@
 				DB1BC88A203E6947006B9FC4 /* BiblePassageCell.swift in Sources */,
 				DB4816B3203A3C5200C7FF38 /* Reachability.swift in Sources */,
 				DB4816B7203BAE7D00C7FF38 /* Event.swift in Sources */,
+				DB1BC8A12041FB4E006B9FC4 /* AnswerCell.swift in Sources */,
 				DB1BC87E203E1DBC006B9FC4 /* CreateLessonViewController.swift in Sources */,
 				DB13137020362B1D00051ED7 /* CreateGroupViewController.swift in Sources */,
 			);

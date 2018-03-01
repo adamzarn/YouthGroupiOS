@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import FirebaseAuth
 
 enum EventSections: Int {
     case date = 0
@@ -31,6 +32,7 @@ class EventViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.infoTableView.tableFooterView = UIView(frame: CGRect.zero)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -38,13 +40,58 @@ class EventViewController: UIViewController {
         title = event.name
     }
     
-    @IBAction func dismissButtonPressed(_ sender: Any) {
-        self.navigationController?.dismiss(animated: true, completion: nil)
-    }
-    
 }
 
 extension EventViewController: UITableViewDelegate, UITableViewDataSource {
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section > EventSections.buttons.rawValue {
+            if let email = Auth.auth().currentUser?.email {
+                switch indexPath.section {
+                case EventSections.going.rawValue:
+                    let rsvp = event.going![indexPath.row]
+                    if rsvp.email == email {
+                        return true
+                    }
+                case EventSections.maybe.rawValue:
+                    let rsvp = event.maybe![indexPath.row]
+                    if rsvp.email == email {
+                        return true
+                    }
+                case EventSections.notGoing.rawValue:
+                    let rsvp = event.notGoing![indexPath.row]
+                    if rsvp.email == email {
+                        return true
+                    }
+                default:
+                    return false
+                }
+            }
+        }
+        return false
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            switch indexPath.section {
+            case EventSections.going.rawValue:
+                let rsvp = event.going![indexPath.row]
+                event.going!.remove(at: indexPath.row)
+                FirebaseClient.shared.deleteRSVP(groupUID: groupUID, eventUID: event.uid!, rsvp: "going", email: rsvp.email, completion: { error in })
+            case EventSections.maybe.rawValue:
+                let rsvp = event.maybe![indexPath.row]
+                event.maybe!.remove(at: indexPath.row)
+                FirebaseClient.shared.deleteRSVP(groupUID: groupUID, eventUID: event.uid!, rsvp: "maybe", email: rsvp.email, completion: { error in })
+            case EventSections.notGoing.rawValue:
+                let rsvp = event.notGoing![indexPath.row]
+                event.notGoing!.remove(at: indexPath.row)
+                FirebaseClient.shared.deleteRSVP(groupUID: groupUID, eventUID: event.uid!, rsvp: "notGoing", email: rsvp.email, completion: { error in })
+            default:
+                ()
+            }
+            tableView.reloadData()
+        }
+    }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if section >= EventSections.notes.rawValue {
@@ -188,7 +235,7 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
         
         if let googleMapsURL = URL(string:"comgooglemaps://") {
             if UIApplication.shared.canOpenURL(googleMapsURL) {
-                actionSheet.addAction(UIAlertAction(title: "Google Maps", style: UIAlertActionStyle.default, handler: { (action) in
+                actionSheet.addAction(UIAlertAction(title: Helper.getString(key: "googleMaps"), style: UIAlertActionStyle.default, handler: { (action) in
                     if let url = URL(string: "comgooglemaps://?saddr=&daddr=\(formattedAddressString)&directionsmode=driving") {
                         UIApplication.shared.open(url, options: [:], completionHandler: nil)
                     }
@@ -196,13 +243,13 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
             }
         }
         
-        actionSheet.addAction(UIAlertAction(title: "Apple Maps", style: UIAlertActionStyle.default, handler: { (action) in
+        actionSheet.addAction(UIAlertAction(title: Helper.getString(key: "appleMaps"), style: UIAlertActionStyle.default, handler: { (action) in
             if let url = URL(string: "http://maps.apple.com/maps?saddr=&daddr=\(formattedAddressString)") {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         }))
         
-        actionSheet.addAction(UIAlertAction(title: "Cancel", style: UIAlertActionStyle.cancel, handler: nil))
+        actionSheet.addAction(UIAlertAction(title: Helper.getString(key: "cancel"), style: UIAlertActionStyle.cancel, handler: nil))
         
         self.present(actionSheet, animated: true, completion: nil)
     }
@@ -212,15 +259,15 @@ extension EventViewController: UITableViewDelegate, UITableViewDataSource {
 extension EventViewController: ButtonsCellDelegate {
     
     func didSelectGoing() {
-        let alertController = UIAlertController(title: "What are you bringing?", message: nil, preferredStyle: .alert)
+        let alertController = UIAlertController(title: Helper.getString(key: "bringing"), message: nil, preferredStyle: .alert)
         
-        let submitAction = UIAlertAction(title: "Submit", style: .default) { (_) in
+        let submitAction = UIAlertAction(title: Helper.getString(key: "submit"), style: .default) { (_) in
             if let field = alertController.textFields?[0] {
                 self.addBringer(rsvp: RSVP.going, bringing: field.text!)
             }
         }
         
-        let cancelAction = UIAlertAction(title: "Nothing", style: .cancel) { (_) in
+        let cancelAction = UIAlertAction(title: Helper.getString(key: "nothing"), style: .cancel) { (_) in
             self.addBringer(rsvp: RSVP.going, bringing: nil)
         }
         

@@ -13,7 +13,7 @@ struct PrayerRequest {
     var uid: String?
     var submittedBy: String
     var submittedByEmail: String
-    var timestamp: String
+    var timestamp: Int64
     var title: String
     var request: String
     var answered: Bool
@@ -24,7 +24,7 @@ struct PrayerRequest {
         self.uid = uid
         self.submittedBy = info["submittedBy"] as! String
         self.submittedByEmail = info["submittedByEmail"] as! String
-        self.timestamp = info["timestamp"] as! String
+        self.timestamp = info["timestamp"] as! Int64
         self.title = info["title"] as! String
         self.request = info["request"] as! String
         self.answered = info["answered"] as! Bool
@@ -34,7 +34,7 @@ struct PrayerRequest {
         }
     }
     
-    init(uid: String?, submittedBy: String, submittedByEmail: String, timestamp: String, title: String, request: String, answered: Bool, anonymous: Bool, prayingMembers: [Member]?) {
+    init(uid: String?, submittedBy: String, submittedByEmail: String, timestamp: Int64, title: String, request: String, answered: Bool, anonymous: Bool, prayingMembers: [Member]?) {
         self.uid = uid
         self.submittedBy = submittedBy
         self.submittedByEmail = submittedByEmail

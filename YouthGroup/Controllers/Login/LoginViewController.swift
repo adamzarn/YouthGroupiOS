@@ -109,12 +109,12 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
                     if let providers = providers, providers.contains("password") {
                         self.startLinkingFacebookWithEmailPasswordAccount(email: email)
                     } else {
-                        Alert.showBasic(title: "Error", message: error, vc: self)
+                        Alert.showBasic(title: Helper.getString(key: "error"), message: error, vc: self)
                         Aiv.hide(aiv: self.aiv)
                     }
                 })
             } else {
-                Alert.showBasic(title: "Error", message: "Could not retrieve Facebook Email", vc: self)
+                Alert.showBasic(title: Helper.getString(key: "error"), message: Helper.getString(key: "facebookEmailMessage"), vc: self)
                 Aiv.hide(aiv: self.aiv)
             }
         })
@@ -161,11 +161,11 @@ class LoginViewController: UIViewController, FBSDKLoginButtonDelegate, CreateAcc
                         if providers.contains("facebook.com") {
                             self.startLinkingEmailPasswordWithFacebookAccount(email: email)
                         } else {
-                            Alert.showBasic(title: "Error", message: errorString, vc: self)
+                            Alert.showBasic(title: Helper.getString(key: "error"), message: errorString, vc: self)
                             Aiv.hide(aiv: self.aiv)
                         }
                     } else {
-                        Alert.showBasic(title: "Error", message: errorString, vc: self)
+                        Alert.showBasic(title: Helper.getString(key: "error"), message: errorString, vc: self)
                         Aiv.hide(aiv: self.aiv)
                     }
                 })

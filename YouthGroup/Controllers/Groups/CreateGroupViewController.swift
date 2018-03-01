@@ -97,7 +97,7 @@ class CreateGroupViewController: UIViewController {
                 } else {
                     let completion: (UIAlertAction) -> Void = {_ in
                         self.delegate?.refreshAccountDetail(reloadGroupsOnly: true)
-                        self.navigationController?.dismiss(animated: true, completion: nil)
+                        self.navigationController?.popViewController(animated: true)
                     }
                     Alert.showBasicWithCompletion(title: self.getString(key: "success"), message: self.getString(key: "editedGroupMessage"), vc: self, completion: completion)
                 }
@@ -160,7 +160,7 @@ class CreateGroupViewController: UIViewController {
             tableView.reloadData()
             tableView.isUserInteractionEnabled = false
         }
-        
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -182,10 +182,6 @@ class CreateGroupViewController: UIViewController {
                 
     func getString(key: String) -> String {
         return NSLocalizedString(key, comment: "")
-    }
-    
-    @IBAction func cancelButtonPressed(_ sender: Any) {
-        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
 }
@@ -225,7 +221,7 @@ extension CreateGroupViewController: EditMemberCellDelegate {
     func toggle(member: Member) {
         let leaders = members.filter { $0.leader! }
         if leaders.count == 1 && member.leader! {
-            Alert.showBasic(title: "Not Allowed", message: "There must always be at least 1 leader.", vc: self)
+            Alert.showBasic(title: Helper.getString(key: "notAllowed"), message: Helper.getString(key: "leaderExceptionMessage"), vc: self)
         } else {
             var updatedMember = member
             updatedMember.leader = !updatedMember.leader!

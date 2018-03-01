@@ -72,6 +72,9 @@ class CreateEventViewController: UIViewController {
         stateTextField.inputView = statePicker
         stateTextField.inputAccessoryView = toolbar
         zipTextField.inputAccessoryView = toolbar
+        
+        self.tabBarController?.tabBar.isHidden = true
+        
     }
     
     @objc func setDateAndTime(sender: UIDatePicker) {
@@ -79,7 +82,7 @@ class CreateEventViewController: UIViewController {
         dateFormatter.dateFormat = "yyyyMMdd"
         
         let timeFormatter = DateFormatter()
-        timeFormatter.dateFormat = "HH:mm:ss:SSS"
+        timeFormatter.dateFormat = "HHmmssSSS"
         
         let dateText = dateFormatter.string(from: sender.date)
         let timeText = timeFormatter.string(from: sender.date)
@@ -146,10 +149,6 @@ class CreateEventViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         KeyboardNotifications.unsubscribe(vc: self)
-    }
-    
-    @IBAction func cancelButtonPressed(_ sender: Any) {
-        self.navigationController?.dismiss(animated: true, completion: nil)
     }
     
     @objc func dismissPicker() {
@@ -246,7 +245,7 @@ class CreateEventViewController: UIViewController {
                     Alert.showBasic(title: Helper.getString(key: "Error"), message: error, vc: self)
                 } else {
                     let completion: (UIAlertAction) -> Void = {_ in
-                        self.navigationController?.dismiss(animated: true, completion: nil)
+                        self.navigationController?.popViewController(animated: true)
                     }
                     Alert.showBasicWithCompletion(title: Helper.getString(key: "success"), message: Helper.getString(key: "editedEventMessage"), vc: self, completion: completion)
                 }
@@ -258,7 +257,7 @@ class CreateEventViewController: UIViewController {
                     Alert.showBasic(title: Helper.getString(key: "Error"), message: error, vc: self)
                 } else {
                     let completion: (UIAlertAction) -> Void = {_ in
-                        self.navigationController?.dismiss(animated: true, completion: nil)
+                        self.navigationController?.popViewController(animated: true)
                     }
                     Alert.showBasicWithCompletion(title: Helper.getString(key: "success"), message: Helper.getString(key: "createdEventMessage"), vc: self, completion: completion)
                 }

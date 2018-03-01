@@ -100,25 +100,61 @@ class Helper {
         return nil
     }
     
-    static func convertAnyObjectToAnswerers(dict: [String: [String:String]], leader: Bool) -> [Answerer] {
+    static func convertAnyObjectToPosts(dict: [String: [String: Any]]) -> [Post] {
+        var posts: [Post] = []
+        for (key, value) in dict {
+            let uid = key
+            let email = value["email"] as! String
+            let name = value["name"] as! String
+            let timestamp = value["email"] as! Int64
+            let text = value["text"] as! String
+            var comments: [Post]?
+            if let commentsDict = value["comments"] {
+                comments = Helper.convertAnyObjectToPosts(dict: commentsDict as! [String:[String: Any]])
+            }
+            let post = Post(uid: uid, email: email, name: name, timestamp: timestamp, text: text, comments: comments)
+            posts.append(post)
+        }
+        return posts
+    }
+    
+    static func convertPostsToAnyObject(posts: [Post]?) ->  [String: [String: Any]]? {
+        if let posts = posts {
+            var postsObject = [:] as [String: [String: Any]]
+            for post in posts {
+                var value = [:] as [String: Any]
+                value["email"] = post.email
+                value["name"] = post.name
+                value["timestamp"] = post.timestamp
+                value["text"] = post.text
+                value["comments"] = Helper.convertPostsToAnyObject(posts: post.comments)
+                postsObject[post.uid!] = value
+            }
+            return postsObject
+        }
+        return nil
+    }
+    
+    static func convertAnyObjectToAnswerers(dict: [String: [String:Any]], leader: Bool) -> [Answerer] {
         var answerers: [Answerer] = []
         for (key,value) in dict {
             if let email = key.decodeURIComponent() {
                 let name = value["name"] as! String
                 let answer = value["answer"] as! String
-                let answerer = Answerer(email: email, name: name, leader: leader, answer: answer)
+                let timestamp = value["timestamp"] as! Int64
+                let answerer = Answerer(email: email, name: name, leader: leader, answer: answer, timestamp: timestamp)
                 answerers.append(answerer)
             }
         }
         return answerers
     }
     
-    static func convertAnswerersToAnyObject(answerers: [Answerer]?) ->  [String: [String: String]]? {
+    static func convertAnswerersToAnyObject(answerers: [Answerer]?) ->  [String: [String: Any]]? {
         if let answerers = answerers {
-            var answerersObject = [:] as [String: [String: String]]
+            var answerersObject = [:] as [String: [String: Any]]
             for answerer in answerers {
                 if let email = answerer.email.encodeURIComponent(), let name = answerer.name {
-                    answerersObject[email] = ["name": name, "answer": answerer.answer!]
+                    answerersObject[email] = ["name": name, "answer": answerer.answer!, "timestamp": answerer.timestamp]
                 }
             }
             return answerersObject
@@ -214,17 +250,21 @@ class Helper {
     static func getCurrentDateAndTime() -> String {
         let date = Date()
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyyMMdd HH:mm:ss:SSS"
+        formatter.dateFormat = "yyyyMMddHHmmssSSS"
         let stringDate = formatter.string(from: date)
         return stringDate
     }
     
     static func formattedTimestamp(ts: String, includeDate: Bool, includeTime: Bool) -> String {
-        let year = ts.substring(with: 2..<4)
-        let month = Int(ts.substring(with: 4..<6))
-        let day = Int(ts.substring(with: 6..<8))
-        var hour = Int(ts.substring(with: 9..<11))
-        let minute = ts.substring(with: 12..<14)
+        var timestamp = ts
+        if ts.count == 18 {
+            timestamp = ts.substring(with: 1..<18)
+        }
+        let year = timestamp.substring(with: 2..<4)
+        let month = Int(timestamp.substring(with: 4..<6))
+        let day = Int(timestamp.substring(with: 6..<8))
+        var hour = Int(timestamp.substring(with: 8..<10))
+        let minute = timestamp.substring(with: 10..<12)
         var suffix = "AM"
         if hour! > 11 {
             suffix = "PM"
@@ -257,7 +297,7 @@ class Helper {
     
     static func formattedTime(ts: String) -> String {
         var hour = Int(ts.substring(with: 0..<2))
-        let minute = ts.substring(with: 3..<5)
+        let minute = ts.substring(with: 2..<4)
         var suffix = "AM"
         if hour! > 11 {
             suffix = "PM"
@@ -291,6 +331,12 @@ class Helper {
         return weekdays[weekday!]!
     }
     
+    static func getTodayString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyyMMdd"
+        return dateFormatter.string(from: Date())
+    }
+    
     static func isLeader(group: Group) -> Bool {
         if let leaders = group.leaders {
             let leaderEmails = leaders.map { $0.email }
@@ -299,6 +345,25 @@ class Helper {
             }
         }
         return false
+    }
+    
+    static func getCurrentAnswerer(correctMembers: [Answerer]?, incorrectMembers: [Answerer]?) -> Answerer? {
+        var answerers: [Answerer] = []
+        if let correctMembers = correctMembers {
+            answerers += correctMembers
+        }
+        if let incorrectMembers = incorrectMembers {
+            answerers += incorrectMembers
+        }
+        if let email = Auth.auth().currentUser?.email {
+            let currentAnswerers = answerers.filter({ $0.email == email })
+            if currentAnswerers.count > 0 {
+                return currentAnswerers[0]
+            } else {
+                return nil
+            }
+        }
+        return nil
     }
     
 }
